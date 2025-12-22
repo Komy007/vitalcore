@@ -270,7 +270,10 @@ export const TRANSLATIONS: Record<string, any> = {
       products: [
         { name: "Wild Phellinus 374g", price: "₩1,900,000", originalPrice: "₩2,300,000", discount: "17%", tag: "Wild, Dried", img: linteus0 },
         { name: "Wild Phellinus 926g", price: "₩4,700,000", originalPrice: "₩5,000,000", discount: "6%", tag: "Wild, Dried", img: linteus1 },
-        { name: "Wild Phellinus 980g", price: "₩4,300,000", originalPrice: "₩5,000,000", discount: "14%", tag: "Whole Dried", img: linteus2 }
+        { name: "Wild Phellinus 980g", price: "₩4,300,000", originalPrice: "₩5,000,000", discount: "14%", tag: "Whole Dried", img: linteus2 },
+        { name: "Phellinus Gift Set", price: "₩1,200,000", originalPrice: "₩1,400,000", discount: "14%", tag: "Gift Set", img: linteus3 },
+        { name: "Phellinus Powder", price: "₩450,000", originalPrice: "₩500,000", discount: "10%", tag: "Powder", img: linteus4 },
+        { name: "Vital Core Signature", price: "₩5,500,000", originalPrice: "₩6,000,000", discount: "8%", tag: "Limited", img: linteus5 }
       ]
     },
     research: {
@@ -398,7 +401,10 @@ export const TRANSLATIONS: Record<string, any> = {
       products: [
         { name: "自然桑黄 374g", price: "₩1,900,000", originalPrice: "₩2,300,000", discount: "17%", tag: "自然, 干燥", img: linteus0 },
         { name: "自然桑黄 926g", price: "₩4,700,000", originalPrice: "₩5,000,000", discount: "6%", tag: "自然, 干燥", img: linteus1 },
-        { name: "自然桑黄 980g", price: "₩4,300,000", originalPrice: "₩5,000,000", discount: "14%", tag: "全干", img: linteus2 }
+        { name: "自然桑黄 980g", price: "₩4,300,000", originalPrice: "₩5,000,000", discount: "14%", tag: "全干", img: linteus2 },
+        { name: "桑黄礼盒套装", price: "₩1,200,000", originalPrice: "₩1,400,000", discount: "14%", tag: "礼品", img: linteus3 },
+        { name: "桑黄粉末", price: "₩450,000", originalPrice: "₩500,000", discount: "10%", tag: "粉末", img: linteus4 },
+        { name: "Vital Core 签名版", price: "₩5,500,000", originalPrice: "₩6,000,000", discount: "8%", tag: "限量版", img: linteus5 }
       ]
     },
     research: {
@@ -526,7 +532,10 @@ export const TRANSLATIONS: Record<string, any> = {
       products: [
         { name: "自然産メシマコブ 374g", price: "₩1,900,000", originalPrice: "₩2,300,000", discount: "17%", tag: "自然産, 乾燥", img: linteus0 },
         { name: "自然産メシマコブ 926g", price: "₩4,700,000", originalPrice: "₩5,000,000", discount: "6%", tag: "自然産, 乾燥", img: linteus1 },
-        { name: "自然産メシマコブ 980g", price: "₩4,300,000", originalPrice: "₩5,000,000", discount: "14%", tag: "丸ごと乾燥", img: linteus2 }
+        { name: "自然産メシマコブ 980g", price: "₩4,300,000", originalPrice: "₩5,000,000", discount: "14%", tag: "丸ごと乾燥", img: linteus2 },
+        { name: "メシマコブギフトセット", price: "₩1,200,000", originalPrice: "₩1,400,000", discount: "14%", tag: "ギフト", img: linteus3 },
+        { name: "メシマコブ粉末", price: "₩450,000", originalPrice: "₩500,000", discount: "10%", tag: "粉末", img: linteus4 },
+        { name: "Vital Core シグネチャー", price: "₩5,500,000", originalPrice: "₩6,000,000", discount: "8%", tag: "限定版", img: linteus5 }
       ]
     },
     research: {
