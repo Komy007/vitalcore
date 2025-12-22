@@ -7,7 +7,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # Install dependencies
-RUN npm ci
+RUN npm install
 
 # Copy source code
 COPY . .
@@ -22,7 +22,7 @@ WORKDIR /app
 
 # Install production dependencies only (backend)
 COPY package.json package-lock.json ./
-RUN npm ci --only=production
+RUN npm install --production
 
 # Copy backend source code
 COPY server ./server
