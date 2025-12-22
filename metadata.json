@@ -1,0 +1,7 @@
+{
+  "name": "Vital Core Premium - Phellinus Lab",
+  "description": "A premium health supplement portal focused on the scientific benefits of Phellinus linteus (Sanghwang Mushroom), featuring AI-powered research summaries and multi-language support.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
