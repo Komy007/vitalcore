@@ -268,9 +268,9 @@ export const TRANSLATIONS: Record<string, any> = {
         }
       ],
       products: [
-        { name: "Wild Phellinus 374g", price: "₩1,900,000", originalPrice: "₩2,300,000", discount: "17%", tag: "Wild, Dried", img: "https://images.unsplash.com/photo-1594200843957-c340c436b772?q=80&w=400" },
-        { name: "Wild Phellinus 926g", price: "₩4,700,000", originalPrice: "₩5,000,000", discount: "6%", tag: "Wild, Dried", img: "https://images.unsplash.com/photo-1511497584788-8767fe771721?q=80&w=400" },
-        { name: "Wild Phellinus 980g", price: "₩4,300,000", originalPrice: "₩5,000,000", discount: "14%", tag: "Whole Dried", img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=400" }
+        { name: "Wild Phellinus 374g", price: "₩1,900,000", originalPrice: "₩2,300,000", discount: "17%", tag: "Wild, Dried", img: linteus0 },
+        { name: "Wild Phellinus 926g", price: "₩4,700,000", originalPrice: "₩5,000,000", discount: "6%", tag: "Wild, Dried", img: linteus1 },
+        { name: "Wild Phellinus 980g", price: "₩4,300,000", originalPrice: "₩5,000,000", discount: "14%", tag: "Whole Dried", img: linteus2 }
       ]
     },
     research: {
@@ -396,9 +396,9 @@ export const TRANSLATIONS: Record<string, any> = {
         { title: "学术依据", desc: "桑黄的功效已通过数千篇国际学术论文得到证实。PubMed中每年都会更新关于其抗肿瘤和调节免疫的研究。日本国立癌症中心的研究显示，桑黄多糖的肿瘤抑制率达到96.7%。我们基于这些最新成就提供最可靠的信息。" }
       ],
       products: [
-        { name: "自然桑黄 374g", price: "₩1,900,000", originalPrice: "₩2,300,000", discount: "17%", tag: "自然, 干燥", img: "https://images.unsplash.com/photo-1594200843957-c340c436b772?q=80&w=400" },
-        { name: "自然桑黄 926g", price: "₩4,700,000", originalPrice: "₩5,000,000", discount: "6%", tag: "自然, 干燥", img: "https://images.unsplash.com/photo-1511497584788-8767fe771721?q=80&w=400" },
-        { name: "自然桑黄 980g", price: "₩4,300,000", originalPrice: "₩5,000,000", discount: "14%", tag: "全干", img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=400" }
+        { name: "自然桑黄 374g", price: "₩1,900,000", originalPrice: "₩2,300,000", discount: "17%", tag: "自然, 干燥", img: linteus0 },
+        { name: "自然桑黄 926g", price: "₩4,700,000", originalPrice: "₩5,000,000", discount: "6%", tag: "自然, 干燥", img: linteus1 },
+        { name: "自然桑黄 980g", price: "₩4,300,000", originalPrice: "₩5,000,000", discount: "14%", tag: "全干", img: linteus2 }
       ]
     },
     research: {
@@ -519,14 +519,14 @@ export const TRANSLATIONS: Record<string, any> = {
       tabs: { intro: "基本情報", compounds: "主要成分", mechanism: "作用機序", evidence: "学術根拠", recommended: "おすすめ製品" },
       cards: [
         { title: "環境と希少性", desc: "標高1000m以上の原生林で数十年間成長した最高品質のメシマコブのみを使用しています。人工栽培が非常に困難なため「神から授かったキノコ」と呼ばれています。原生林のエネルギーをそのままお届けすることを最優先事項としています。" },
-        { title: "主要成分", desc: "最も核心的な成分はベータグル칸(1-3, 1-6)です。他のキノコ類と比較して圧倒的に高い含有量を誇り、免疫体系を根本から再設計します。ポリフェノールも豊富で、細胞の老化と変異を防ぎます。科学的に検証された純粋な成分のみにこだわっています。" },
+        { title: "主要成分", desc: "最も核心的な成分はベータグルカン(1-3, 1-6)です。他のキノコ類と比較して圧倒的に高い含有量を誇り、免疫体系を根本から再設計します。ポリフェノールも豊富で、細胞の老化と変異を防ぎます。科学的に検証された純粋な成分のみにこだわっています。" },
         { title: "作用機序", desc: "癌細胞を直接攻撃するのではなく、体内の先天的な免疫力を極大化させます。NK細胞を活性化させて監視システムを強化し、癌細胞が必要とする新生血管の形成を遮断します。また、炎症反応を抑制し、バランスの取れた免疫状態を維持させます。" },
         { title: "学術的根拠", desc: "数千の学術論文を通じてその価値が立証されています。PubMedには抗腫瘍や免疫調節に関する研究結果が毎年更新されています。日本の国立がんセンターの研究では、腫瘍阻止率が96.7%に達するという結果が発表されました。信頼できる情報を提供します。" }
       ],
       products: [
-        { name: "自然産メシマコブ 374g", price: "₩1,900,000", originalPrice: "₩2,300,000", discount: "17%", tag: "自然産, 乾燥", img: "https://images.unsplash.com/photo-1594200843957-c340c436b772?q=80&w=400" },
-        { name: "自然産メ시마코브 926g", price: "₩4,700,000", originalPrice: "₩5,000,000", discount: "6%", tag: "自然産, 乾燥", img: "https://images.unsplash.com/photo-1511497584788-8767fe771721?q=80&w=400" },
-        { name: "自然産メ시마코브 980g", price: "₩4,300,000", originalPrice: "₩5,000,000", discount: "14%", tag: "丸ごと乾燥", img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=400" }
+        { name: "自然産メシマコブ 374g", price: "₩1,900,000", originalPrice: "₩2,300,000", discount: "17%", tag: "自然産, 乾燥", img: linteus0 },
+        { name: "自然産メシマコブ 926g", price: "₩4,700,000", originalPrice: "₩5,000,000", discount: "6%", tag: "自然産, 乾燥", img: linteus1 },
+        { name: "自然産メシマコブ 980g", price: "₩4,300,000", originalPrice: "₩5,000,000", discount: "14%", tag: "丸ごと乾燥", img: linteus2 }
       ]
     },
     research: {
