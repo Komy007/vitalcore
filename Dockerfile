@@ -42,5 +42,5 @@ ENV NODE_ENV=production
 # Expose port (Cloud Run defaults to 8080)
 EXPOSE 8080
 
-# Start the server
+# Start the server (Explicitly matching user request)
 CMD ["node", "server/index.cjs"]

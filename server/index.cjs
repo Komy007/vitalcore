@@ -199,11 +199,13 @@ if (process.env.NODE_ENV === 'production') {
 
 
 // Start Server
-// Use PORT env (Cloud Run requirement) or default 8080
-const port = process.env.PORT || 8080;
+// Start Server
+// Cloud Run injects PORT environment variable. We MUST listen on it.
+// We also MUST listen on '0.0.0.0' to be accessible outside the container.
+const port = parseInt(process.env.PORT) || 8080;
 
 app.listen(port, '0.0.0.0', () => {
-    console.log(`Server running on port ${port}`);
+    console.log(`Server running on http://0.0.0.0:${port}`);
 });
 
 module.exports = app;
