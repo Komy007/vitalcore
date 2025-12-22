@@ -40,6 +40,8 @@ db.exec(`
     title TEXT NOT NULL,
     content TEXT NOT NULL,
     summary TEXT,
+    key_point TEXT,
+    image_url TEXT,
     views INTEGER DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );

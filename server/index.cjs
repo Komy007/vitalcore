@@ -102,7 +102,7 @@ app.put('/api/users/:id/password', authenticateToken, isAdmin, (req, res) => {
 // --- Health Report Routes ---
 
 app.get('/api/health-reports', (req, res) => {
-    const stmt = db.prepare('SELECT id, title, summary, created_at, views FROM health_reports ORDER BY created_at DESC');
+    const stmt = db.prepare('SELECT id, title, summary, key_point, image_url, created_at, views FROM health_reports ORDER BY created_at DESC');
     const reports = stmt.all();
     res.json(reports);
 });
@@ -122,9 +122,9 @@ app.get('/api/health-reports/:id', (req, res) => {
 });
 
 app.post('/api/health-reports', authenticateToken, isAdmin, (req, res) => {
-    const { title, content, summary } = req.body;
-    const stmt = db.prepare('INSERT INTO health_reports (title, content, summary) VALUES (?, ?, ?)');
-    stmt.run(title, content, summary);
+    const { title, content, summary, key_point, image_url } = req.body;
+    const stmt = db.prepare('INSERT INTO health_reports (title, content, summary, key_point, image_url) VALUES (?, ?, ?, ?, ?)');
+    stmt.run(title, content, summary, key_point, image_url);
     res.json({ success: true });
 });
 
