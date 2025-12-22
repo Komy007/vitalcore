@@ -1,35 +1,40 @@
 # Stage 1: Build the React application
 FROM node:18-alpine AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Copy package files first to leverage Docker cache
+# Copy package files
 COPY package.json package-lock.json ./
 
-# Install dependencies (ci for clean install)
+# Install dependencies
 RUN npm ci
 
-# Copy the rest of the application code
+# Copy source code
 COPY . .
 
-# Build the application
+# Build frontend (produces /app/dist)
 RUN npm run build
 
-# Stage 2: Serve with Nginx
-FROM nginx:alpine
+# Stage 2: Production Server (Node.js)
+FROM node:18-alpine
 
-# Remove default nginx static assets
-RUN rm -rf /usr/share/nginx/html/*
+WORKDIR /app
 
-# Copy build artifacts from the builder stage
-COPY --from=builder /app/dist /usr/share/nginx/html
+# Install production dependencies only (backend)
+COPY package.json package-lock.json ./
+RUN npm ci --only=production
 
-# Copy custom nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy backend source code
+COPY server ./server
 
-# Expose port 80
-EXPOSE 80
+# Copy built frontend from builder stage
+COPY --from=builder /app/dist ./dist
 
-# Start Nginx in the foreground
-CMD ["nginx", "-g", "daemon off;"]
+# Set ENV to production
+ENV NODE_ENV=production
+
+# Expose port (Cloud Run defaults to 8080)
+EXPOSE 8080
+
+# Start the server
+CMD ["node", "server/index.cjs"]

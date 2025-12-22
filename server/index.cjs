@@ -4,12 +4,18 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const db = require('./database.cjs');
 
+const path = require('path');
 const app = express();
-const PORT = 3002;
-const JWT_SECRET = 'vitalcore-secret-key-change-this-production'; // In real app, use .env
+const JWT_SECRET = process.env.JWT_SECRET || 'vitalcore-secret-key-change-this-production'; // Use env var
 
 app.use(cors());
 app.use(express.json());
+
+// Serve Static Files (React Build) for Cloud Run / Production
+if (process.env.NODE_ENV === 'production') {
+    // Serve any static files
+    app.use(express.static(path.join(__dirname, '../dist')));
+}
 
 // Middleware to authenticate token
 const authenticateToken = (req, res, next) => {
@@ -182,12 +188,12 @@ app.put('/api/qna/:id/answer', authenticateToken, isAdmin, (req, res) => {
 });
 
 
-// Start Server (only if not in Vercel environment)
-if (process.env.NODE_ENV !== 'production') {
-    app.listen(PORT, '0.0.0.0', () => {
-        console.log(`Server running on http://localhost:${PORT}`);
-    });
-}
+// Start Server
+// Use PORT env (Cloud Run requirement) or default 8080
+const port = process.env.PORT || 8080;
+
+app.listen(port, '0.0.0.0', () => {
+    console.log(`Server running on port ${port}`);
+});
 
 module.exports = app;
-```
