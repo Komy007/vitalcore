@@ -187,6 +187,16 @@ app.put('/api/qna/:id/answer', authenticateToken, isAdmin, (req, res) => {
     res.json({ success: true });
 });
 
+// Handle React Routing, return all requests to React app
+if (process.env.NODE_ENV === 'production') {
+    app.get('*', (req, res) => {
+        // Don't intercept API routes
+        if (!req.path.startsWith('/api')) {
+            res.sendFile(path.join(__dirname, '../dist', 'index.html'));
+        }
+    });
+}
+
 
 // Start Server
 // Use PORT env (Cloud Run requirement) or default 8080
