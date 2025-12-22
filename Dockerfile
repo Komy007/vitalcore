@@ -6,6 +6,9 @@ WORKDIR /app
 # Copy package files
 COPY package.json package-lock.json ./
 
+# Install build tools for native modules (gyp)
+RUN apk add --no-cache python3 make g++
+
 # Install dependencies
 RUN npm install
 
@@ -19,6 +22,9 @@ RUN npm run build
 FROM node:18-alpine
 
 WORKDIR /app
+
+# Install build tools for native modules (gyp)
+RUN apk add --no-cache python3 make g++
 
 # Install production dependencies only (backend)
 COPY package.json package-lock.json ./
