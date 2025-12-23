@@ -1,15 +1,14 @@
 # Stage 1: Build the React application
-FROM node:18-alpine AS builder
+# Use specific version of node:18 (Debian-based) for stability
+FROM node:18 AS builder
 
 WORKDIR /app
 
 # Copy package files
 COPY package.json package-lock.json ./
 
-# Install build tools for native modules (gyp)
-RUN apk add --no-cache python3 make g++
-
-# Install dependencies
+# Install dependencies (Debian image usually has python/make/g++ pre-installed or available)
+# Using npm install is safe here
 RUN npm install
 
 # Copy source code
@@ -19,12 +18,9 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Production Server (Node.js)
-FROM node:18-alpine
+FROM node:18
 
 WORKDIR /app
-
-# Install build tools for native modules (gyp)
-RUN apk add --no-cache python3 make g++
 
 # Install production dependencies only (backend)
 COPY package.json package-lock.json ./
@@ -39,8 +35,8 @@ COPY --from=builder /app/dist ./dist
 # Set ENV to production
 ENV NODE_ENV=production
 
-# Expose port (Cloud Run defaults to 8080)
+# Expose port
 EXPOSE 8080
 
-# Start the server (Explicitly matching user request)
+# Start the server
 CMD ["node", "server/index.cjs"]
