@@ -31,13 +31,8 @@ let db;
 try {
   db = new Database(dbPath, { verbose: console.log });
   console.log('[Database] Connection successful.');
-} catch (err) {
-  console.error('[Database] Connection FAILED:', err);
-  process.exit(1); // Exit explicitly on DB failure
-}
 
-// --- Initialize Schema ---
-try {
+  // --- Initialize Schema ---
   db.exec(`
       CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -73,14 +68,9 @@ try {
       );
     `);
   console.log('[Database] Schema initialized.');
-} catch (err) {
-  console.error('[Database] Schema initialization FAILED:', err);
-  process.exit(1);
-}
 
-// --- Create Default Admin ---
-const createAdmin = () => {
-  try {
+  // --- Create Default Admin ---
+  const createAdmin = () => {
     const adminEmail = 'cambodia.bae@gmail.com';
     const stmt = db.prepare('SELECT * FROM users WHERE email = ?');
     const admin = stmt.get(adminEmail);
@@ -91,11 +81,13 @@ const createAdmin = () => {
       insert.run(adminEmail, hashedPassword, 'Admin', 'admin');
       console.log('[Database] Default admin account created.');
     }
-  } catch (err) {
-    console.error('[Database] Admin creation failed:', err);
-  }
-};
+  };
+  createAdmin();
 
-createAdmin();
+} catch (err) {
+  console.error('[Database] Initialization FAILED:', err);
+  // Do NOT exit here. Throw error so index.cjs can catch it and Soft Start.
+  throw err;
+}
 
 module.exports = db;
