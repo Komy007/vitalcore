@@ -11,7 +11,8 @@ try {
     console.log('[Server] Database module loaded success.');
 } catch (err) {
     console.error('[Server] CRITICAL FAIL: Could not load database:', err);
-    process.exit(1);
+    // process.exit(1); // DO NOT EXIT. Let the server start so we can see logs.
+    db = null; // Mark DB as failed
 }
 
 const path = require('path');
@@ -20,6 +21,19 @@ const JWT_SECRET = process.env.JWT_SECRET || 'vitalcore-secret-key-change-this-p
 
 app.use(cors());
 app.use(express.json());
+
+// Health Check (Critical for Cloud Run)
+app.get('/api/health', (req, res) => {
+    res.status(200).send('OK');
+});
+
+// Database Guard Middleware
+app.use((req, res, next) => {
+    if (!db && req.path.startsWith('/api') && req.path !== '/api/health') {
+        return res.status(503).json({ error: 'Database service unavailable', details: 'Check server logs for startup errors.' });
+    }
+    next();
+});
 
 // Serve Static Files (React Build) for Cloud Run / Production
 if (process.env.NODE_ENV === 'production') {
