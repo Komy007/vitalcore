@@ -6,11 +6,11 @@ WORKDIR /app
 # 1. Install System Build Tools (Required for better-sqlite3)
 RUN apt-get update && apt-get install -y python3 make g++
 
-# 2. Copy Package Files
-COPY package.json ./
-# 2.5 Force delete local lockfile if copied (Windows compat) & Install
-# We do NOT copy package-lock.json here to force fresh Linux resolution.
-RUN npm install
+# 2. IGNORE project package.json. Generate a clean one.
+RUN npm init -y
+
+# 3. Install ONLY express
+RUN npm install express
 
 # 4. Copy Source Code
 COPY . .

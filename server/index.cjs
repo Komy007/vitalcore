@@ -1,7 +1,7 @@
 const express = require('express');
 
 console.log('[Server] Require Express success.');
-console.log('[Server] Starting Express Hello World...');
+console.log('[Server] Starting Ad-Hoc Express (Fresh n pure)...');
 
 const app = express();
 const port = parseInt(process.env.PORT) || 8080;
