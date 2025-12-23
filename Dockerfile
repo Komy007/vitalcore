@@ -7,10 +7,10 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y python3 make g++
 
 # 2. Copy Package Files
-COPY package.json package-lock.json ./
-
-# 3. Install dependencies cleanly
-RUN npm ci
+COPY package.json ./
+# 2.5 Force delete local lockfile if copied (Windows compat) & Install
+# We do NOT copy package-lock.json here to force fresh Linux resolution.
+RUN npm install
 
 # 4. Copy Source Code
 COPY . .
