@@ -22,6 +22,11 @@ const App: React.FC = () => {
   const [benefitActiveTab, setBenefitActiveTab] = useState(0);
   const [isLangOpen, setIsLangOpen] = useState(false);
 
+  // Mobile Modals
+  const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
+  const [isResearchModalOpen, setIsResearchModalOpen] = useState(false);
+  const [isBenefitModalOpen, setIsBenefitModalOpen] = useState(false);
+
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
@@ -37,6 +42,21 @@ const App: React.FC = () => {
   const [authMessage, setAuthMessage] = useState<string | null>(null);
 
   // ... (lines 38-93)
+
+  const handleAboutTabClick = (tab: string) => {
+    setAboutActiveTab(tab);
+    if (window.innerWidth < 768) setIsAboutModalOpen(true);
+  };
+
+  const handleResearchTabClick = (tab: any) => {
+    setActiveTab(tab);
+    if (window.innerWidth < 768) setIsResearchModalOpen(true);
+  };
+
+  const handleBenefitClick = (index: number) => {
+    setBenefitActiveTab(index);
+    if (window.innerWidth < 768) setIsBenefitModalOpen(true);
+  };
 
   const handleReadReport = async (report: any) => {
     if (isAuthenticated) {
@@ -310,6 +330,35 @@ const App: React.FC = () => {
                     aboutActiveTab === 'mechanism' ? t.about.cards[2]?.title : t.about.cards[3]?.title}
               </h3>
             </div>
+
+            {/* Mobile Modal for About */}
+            <MobileModal isOpen={isAboutModalOpen} onClose={() => setIsAboutModalOpen(false)} title={t.about.tabs[aboutActiveTab]}>
+              <div className="space-y-6">
+                <h3 className="text-xl font-bold text-amber-500 mb-2">
+                  {aboutActiveTab === 'intro' ? t.about.cards[0]?.title :
+                    aboutActiveTab === 'compounds' ? t.about.cards[1]?.title :
+                      aboutActiveTab === 'mechanism' ? t.about.cards[2]?.title : t.about.cards[3]?.title}
+                </h3>
+                {aboutActiveTab === 'intro' && t.about.introDetails ? (
+                  <div className="space-y-6">
+                    <p className="text-stone-300 leading-relaxed font-light">{t.about.cards[0]?.desc}</p>
+                    {t.about.introDetails.map((item: any, i: number) => (
+                      <div key={i} className="bg-white/5 p-4 rounded-xl border border-white/10">
+                        <h4 className="text-amber-500 font-bold mb-2">{item.title}</h4>
+                        <p className="text-stone-300 text-sm leading-relaxed whitespace-pre-line">{item.content}</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-stone-300 text-lg leading-relaxed font-light whitespace-pre-wrap">
+                    {aboutActiveTab === 'intro' ? t.about.cards[0]?.desc :
+                      aboutActiveTab === 'compounds' ? t.about.cards[1]?.desc :
+                        aboutActiveTab === 'mechanism' ? t.about.cards[2]?.desc : t.about.cards[3]?.desc}
+                  </p>
+                )}
+              </div>
+            </MobileModal>
+
             {aboutActiveTab === 'intro' && t.about.introDetails ? (
               <div className="grid lg:grid-cols-2 gap-12 items-start">
                 <div>
@@ -356,11 +405,35 @@ const App: React.FC = () => {
           {/* New Research Tabs Grid */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {Object.entries(t.research.tabs).map(([key, label]) => (
-              <button key={key} onClick={() => setActiveTab(key as any)} className={`px-4 py-3 rounded-xl border text-xs font-bold uppercase tracking-wider transition-all ${activeTab === key ? 'bg-amber-600 border-amber-500 text-white shadow-lg scale-105' : 'bg-stone-900/60 border-white/10 text-stone-400 hover:bg-stone-800 hover:text-white'}`}>
+              <button key={key} onClick={() => handleResearchTabClick(key as any)} className={`px-4 py-3 rounded-xl border text-xs font-bold uppercase tracking-wider transition-all ${activeTab === key ? 'bg-amber-600 border-amber-500 text-white shadow-lg scale-105' : 'bg-stone-900/60 border-white/10 text-stone-400 hover:bg-stone-800 hover:text-white'}`}>
                 {label as string}
               </button>
             ))}
           </div>
+
+          <MobileModal isOpen={isResearchModalOpen} onClose={() => setIsResearchModalOpen(false)} title={t.research.tabs[activeTab]}>
+            <div className="space-y-6">
+              <div className="bg-amber-600/10 p-6 rounded-2xl border border-amber-500/30">
+                <div className="flex items-center gap-3 text-amber-500 mb-4">
+                  <GraduationCap size={32} />
+                  <span className="font-bold text-xs uppercase tracking-widest">Evidence Hub</span>
+                </div>
+                <h3 className="text-lg font-serif font-bold leading-tight text-white mb-3">{t.research.papers[activeTab]?.title}</h3>
+                <p className="text-stone-300 text-sm leading-relaxed font-light mb-4">{t.research.papers[activeTab]?.summary}</p>
+                <div className="pt-4 border-t border-white/10 flex flex-col gap-2 mb-4">
+                  <span className="text-[10px] text-amber-500 font-bold uppercase tracking-wider">{t.research.papers[activeTab]?.journal}</span>
+                  <span className="text-[10px] text-stone-500 font-mono">Impact: {t.research.papers[activeTab]?.impact}</span>
+                </div>
+                <a href={t.research.papers[activeTab]?.url} target="_blank" rel="noopener noreferrer" className="w-full py-4 bg-amber-600 hover:bg-amber-500 rounded-xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 text-white">
+                  {t.common.view_paper} <ExternalLink size={14} />
+                </a>
+              </div>
+              {/* Simplified Chart Message */}
+              <div className="bg-stone-900 p-4 rounded-xl border border-white/10">
+                <p className="text-xs text-stone-500 text-center">Detailed charts are available on the desktop version.</p>
+              </div>
+            </div>
+          </MobileModal>
 
           <div className="bg-stone-900/40 backdrop-blur-3xl p-10 rounded-[2.5rem] border border-white/10 shadow-2xl h-[400px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -412,13 +485,35 @@ const App: React.FC = () => {
         {t.benefits.items.map((item: string, i: number) => {
           const Icon = benefitIcons[i] || Activity;
           return (
-            <button key={i} onClick={() => setBenefitActiveTab(i)} className={`flex items-center gap-5 px-8 py-5 rounded-[1.5rem] border transition-all duration-500 ${benefitActiveTab === i ? 'bg-amber-600 border-amber-600 text-white shadow-2xl scale-105' : 'bg-black/55 border-white/10 text-stone-400 hover:bg-black/75 hover:border-white/20'}`}>
+            <button key={i} onClick={() => handleBenefitClick(i)} className={`flex items-center gap-5 px-8 py-5 rounded-[1.5rem] border transition-all duration-500 ${benefitActiveTab === i ? 'bg-amber-600 border-amber-600 text-white shadow-2xl scale-105' : 'bg-black/55 border-white/10 text-stone-400 hover:bg-black/75 hover:border-white/20'}`}>
               <Icon size={28} className={benefitActiveTab === i ? 'text-white' : 'text-stone-600'} />
               <span className="font-black text-sm xl:text-base tracking-tight uppercase whitespace-nowrap">{item}</span>
             </button>
           );
         })}
       </div>
+
+      <MobileModal isOpen={isBenefitModalOpen} onClose={() => setIsBenefitModalOpen(false)} title={t.benefits.items[benefitActiveTab]}>
+        {t.benefits.details && t.benefits.details[benefitActiveTab] && (
+          <div className="space-y-8">
+            <div>
+              <span className="text-amber-500 font-black text-xs uppercase tracking-[0.2em] block mb-2">{t.benefits.details[benefitActiveTab].scientificTerm}</span>
+              <h3 className="text-2xl font-serif font-bold text-white leading-tight mb-4">{t.benefits.details[benefitActiveTab].title}</h3>
+              <p className="text-amber-200 text-lg font-serif italic border-l-4 border-amber-600 pl-4 py-1">{t.benefits.details[benefitActiveTab].summary}</p>
+            </div>
+            <div className="h-px bg-white/10 w-full"></div>
+            <p className="text-stone-300 text-base leading-[1.8] font-light opacity-95 whitespace-pre-wrap">{t.benefits.details[benefitActiveTab].content}</p>
+
+            <div className="p-6 bg-amber-900/20 rounded-2xl border border-amber-500/30">
+              <h4 className="text-amber-500 font-black text-xs uppercase tracking-[0.2em] mb-4 flex items-center gap-2"><BookOpen size={16} /> Key Evidence</h4>
+              <p className="text-stone-100 text-sm font-medium leading-relaxed mb-6">"{t.benefits.details[benefitActiveTab].evidence}"</p>
+              <a href={t.benefits.details[benefitActiveTab].link} target="_blank" rel="noopener noreferrer" className="block w-full text-center py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-xs uppercase tracking-widest">
+                View Study <ExternalLink size={12} className="inline ml-1" />
+              </a>
+            </div>
+          </div>
+        )}
+      </MobileModal>
       <div className="bg-stone-900/60 backdrop-blur-3xl p-8 md:p-12 lg:p-16 rounded-[4rem] border border-white/5 shadow-2xl min-h-[400px] flex items-center mb-16 text-left relative overflow-hidden">
         {t.benefits.details && t.benefits.details[benefitActiveTab] && (
           <div className="grid lg:grid-cols-5 gap-12 lg:gap-16 w-full relative z-10">
@@ -788,6 +883,71 @@ const App: React.FC = () => {
     </div>
   </footer>
     </div >
+  );
+};
+
+export const HealthReportModal: React.FC<{ report: any; onClose: () => void }> = ({ report, onClose }) => {
+  if (!report) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-0 md:p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-300">
+      <div className="w-full h-full md:max-w-4xl md:h-[90vh] bg-stone-900 md:rounded-3xl border border-white/10 shadow-2xl overflow-hidden flex flex-col relative">
+
+        {/* Sticky Header */}
+        <div className="sticky top-0 bg-stone-900/95 backdrop-blur z-20 px-6 py-4 border-b border-white/5 flex justify-between items-center shrink-0">
+          <div className="flex items-center gap-3">
+            <span className="px-2 py-1 bg-amber-600/20 text-amber-500 text-[10px] font-bold uppercase tracking-wider rounded border border-amber-500/20">
+              Health Report
+            </span>
+            <span className="text-stone-500 text-xs font-mono">{new Date(report.created_at).toLocaleDateString()}</span>
+          </div>
+          <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full transition-colors text-stone-400 hover:text-white">
+            <X size={24} />
+          </button>
+        </div>
+
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto p-6 md:p-10">
+          <h2 className="text-2xl md:text-4xl font-serif font-bold text-white mb-8 leading-tight">{report.title}</h2>
+          <div className="prose prose-invert prose-amber max-w-none">
+            <div className="text-stone-300 leading-loose text-base md:text-lg whitespace-pre-wrap font-light">
+              {report.content}
+            </div>
+          </div>
+
+          <div className="mt-12 pt-8 border-t border-white/5 flex items-center gap-4 text-stone-500 text-sm">
+            <div className="w-10 h-10 rounded-full bg-stone-800 flex items-center justify-center">
+              <User size={16} />
+            </div>
+            <div>
+              <p className="text-white font-bold">Vital Core Research Team</p>
+              <p className="text-xs">Medical Evidence Based Analysis</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const MobileModal: React.FC<{ isOpen: boolean; onClose: () => void; title: string; children: React.ReactNode }> = ({ isOpen, onClose, title, children }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[60] bg-stone-950 flex flex-col animate-in slide-in-from-bottom duration-300 md:hidden">
+      {/* Sticky Header */}
+      <div className="px-6 py-4 bg-stone-900/95 backdrop-blur border-b border-white/5 flex justify-between items-center shrink-0 safe-top">
+        <h3 className="text-lg font-bold text-white truncate max-w-[80%]">{title}</h3>
+        <button onClick={onClose} className="p-2 -mr-2 text-stone-400 hover:text-white">
+          <X size={24} />
+        </button>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto p-6 safe-bottom">
+        {children}
+      </div>
+    </div>
   );
 };
 
