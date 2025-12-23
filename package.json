@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"vite\" \"node server/index.cjs\"",
+    "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "start": "node server/index.cjs"
+    "start": "vite preview --host 0.0.0.0 --port 8080"
   },
   "dependencies": {
     "@google/genai": "^1.34.0",
