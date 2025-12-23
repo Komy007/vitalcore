@@ -1,14 +1,12 @@
 # Stage 1: Build the React application
-# Use specific version of node:18 (Debian-based) for stability
-FROM node:18 AS builder
+FROM node:18-bullseye AS builder
 
 WORKDIR /app
 
 # Copy package files
 COPY package.json package-lock.json ./
 
-# Install dependencies (Debian image usually has python/make/g++ pre-installed or available)
-# Using npm install is safe here
+# Install dependencies
 RUN npm install
 
 # Copy source code
@@ -18,13 +16,16 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Production Server (Node.js)
-FROM node:18
+FROM node:18-bullseye
 
 WORKDIR /app
 
 # Install production dependencies only (backend)
 COPY package.json package-lock.json ./
 RUN npm install --production
+
+# Force rebuild of better-sqlite3 to ensure native binary compatibility
+RUN npm rebuild better-sqlite3
 
 # Copy backend source code
 COPY server ./server
