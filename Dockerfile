@@ -9,8 +9,8 @@ RUN apt-get update && apt-get install -y python3 make g++
 # 2. Copy Package Files
 COPY package.json package-lock.json ./
 
-# 3. Install ALL Dependencies (including devDependencies for build)
-RUN npm install
+# 3. Install dependencies cleanly
+RUN npm ci
 
 # 4. Copy Source Code
 COPY . .
@@ -18,8 +18,8 @@ COPY . .
 # 5. Build Frontend (React)
 RUN npm run build
 
-# 6. Rebuild Native Modules for this Architecture
-RUN npm rebuild better-sqlite3
+# 6. Rebuild Native Modules (Commented out for Express test)
+# RUN npm rebuild better-sqlite3
 
 # 7. Configure Runtime
 ENV NODE_ENV=production
