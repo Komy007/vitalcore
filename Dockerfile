@@ -16,7 +16,7 @@ RUN npm install express
 COPY . .
 
 # 5. Build Frontend (React)
-RUN npm run build
+# RUN npm run build
 
 # 6. Rebuild Native Modules (Commented out for Express test)
 # RUN npm rebuild better-sqlite3
