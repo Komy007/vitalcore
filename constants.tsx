@@ -510,7 +510,7 @@ export const TRANSLATIONS: Record<string, any> = {
     }
   },
   ja: {
-    nav: { about: "メ시마코브 정보", research: "臨床研究", benefits: "主な効能", usage: "服用方法", health: "健康レポート", faq: "Q&A" },
+    nav: { about: "メシマコブについて", research: "臨床研究", benefits: "主な効能", usage: "服用方法", health: "健康レポート", faq: "Q&A" },
     hero: {
       badge: "Vital Core Premium",
       title_top: "大自然が贈る",
@@ -521,7 +521,7 @@ export const TRANSLATIONS: Record<string, any> = {
     },
     common: { view_paper: "論文確認", login: "ログイン" },
     about: {
-      title: "メシ마코브 (Phellinus)",
+      title: "メシマコブ (Phellinus)",
       tabs: { intro: "基本情報", compounds: "主要成分", mechanism: "作用機序", evidence: "学術根拠", recommended: "おすすめ製品" },
       cards: [
         { title: "環境と希少性", desc: "標高1000m以上の原生林で数十年間成長した最高品質のメシマコブのみを使用しています。人工栽培が非常に困難なため「神から授かったキノコ」と呼ばれています。原生林のエネルギーをそのままお届けすることを最優先事項としています。" },
