@@ -757,8 +757,8 @@ const App: React.FC = () => {
           <h2 className="text-3xl md:text-4xl font-serif font-medium text-white mb-12 uppercase tracking-tight">{t.nav.health}</h2>
 
           <div className="grid md:grid-cols-2 gap-8 text-left">
-            {healthReports.length === 0 && <p className="text-stone-500 col-span-2 text-center">No reports available yet.</p>}
-            {healthReports.map((report) => (
+            {(!Array.isArray(healthReports) || healthReports.length === 0) && <p className="text-stone-500 col-span-2 text-center">No reports available yet.</p>}
+            {Array.isArray(healthReports) && healthReports.map((report) => (
               <div key={report.id} className="bg-gradient-to-br from-stone-900 to-stone-950 p-8 rounded-[2rem] border border-amber-500/10 hover:border-amber-500/30 shadow-2xl relative overflow-hidden group transition-all">
                 <span className="text-amber-500 text-[10px] font-black uppercase tracking-widest mb-4 block">Exclusive Report</span>
                 <h3 className="text-xl font-serif font-bold text-white mb-4 group-hover:text-amber-500 transition-colors">{report.title}</h3>
@@ -910,8 +910,8 @@ const App: React.FC = () => {
           </div>
 
           <div className="grid gap-4">
-            {questions.length === 0 && <p className="text-center text-stone-600 py-10">No questions yet. Be the first to ask!</p>}
-            {questions.map((q: any) => (
+            {(!Array.isArray(questions) || questions.length === 0) && <p className="text-center text-stone-600 py-10">No questions yet. Be the first to ask!</p>}
+            {Array.isArray(questions) && questions.map((q: any) => (
               <div key={q.id} className="bg-stone-900/50 p-8 rounded-[2rem] border border-white/5 hover:border-amber-500/30 transition-all">
                 <div className="flex justify-between items-start mb-4">
                   <h4 className="text-lg font-bold text-white flex items-center gap-3">

@@ -43,6 +43,7 @@ export const api = {
     health: {
         list: async () => {
             const res = await fetch(`${API_URL}/health-reports`);
+            if (!res.ok) throw await res.json();
             return res.json();
         },
         get: async (id: number) => {
@@ -63,6 +64,7 @@ export const api = {
     qna: {
         list: async () => {
             const res = await fetch(`${API_URL}/questions`, { headers: getHeaders() });
+            if (!res.ok) throw await res.json();
             return res.json();
         },
         create: async (data: any) => {
