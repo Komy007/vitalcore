@@ -1,5 +1,5 @@
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3002/api';
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 const getHeaders = () => {
     const token = localStorage.getItem('token');
@@ -62,11 +62,11 @@ export const api = {
     },
     qna: {
         list: async () => {
-            const res = await fetch(`${API_URL}/qna`, { headers: getHeaders() });
+            const res = await fetch(`${API_URL}/questions`, { headers: getHeaders() });
             return res.json();
         },
         create: async (data: any) => {
-            const res = await fetch(`${API_URL}/qna`, {
+            const res = await fetch(`${API_URL}/questions`, {
                 method: 'POST',
                 headers: getHeaders(),
                 body: JSON.stringify(data),
@@ -75,7 +75,7 @@ export const api = {
             return res.json();
         },
         answer: async (id: number, answer: string) => {
-            const res = await fetch(`${API_URL}/qna/${id}/answer`, {
+            const res = await fetch(`${API_URL}/questions/${id}/answer`, {
                 method: 'PUT',
                 headers: getHeaders(),
                 body: JSON.stringify({ answer }),
