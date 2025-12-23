@@ -20,12 +20,12 @@ FROM node:18-bullseye
 
 WORKDIR /app
 
-# Install production dependencies only (backend)
-COPY package.json package-lock.json ./
-RUN npm install --production
+# Install build tools for native modules (required for better-sqlite3 build from source)
+RUN apt-get update && apt-get install -y python3 make g++
 
-# Force rebuild of better-sqlite3 to ensure native binary compatibility in Debian
-RUN npm rebuild better-sqlite3
+# Install production dependencies only (backend) and force build from source
+COPY package.json package-lock.json ./
+RUN npm install --production --build-from-source
 
 # Copy backend source code
 COPY server ./server
@@ -35,10 +35,10 @@ COPY --from=builder /app/dist ./dist
 
 # Set ENV to production
 ENV NODE_ENV=production
+ENV PORT=8080
 
-# Expose port 8080 checks (Cloud Run contract)
+# Expose port
 EXPOSE 8080
 
-# Start the server (Monolithic: Express serves API + Frontend)
-# Explicitly use node to bypass any npm script wrapping issues
+# Start the server
 CMD ["node", "server/index.cjs"]
