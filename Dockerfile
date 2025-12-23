@@ -40,4 +40,4 @@ ENV NODE_ENV=production
 EXPOSE 8080
 
 # Start the server
-CMD ["node", "server/index.cjs"]
+CMD ["npm", "run", "start"]
