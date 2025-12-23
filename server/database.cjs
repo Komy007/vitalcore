@@ -1,56 +1,98 @@
 const Database = require('better-sqlite3');
 const bcrypt = require('bcryptjs');
 const path = require('path');
+const fs = require('fs');
 
-const db = new Database(path.join(dbDir, 'vitalcore.db'));
+// --- Database Path Configuration ---
+// Cloud Run filesystem is read-only except for /tmp.
+// For production, we use /tmp/vitalcore.db.
+// For development, we use ./data/vitalcore.db (relative to this file).
 
-// Initialize Schema
-db.exec(`
-  CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email TEXT UNIQUE NOT NULL,
-    password TEXT NOT NULL,
-    name TEXT NOT NULL,
-    country TEXT,
-    phone TEXT,
-    role TEXT DEFAULT 'user', -- 'admin' or 'user'
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  );
+let dbPath;
+if (process.env.NODE_ENV === 'production') {
+  dbPath = path.join('/tmp', 'vitalcore.db');
+} else {
+  // Development: Ensure 'data' directory exists locally
+  const dbDir = path.join(__dirname, 'data');
+  if (!fs.existsSync(dbDir)) {
+    try {
+      fs.mkdirSync(dbDir, { recursive: true });
+      console.log(`Created local database directory: ${dbDir}`);
+    } catch (err) {
+      console.error('Error creating database directory:', err);
+    }
+  }
+  dbPath = path.join(dbDir, 'vitalcore.db');
+}
 
-  CREATE TABLE IF NOT EXISTS questions (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
-    title TEXT NOT NULL,
-    content TEXT NOT NULL,
-    is_secret INTEGER DEFAULT 0, -- 0: public, 1: secret
-    answer TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users (id)
-  );
+console.log(`[Database] Initializing SQLite at: ${dbPath}`);
 
-  CREATE TABLE IF NOT EXISTS health_reports (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT NOT NULL,
-    content TEXT NOT NULL,
-    summary TEXT,
-    key_point TEXT,
-    image_url TEXT,
-    views INTEGER DEFAULT 0,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  );
-`);
+let db;
+try {
+  db = new Database(dbPath, { verbose: console.log });
+  console.log('[Database] Connection successful.');
+} catch (err) {
+  console.error('[Database] Connection FAILED:', err);
+  process.exit(1); // Exit explicitly on DB failure
+}
 
-// Create Default Admin if not exists
+// --- Initialize Schema ---
+try {
+  db.exec(`
+      CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        email TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL,
+        name TEXT NOT NULL,
+        country TEXT,
+        phone TEXT,
+        role TEXT DEFAULT 'user', -- 'admin' or 'user'
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      );
+    
+      CREATE TABLE IF NOT EXISTS questions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        title TEXT NOT NULL,
+        content TEXT NOT NULL,
+        is_secret INTEGER DEFAULT 0, -- 0: public, 1: secret
+        answer TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users (id)
+      );
+    
+      CREATE TABLE IF NOT EXISTS health_reports (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        content TEXT NOT NULL,
+        summary TEXT,
+        key_point TEXT,
+        image_url TEXT,
+        views INTEGER DEFAULT 0,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+  console.log('[Database] Schema initialized.');
+} catch (err) {
+  console.error('[Database] Schema initialization FAILED:', err);
+  process.exit(1);
+}
+
+// --- Create Default Admin ---
 const createAdmin = () => {
-  const adminEmail = 'cambodia.bae@gmail.com';
-  const stmt = db.prepare('SELECT * FROM users WHERE email = ?');
-  const admin = stmt.get(adminEmail);
+  try {
+    const adminEmail = 'cambodia.bae@gmail.com';
+    const stmt = db.prepare('SELECT * FROM users WHERE email = ?');
+    const admin = stmt.get(adminEmail);
 
-  if (!admin) {
-    const hashedPassword = bcrypt.hashSync('123456', 10);
-    const insert = db.prepare('INSERT INTO users (email, password, name, role) VALUES (?, ?, ?, ?)');
-    insert.run(adminEmail, hashedPassword, 'Admin', 'admin');
-    console.log('Default admin account created.');
+    if (!admin) {
+      const hashedPassword = bcrypt.hashSync('123456', 10);
+      const insert = db.prepare('INSERT INTO users (email, password, name, role) VALUES (?, ?, ?, ?)');
+      insert.run(adminEmail, hashedPassword, 'Admin', 'admin');
+      console.log('[Database] Default admin account created.');
+    }
+  } catch (err) {
+    console.error('[Database] Admin creation failed:', err);
   }
 };
 
