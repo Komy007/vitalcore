@@ -176,6 +176,24 @@ if (db) {
         } catch (e) { res.status(500).json({ error: e.message }); }
     });
 
+    app.put('/api/questions/:id', authenticateToken, (req, res) => {
+        try {
+            const { id } = req.params;
+            const { title, content, is_secret } = req.body;
+
+            // Verify ownership
+            const existing = db.prepare('SELECT user_id FROM questions WHERE id = ?').get(id);
+            if (!existing) return res.status(404).json({ error: 'Question not found' });
+            if (existing.user_id !== req.user.id && req.user.role !== 'admin') {
+                return res.status(403).json({ error: 'Not authorized' });
+            }
+
+            const stmt = db.prepare('UPDATE questions SET title = ?, content = ?, is_secret = ? WHERE id = ?');
+            stmt.run(title, content, is_secret ? 1 : 0, id);
+            res.json({ message: 'Question updated' });
+        } catch (e) { res.status(500).json({ error: e.message }); }
+    });
+
     app.post('/api/questions', authenticateToken, (req, res) => {
         try {
             const { title, content, is_secret } = req.body;

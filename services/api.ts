@@ -74,6 +74,15 @@ export const api = {
             if (!res.ok) throw await res.json();
             return res.json();
         },
+        update: async (id: number, data: any) => {
+            const res = await fetch(`${API_URL}/questions/${id}`, {
+                method: 'PUT',
+                headers: getHeaders(),
+                body: JSON.stringify(data),
+            });
+            if (!res.ok) throw await res.json();
+            return res.json();
+        },
         answer: async (id: number, answer: string) => {
             const res = await fetch(`${API_URL}/questions/${id}/answer`, {
                 method: 'PUT',
