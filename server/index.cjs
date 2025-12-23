@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const path = require('path');
 
-console.log('[Server] Starting Full Monolithic Server...');
+console.log('[Server] Starting Full Monolithic Server (Safe Mode)...');
 
 // --- Database Loading (Soft Start) ---
 console.log('[Server] Loading database module...');
@@ -33,9 +33,9 @@ app.get('/api/health', (req, res) => {
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-    if (!token) return res.sendStatus(401);
+    if (!token) return res.status(401).json({ error: 'Access token required' });
     jwt.verify(token, JWT_SECRET, (err, user) => {
-        if (err) return res.sendStatus(403);
+        if (err) return res.status(403).json({ error: 'Invalid or expired token' });
         req.user = user;
         next();
     });
@@ -43,7 +43,7 @@ const authenticateToken = (req, res, next) => {
 
 const isAdmin = (req, res, next) => {
     if (req.user && req.user.role === 'admin') next();
-    else res.sendStatus(403);
+    else res.status(403).json({ error: 'Admin access required' });
 };
 
 // --- Database Guard Middleware ---
@@ -56,9 +56,12 @@ app.use((req, res, next) => {
 
 // --- API Routes ---
 if (db) {
+    // 1. Auth
     app.post('/api/auth/register', (req, res) => {
         try {
             const { email, password, name, country, phone } = req.body;
+            if (!email || !password || !name) return res.status(400).json({ error: 'Missing required fields' });
+
             const hashedPassword = bcrypt.hashSync(password, 10);
             const stmt = db.prepare('INSERT INTO users (email, password, name, country, phone) VALUES (?, ?, ?, ?, ?)');
             const info = stmt.run(email, hashedPassword, name, country, phone);
@@ -66,6 +69,7 @@ if (db) {
             const token = jwt.sign(user, JWT_SECRET);
             res.json({ token, user });
         } catch (e) {
+            console.error('[Register Error]', e);
             if (e.code === 'SQLITE_CONSTRAINT_UNIQUE') return res.status(400).json({ error: 'Email already exists' });
             res.status(500).json({ error: e.message });
         }
@@ -77,21 +81,31 @@ if (db) {
             const stmt = db.prepare('SELECT * FROM users WHERE email = ?');
             const user = stmt.get(email);
             if (!user || !bcrypt.compareSync(password, user.password)) return res.status(401).json({ error: 'Invalid credentials' });
+
             const tokenUser = { id: user.id, email: user.email, role: user.role, name: user.name };
             const token = jwt.sign(tokenUser, JWT_SECRET);
             res.json({ token, user: tokenUser });
-        } catch (e) { res.status(500).json({ error: e.message }); }
+        } catch (e) {
+            console.error('[Login Error]', e);
+            res.status(500).json({ error: e.message });
+        }
     });
 
     app.get('/api/auth/me', authenticateToken, (req, res) => {
-        const stmt = db.prepare('SELECT id, email, name, role, country, phone FROM users WHERE id = ?');
-        const user = stmt.get(req.user.id);
-        res.json(user);
+        try {
+            const stmt = db.prepare('SELECT id, email, name, role, country, phone FROM users WHERE id = ?');
+            const user = stmt.get(req.user.id);
+            if (!user) return res.status(404).json({ error: 'User not found' });
+            res.json(user);
+        } catch (e) { res.status(500).json({ error: e.message }); }
     });
 
+    // 2. Health Reports (Blog Style)
     app.get('/api/health-reports', (req, res) => {
-        const stmt = db.prepare('SELECT id, title, summary, key_point, image_url, created_at, views FROM health_reports ORDER BY created_at DESC');
-        res.json(stmt.all());
+        try {
+            const stmt = db.prepare('SELECT id, title, summary, key_point, image_url, created_at, views FROM health_reports ORDER BY created_at DESC');
+            res.json(stmt.all());
+        } catch (e) { res.status(500).json({ error: e.message }); }
     });
 
     app.get('/api/health-reports/:id', (req, res) => {
@@ -101,6 +115,86 @@ if (db) {
             const report = db.prepare('SELECT * FROM health_reports WHERE id = ?').get(id);
             if (!report) return res.status(404).json({ error: 'Report not found' });
             res.json(report);
+        } catch (e) { res.status(500).json({ error: e.message }); }
+    });
+
+    // Create Report (Admin Only)
+    app.post('/api/health-reports', authenticateToken, isAdmin, (req, res) => {
+        try {
+            const { title, content, summary, key_point, image_url } = req.body;
+            if (!title || !content) return res.status(400).json({ error: 'Title and content are required' });
+
+            const stmt = db.prepare('INSERT INTO health_reports (title, content, summary, key_point, image_url) VALUES (?, ?, ?, ?, ?)');
+            const info = stmt.run(title, content, summary || '', key_point || '', image_url || '');
+            res.json({ id: info.lastInsertRowid, message: 'Report created successfully' });
+        } catch (e) { res.status(500).json({ error: e.message }); }
+    });
+
+    // 3. Questions (Q&A)
+    app.get('/api/questions', (req, res) => {
+        try {
+            // Get all questions with user info
+            const stmt = db.prepare(`
+                SELECT q.*, u.name as user_name 
+                FROM questions q 
+                JOIN users u ON q.user_id = u.id 
+                ORDER BY q.created_at DESC
+            `);
+            const questions = stmt.all();
+
+            // Filter logic: 
+            // - Public (is_secret=0): Visible to everyone
+            // - Secret (is_secret=1): Visible only to Admin OR the Author
+            // Use header token to determine current user (optional for public viewing)
+            const authHeader = req.headers['authorization'];
+            let currentUserId = null;
+            let isAdminUser = false;
+
+            if (authHeader) {
+                const token = authHeader.split(' ')[1];
+                try {
+                    const decoded = jwt.verify(token, JWT_SECRET);
+                    currentUserId = decoded.id;
+                    isAdminUser = decoded.role === 'admin';
+                } catch (e) { /* ignore invalid token for listing */ }
+            }
+
+            const filtered = questions.map(q => {
+                if (q.is_secret === 0) return q; // Public
+                if (isAdminUser || (currentUserId && q.user_id === currentUserId)) return q; // Authorized
+                // Mask secret content
+                return {
+                    ...q,
+                    title: 'Secret Question',
+                    content: 'This content is private.',
+                    answer: q.answer ? 'This answer is private.' : null,
+                    is_accessible: false
+                };
+            });
+
+            res.json(filtered);
+        } catch (e) { res.status(500).json({ error: e.message }); }
+    });
+
+    app.post('/api/questions', authenticateToken, (req, res) => {
+        try {
+            const { title, content, is_secret } = req.body;
+            if (!title || !content) return res.status(400).json({ error: 'Title and content are required' });
+
+            const stmt = db.prepare('INSERT INTO questions (user_id, title, content, is_secret) VALUES (?, ?, ?, ?)');
+            const info = stmt.run(req.user.id, title, content, is_secret ? 1 : 0);
+            res.json({ id: info.lastInsertRowid, message: 'Question created' });
+        } catch (e) { res.status(500).json({ error: e.message }); }
+    });
+
+    // Answer Question (Admin Only)
+    app.post('/api/questions/:id/answer', authenticateToken, isAdmin, (req, res) => {
+        try {
+            const { id } = req.params;
+            const { answer } = req.body;
+            const stmt = db.prepare('UPDATE questions SET answer = ? WHERE id = ?');
+            stmt.run(answer, id);
+            res.json({ message: 'Answer updated' });
         } catch (e) { res.status(500).json({ error: e.message }); }
     });
 }
