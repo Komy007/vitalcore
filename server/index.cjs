@@ -2,7 +2,17 @@ const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const db = require('./database.cjs');
+
+console.log('[Server] Starting up...');
+console.log('[Server] Loading database module...');
+let db;
+try {
+    db = require('./database.cjs');
+    console.log('[Server] Database module loaded success.');
+} catch (err) {
+    console.error('[Server] CRITICAL FAIL: Could not load database:', err);
+    process.exit(1);
+}
 
 const path = require('path');
 const app = express();
