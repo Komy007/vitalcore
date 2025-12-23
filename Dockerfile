@@ -1,22 +1,18 @@
-# Stage 1: Build Frontend
-FROM node:18-bullseye AS builder
-WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm install
-COPY . .
-RUN npm run build
-
-# Stage 2: Production Server
+# Single Stage Simple Build
 FROM node:18-bullseye
-WORKDIR /app
-COPY package.json package-lock.json ./
-# Clean install, no native builds
-RUN npm install --production
-COPY server ./server
-COPY --from=builder /app/dist ./dist
 
+WORKDIR /app
+
+# Copy everything
+COPY . .
+
+# Install dependencies (though we don't strictly need them for the http server, we keep it for valid node env)
+RUN npm install
+
+# Env vars
 ENV NODE_ENV=production
 ENV PORT=8080
 EXPOSE 8080
 
+# Start server
 CMD ["node", "server/index.cjs"]
