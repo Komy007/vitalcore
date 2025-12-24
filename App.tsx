@@ -11,6 +11,8 @@ import { Language, UserInfo, ResearchData } from './types';
 import { useAuth } from './contexts/AuthContext';
 import { api } from './services/api';
 
+const benefitIcons = [Shield, Droplet, Zap, Sparkles, Brain];
+
 const App: React.FC = () => {
   const { user, login, logout, isAuthenticated, isAdmin } = useAuth();
 
