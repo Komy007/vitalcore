@@ -201,12 +201,19 @@ if (db) {
     app.post('/api/questions', authenticateToken, (req, res) => {
         try {
             const { title, content, is_secret } = req.body;
+            console.log(`[Q&A] Received submission from User ${req.user.id}: ${title} (Secret: ${is_secret})`);
+
             if (!title || !content) return res.status(400).json({ error: 'Title and content are required' });
 
             const stmt = db.prepare('INSERT INTO questions (user_id, title, content, is_secret) VALUES (?, ?, ?, ?)');
             const info = stmt.run(req.user.id, title, content, is_secret ? 1 : 0);
+
+            console.log(`[Q&A] Created Question ID: ${info.lastInsertRowid}`);
             res.json({ id: info.lastInsertRowid, message: 'Question created' });
-        } catch (e) { res.status(500).json({ error: e.message }); }
+        } catch (e) {
+            console.error('[Q&A] Submission Error:', e);
+            res.status(500).json({ error: e.message });
+        }
     });
 
     // Answer Question (Admin Only)

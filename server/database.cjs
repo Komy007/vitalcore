@@ -59,6 +59,19 @@ try {
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (user_id) REFERENCES users (id)
       );
+
+      -- Check if welcome question exists, if not insert it
+      const count = db.prepare('SELECT count(*) as count FROM questions').get();
+      if (count.count === 0) {
+          try {
+            // Need a dummy user first
+            db.exec("INSERT OR IGNORE INTO users (id, email, password, name, role) VALUES (1, 'system@vitalcore.com', 'system', 'VitalCore Admin', 'admin')");
+            db.exec("INSERT INTO questions (user_id, title, content, is_secret, answer) VALUES (1, 'Welcome to Vital Core Q&A', 'This is a test question to verify the database connection. If you see this, the system is working!', 0, 'Welcome! Feel free to ask any questions.')");
+            console.log('[Database] Inserted Welcome Question');
+          } catch(e) {
+            console.error('[Database] Failed to insert welcome question:', e);
+          }
+      }
     
       CREATE TABLE IF NOT EXISTS health_reports (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
