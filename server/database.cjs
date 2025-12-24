@@ -37,30 +37,53 @@ try {
   console.log('[Database] Connection successful.');
 
   // --- Initialize Schema ---
-      CREATE TABLE IF NOT EXISTS health_reports(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT NOT NULL,
-    content TEXT NOT NULL,
-    summary TEXT,
-    key_point TEXT,
-    image_url TEXT,
-    views INTEGER DEFAULT 0,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  );
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      email TEXT UNIQUE NOT NULL,
+      password TEXT NOT NULL,
+      name TEXT NOT NULL,
+      country TEXT,
+      phone TEXT,
+      role TEXT DEFAULT 'user', -- 'admin' or 'user'
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS questions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
+      title TEXT NOT NULL,
+      content TEXT NOT NULL,
+      is_secret INTEGER DEFAULT 0, -- 0: public, 1: secret
+      answer TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users (id)
+    );
+
+    CREATE TABLE IF NOT EXISTS health_reports (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      content TEXT NOT NULL,
+      summary TEXT,
+      key_point TEXT,
+      image_url TEXT,
+      views INTEGER DEFAULT 0,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
   `);
   console.log('[Database] Schema initialized.');
 
   // --- Seed Data (Welcome Question) ---
   try {
-      const count = db.prepare('SELECT count(*) as count FROM questions').get();
-      if (count && count.count === 0) {
-          // Need a dummy user first
-          db.exec("INSERT OR IGNORE INTO users (id, email, password, name, role) VALUES (1, 'system@vitalcore.com', 'system', 'VitalCore Admin', 'admin')");
-          db.exec("INSERT INTO questions (user_id, title, content, is_secret, answer) VALUES (1, 'Welcome to Vital Core Q&A', 'This is a test question to verify the database connection. If you see this, the system is working!', 0, 'Welcome! Feel free to ask any questions.')");
-          console.log('[Database] Inserted Welcome Question');
-      }
-  } catch(e) {
-      console.error('[Database] Failed to insert welcome question:', e);
+    const count = db.prepare('SELECT count(*) as count FROM questions').get();
+    if (count && count.count === 0) {
+      // Need a dummy user first
+      db.exec("INSERT OR IGNORE INTO users (id, email, password, name, role) VALUES (1, 'system@vitalcore.com', 'system', 'VitalCore Admin', 'admin')");
+      db.exec("INSERT INTO questions (user_id, title, content, is_secret, answer) VALUES (1, 'Welcome to Vital Core Q&A', 'This is a test question to verify the database connection. If you see this, the system is working!', 0, 'Welcome! Feel free to ask any questions.')");
+      console.log('[Database] Inserted Welcome Question');
+    }
+  } catch (e) {
+    console.error('[Database] Failed to insert welcome question:', e);
   }
 
   // --- Create Default Admin ---
