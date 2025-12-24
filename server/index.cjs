@@ -16,6 +16,7 @@ try {
     console.error('[Server] CRITICAL FAIL: Could not load database:', err);
     // Soft Start: Continue without DB
     db = null;
+    global.dbLoadError = err;
 }
 
 const app = express();
@@ -53,7 +54,8 @@ const isAdmin = (req, res, next) => {
 // --- Database Guard Middleware ---
 app.use((req, res, next) => {
     if (!db && req.path.startsWith('/api') && req.path !== '/api/health') {
-        return res.status(503).json({ error: 'Database service unavailable' });
+        const errorMsg = global.dbLoadError ? (global.dbLoadError.message + '\n' + global.dbLoadError.stack) : 'Unknown DB Error';
+        return res.status(503).json({ error: 'Database service unavailable', details: errorMsg });
     }
     next();
 });

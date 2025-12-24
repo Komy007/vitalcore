@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y python3 make g++
 COPY package.json ./
 
 # 3. Clean Install (Generates fresh package-lock for Linux)
-RUN npm install
+RUN npm install --build-from-source=better-sqlite3
 
 # 4. Copy Source Code
 COPY . .
@@ -19,7 +19,7 @@ COPY . .
 # 5. Build Frontend (React)
 RUN npm run build
 
-# 6. Rebuild Native Modules for this Architecture (Critical for SQLite)
+# 6. Rebuild Native Modules (Double check)
 RUN npm rebuild better-sqlite3
 
 # 7. Configure Runtime
