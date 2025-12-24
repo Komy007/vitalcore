@@ -87,7 +87,7 @@ export const api = {
         },
         answer: async (id: number, answer: string) => {
             const res = await fetch(`${API_URL}/questions/${id}/answer`, {
-                method: 'PUT',
+                method: 'POST',
                 headers: getHeaders(),
                 body: JSON.stringify({ answer }),
             });

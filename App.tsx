@@ -1084,11 +1084,28 @@ const App: React.FC = () => {
               <label className="block text-stone-500 text-xs font-bold mb-2 uppercase">Content</label>
               <textarea className="w-full bg-stone-800 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-amber-500 min-h-[150px]" placeholder="Ask anything about Phellinus Linteus..." value={newQuestion.content} onChange={e => setNewQuestion({ ...newQuestion, content: e.target.value })} />
             </div>
-            <div className="flex items-center gap-3">
-              <input type="checkbox" id="is_secret" checked={newQuestion.is_secret} onChange={e => setNewQuestion({ ...newQuestion, is_secret: e.target.checked })} className="w-5 h-5 accent-amber-600 rounded" />
-              <label htmlFor="is_secret" className="text-stone-400 text-sm select-none">Secret Question (Only Admin can see)</label>
+            <div>
+              <label className="block text-stone-500 text-xs font-bold mb-4 uppercase">Question Type</label>
+              <div className="grid grid-cols-2 gap-4">
+                <button
+                  type="button"
+                  onClick={() => setNewQuestion({ ...newQuestion, is_secret: false })}
+                  className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${!newQuestion.is_secret ? 'bg-amber-600 border-amber-500 text-white' : 'bg-stone-900 border-white/10 text-stone-500 hover:border-white/30'}`}
+                >
+                  <Globe size={24} />
+                  <span className="text-xs font-bold uppercase">General (Public)</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setNewQuestion({ ...newQuestion, is_secret: true })}
+                  className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${newQuestion.is_secret ? 'bg-amber-600 border-amber-500 text-white' : 'bg-stone-900 border-white/10 text-stone-500 hover:border-white/30'}`}
+                >
+                  <Lock size={24} />
+                  <span className="text-xs font-bold uppercase">Secret (Private)</span>
+                </button>
+              </div>
             </div>
-            <button onClick={handleAskQuestion} className="w-full py-4 bg-amber-600 text-white font-bold rounded-xl uppercase tracking-widest hover:bg-amber-500 transition-all">{editingQuestionId ? "Update Question" : "Submit Question"}</button>
+            <button onClick={handleAskQuestion} className="w-full py-4 bg-amber-600 text-white font-bold rounded-xl uppercase tracking-widest hover:bg-amber-500 transition-all shadow-lg mt-4">{editingQuestionId ? "Update Question" : "Submit Question"}</button>
           </div>
         </MobileModal>
       )}
