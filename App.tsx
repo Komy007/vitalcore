@@ -529,9 +529,9 @@ const App: React.FC = () => {
             <div className="absolute inset-0 bg-stone-950/35 backdrop-blur-sm"></div>
             <div className="max-w-[1500px] mx-auto px-8 relative z-10 text-center">
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-medium text-stone-100 mb-8 uppercase tracking-tight">{t.about.title}</h2>
-              <div className="flex justify-center gap-4 mb-16 overflow-x-auto no-scrollbar py-4 px-4 scroll-smooth">
+              <div className="flex flex-wrap justify-center gap-3 mb-12 px-4">
                 {Object.entries(t.about.tabs).map(([key, label]) => (
-                  <button key={key} onClick={() => setAboutActiveTab(key as any)} className={`px-8 py-3 rounded-full border text-xs font-bold uppercase tracking-widest transition-all whitespace-nowrap ${aboutActiveTab === key ? 'bg-amber-700 border-amber-600 text-white shadow-xl' : 'bg-stone-900/50 border-white/5 text-stone-500 hover:text-stone-300 hover:border-white/10'}`}>
+                  <button key={key} onClick={() => handleAboutTabClick(key)} className={`px-6 py-3 rounded-full border text-xs font-bold uppercase tracking-widest transition-all ${aboutActiveTab === key ? 'bg-amber-700 border-amber-600 text-white shadow-xl scale-105' : 'bg-stone-900/50 border-white/5 text-stone-500 hover:text-stone-300 hover:border-white/10'}`}>
                     {label as string}
                   </button>
                 ))}
@@ -619,6 +619,9 @@ const App: React.FC = () => {
                                 aboutActiveTab === 'mechanism' ? t.about.cards[2]?.desc : t.about.cards[3]?.desc}
                           </p>
                         )}
+                        <div className="pt-6 border-t border-white/10">
+                          <button onClick={() => setIsAboutModalOpen(false)} className="w-full py-4 bg-stone-800 text-white font-bold rounded-xl uppercase tracking-widest hover:bg-stone-700">Close</button>
+                        </div>
                       </div>
                     </MobileModal>
 
@@ -692,8 +695,9 @@ const App: React.FC = () => {
                         </a>
                       </div>
                       {/* Simplified Chart Message */}
-                      <div className="bg-stone-900 p-4 rounded-xl border border-white/10">
-                        <p className="text-xs text-stone-500 text-center">Detailed charts are available on the desktop version.</p>
+                      <p className="text-xs text-stone-500 text-center">Detailed charts are available on the desktop version.</p>
+                      <div className="pt-4 border-t border-white/10">
+                        <button onClick={() => setIsResearchModalOpen(false)} className="w-full py-4 bg-stone-800 text-white font-bold rounded-xl uppercase tracking-widest hover:bg-stone-700">Close</button>
                       </div>
                     </div>
                   </MobileModal>
@@ -773,6 +777,9 @@ const App: React.FC = () => {
                       <a href={t.benefits.details[benefitActiveTab].link} target="_blank" rel="noopener noreferrer" className="block w-full text-center py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-xs uppercase tracking-widest">
                         View Study <ExternalLink size={12} className="inline ml-1" />
                       </a>
+                    </div>
+                    <div className="pt-6 border-t border-white/10">
+                      <button onClick={() => setIsBenefitModalOpen(false)} className="w-full py-4 bg-stone-800 text-white font-bold rounded-xl uppercase tracking-widest hover:bg-stone-700">Close</button>
                     </div>
                   </div>
                 )}
@@ -1099,140 +1106,146 @@ const App: React.FC = () => {
         </>
       )}
 
-      {currentView === 'health' && (
-        <div className="pt-32 min-h-screen bg-stone-950">
-          <section className="max-w-7xl mx-auto px-6 mb-24">
-            <div className="flex justify-between items-end mb-12 border-b border-white/10 pb-6">
-              <div>
-                <h2 className="text-3xl md:text-5xl font-serif font-medium text-white uppercase tracking-tight mb-2">{t.nav.health}</h2>
-                <p className="text-stone-400 text-sm">Medical Evidence & Case Studies</p>
-              </div>
-              {isAdmin && <button onClick={() => setIsReportModalOpen(true)} className="px-6 py-3 bg-stone-800 hover:bg-stone-700 text-white font-bold rounded-full text-xs uppercase tracking-widest shadow-lg flex items-center gap-2 transition-all"><Edit size={14} /> Write Health Essay</button>}
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {healthReports.map((report) => (
-                <div key={report.id} onClick={() => { setSelectedReport(report); api.health.get(report.id).catch(console.error); }} className="cursor-pointer group">
-                  <div className="aspect-[4/3] rounded-2xl overflow-hidden mb-6 bg-stone-900 border border-white/5 relative">
-                    {report.image_url ? (
-                      <img src={report.image_url} alt={report.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-stone-800 text-stone-600"><FileText size={48} /></div>
-                    )}
-                    <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all"></div>
-                  </div>
-                  <span className="text-amber-500 font-bold text-xs uppercase tracking-widest mb-2 block">{new Date(report.created_at).toLocaleDateString()}</span>
-                  <h3 className="text-xl font-bold text-white mb-3 group-hover:text-amber-500 transition-colors lineHeight-tight">{report.title}</h3>
-                  <p className="text-stone-400 text-sm line-clamp-2">{report.summary || report.content?.substring(0, 100)}...</p>
+      {
+        currentView === 'health' && (
+          <div className="pt-32 min-h-screen bg-stone-950">
+            <section className="max-w-7xl mx-auto px-6 mb-24">
+              <div className="flex justify-between items-end mb-12 border-b border-white/10 pb-6">
+                <div>
+                  <h2 className="text-3xl md:text-5xl font-serif font-medium text-white uppercase tracking-tight mb-2">{t.nav.health}</h2>
+                  <p className="text-stone-400 text-sm">Medical Evidence & Case Studies</p>
                 </div>
-              ))}
-            </div>
-          </section>
-        </div>
-      )}
-
-      {currentView === 'faq' && (
-        <div className="pt-32 min-h-screen bg-stone-950 px-6">
-          <section className="max-w-5xl mx-auto relative z-10 mb-24">
-            <div className="flex justify-between items-end mb-12 border-b border-white/10 pb-6">
-              <div>
-                <h2 className="text-3xl md:text-4xl font-serif font-medium text-white uppercase tracking-tight mb-2">{t.nav.faq}</h2>
-                <p className="text-stone-400 text-sm">Community Questions & Answers</p>
+                {isAdmin && <button onClick={() => setIsReportModalOpen(true)} className="px-6 py-3 bg-stone-800 hover:bg-stone-700 text-white font-bold rounded-full text-xs uppercase tracking-widest shadow-lg flex items-center gap-2 transition-all"><Edit size={14} /> Write Health Essay</button>}
               </div>
-              {isAuthenticated && <button onClick={() => setIsQnaModalOpen(true)} className="px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-full text-xs uppercase tracking-widest shadow-lg flex items-center gap-2"><Edit size={14} /> {t.board?.ask_btn}</button>}
-            </div>
-
-            <div className="grid gap-4">
-              {(!Array.isArray(questions) || questions.length === 0) && <p className="text-center text-stone-600 py-10">{t.board?.no_questions}</p>}
-              {Array.isArray(questions) && questions.map((q: any) => (
-                <div key={q.id} className="bg-stone-900/50 p-6 md:p-8 rounded-[2rem] border border-white/5 hover:border-amber-500/30 transition-all">
-                  <div className="flex justify-between items-start mb-4">
-                    <h4 className="text-lg font-bold text-white flex items-center gap-3">
-                      {q.is_secret === 1 && <Lock size={14} className="text-amber-500" />}
-                      {q.title}
-                    </h4>
-                    <div className="flex items-center gap-3">
-                      <span className="text-xs text-stone-600 font-mono">{new Date(q.created_at).toLocaleDateString()}</span>
-                      {user && user.id === q.user_id && (
-                        <button onClick={() => handleEditClick(q)} className="text-xs text-amber-500 hover:text-white font-bold flex items-center gap-1 border border-amber-500/30 px-2 py-1 rounded bg-amber-900/10"><Edit size={10} /> {t.board?.edit_btn}</button>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {healthReports.map((report) => (
+                  <div key={report.id} onClick={() => { setSelectedReport(report); api.health.get(report.id).catch(console.error); }} className="cursor-pointer group">
+                    <div className="aspect-[4/3] rounded-2xl overflow-hidden mb-6 bg-stone-900 border border-white/5 relative">
+                      {report.image_url ? (
+                        <img src={report.image_url} alt={report.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-stone-800 text-stone-600"><FileText size={48} /></div>
                       )}
-                      {(isAdmin || (user && user.id === q.user_id)) && (
-                        <button onClick={() => handleDeleteQuestion(q.id)} className="text-xs text-red-500 hover:text-white font-bold flex items-center gap-1 border border-red-500/30 px-2 py-1 rounded bg-red-900/10 ml-2"><Trash2 size={10} /> {t.board?.delete_btn}</button>
-                      )}
+                      <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all"></div>
                     </div>
+                    <span className="text-amber-500 font-bold text-xs uppercase tracking-widest mb-2 block">{new Date(report.created_at).toLocaleDateString()}</span>
+                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-amber-500 transition-colors lineHeight-tight">{report.title}</h3>
+                    <p className="text-stone-400 text-sm line-clamp-2">{report.summary || report.content?.substring(0, 100)}...</p>
                   </div>
-                  <p className="text-stone-400 font-light mb-6 leading-relaxed">{q.content}</p>
-                  {q.answer && (
-                    <div className="ml-4 md:ml-8 p-6 bg-amber-900/10 rounded-2xl border-l-2 border-amber-600">
-                      <span className="text-[10px] font-black uppercase text-amber-600 mb-2 block">{t.board?.admin_answer}</span>
-                      <p className="text-stone-300 text-sm">{q.answer}</p>
-                    </div>
-                  )}
-                  {!q.answer && isAdmin && (
-                    <div className="mt-4 pt-4 border-t border-white/5">
-                      <div className="flex gap-2">
-                        <input
-                          className="flex-grow bg-black/30 p-3 rounded-lg text-white text-sm border border-white/5 outline-none focus:border-amber-500 transition-colors"
-                          placeholder={t.board?.admin_reply_placeholder}
-                          value={adminAnswer[q.id] || ''}
-                          onChange={(e) => setAdminAnswer({ ...adminAnswer, [q.id]: e.target.value })}
-                        />
-                        <button onClick={() => handleAdminAnswer(q.id)} className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg text-xs uppercase">{t.board?.reply_btn}</button>
+                ))}
+              </div>
+            </section>
+          </div>
+        )
+      }
+
+      {
+        currentView === 'faq' && (
+          <div className="pt-32 min-h-screen bg-stone-950 px-6">
+            <section className="max-w-5xl mx-auto relative z-10 mb-24">
+              <div className="flex justify-between items-end mb-12 border-b border-white/10 pb-6">
+                <div>
+                  <h2 className="text-3xl md:text-4xl font-serif font-medium text-white uppercase tracking-tight mb-2">{t.nav.faq}</h2>
+                  <p className="text-stone-400 text-sm">Community Questions & Answers</p>
+                </div>
+                {isAuthenticated && <button onClick={() => setIsQnaModalOpen(true)} className="px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-full text-xs uppercase tracking-widest shadow-lg flex items-center gap-2"><Edit size={14} /> {t.board?.ask_btn}</button>}
+              </div>
+
+              <div className="grid gap-4">
+                {(!Array.isArray(questions) || questions.length === 0) && <p className="text-center text-stone-600 py-10">{t.board?.no_questions}</p>}
+                {Array.isArray(questions) && questions.map((q: any) => (
+                  <div key={q.id} className="bg-stone-900/50 p-6 md:p-8 rounded-[2rem] border border-white/5 hover:border-amber-500/30 transition-all">
+                    <div className="flex justify-between items-start mb-4">
+                      <h4 className="text-lg font-bold text-white flex items-center gap-3">
+                        {q.is_secret === 1 && <Lock size={14} className="text-amber-500" />}
+                        {q.title}
+                      </h4>
+                      <div className="flex items-center gap-3">
+                        <span className="text-xs text-stone-600 font-mono">{new Date(q.created_at).toLocaleDateString()}</span>
+                        {user && user.id === q.user_id && (
+                          <button onClick={() => handleEditClick(q)} className="text-xs text-amber-500 hover:text-white font-bold flex items-center gap-1 border border-amber-500/30 px-2 py-1 rounded bg-amber-900/10"><Edit size={10} /> {t.board?.edit_btn}</button>
+                        )}
+                        {(isAdmin || (user && user.id === q.user_id)) && (
+                          <button onClick={() => handleDeleteQuestion(q.id)} className="text-xs text-red-500 hover:text-white font-bold flex items-center gap-1 border border-red-500/30 px-2 py-1 rounded bg-red-900/10 ml-2"><Trash2 size={10} /> {t.board?.delete_btn}</button>
+                        )}
                       </div>
                     </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </section>
-        </div>
-      )}
+                    <p className="text-stone-400 font-light mb-6 leading-relaxed">{q.content}</p>
+                    {q.answer && (
+                      <div className="ml-4 md:ml-8 p-6 bg-amber-900/10 rounded-2xl border-l-2 border-amber-600">
+                        <span className="text-[10px] font-black uppercase text-amber-600 mb-2 block">{t.board?.admin_answer}</span>
+                        <p className="text-stone-300 text-sm">{q.answer}</p>
+                      </div>
+                    )}
+                    {!q.answer && isAdmin && (
+                      <div className="mt-4 pt-4 border-t border-white/5">
+                        <div className="flex gap-2">
+                          <input
+                            className="flex-grow bg-black/30 p-3 rounded-lg text-white text-sm border border-white/5 outline-none focus:border-amber-500 transition-colors"
+                            placeholder={t.board?.admin_reply_placeholder}
+                            value={adminAnswer[q.id] || ''}
+                            onChange={(e) => setAdminAnswer({ ...adminAnswer, [q.id]: e.target.value })}
+                          />
+                          <button onClick={() => handleAdminAnswer(q.id)} className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg text-xs uppercase">{t.board?.reply_btn}</button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </section>
+          </div>
+        )
+      }
 
       {/* Q&A Modal */}
-      {isQnaModalOpen && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/95 backdrop-blur-2xl p-4 md:p-10 animate-in fade-in duration-500 overflow-y-auto">
-          <div className="bg-stone-900 rounded-[2rem] p-8 w-full max-w-2xl shadow-2xl border border-white/5 relative flex flex-col">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl font-bold text-white">{editingQuestionId ? t.board?.edit_title : t.board?.create_title}</h3>
-              <button onClick={() => setIsQnaModalOpen(false)} className="p-2 -mr-2 text-stone-500 hover:text-white transition-colors">
-                <X size={24} />
-              </button>
-            </div>
+      {
+        isQnaModalOpen && (
+          <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/95 backdrop-blur-2xl p-4 md:p-10 animate-in fade-in duration-500 overflow-y-auto">
+            <div className="bg-stone-900 rounded-[2rem] p-8 w-full max-w-2xl shadow-2xl border border-white/5 relative flex flex-col">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-bold text-white">{editingQuestionId ? t.board?.edit_title : t.board?.create_title}</h3>
+                <button onClick={() => setIsQnaModalOpen(false)} className="p-2 -mr-2 text-stone-500 hover:text-white transition-colors">
+                  <X size={24} />
+                </button>
+              </div>
 
-            <div className="space-y-6">
-              <div>
-                <label className="block text-stone-500 text-xs font-bold mb-2 uppercase">{t.board?.label_title}</label>
-                <input className="w-full bg-stone-800 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-amber-500" placeholder={t.board?.placeholder_title} value={newQuestion.title} onChange={e => setNewQuestion({ ...newQuestion, title: e.target.value })} />
-              </div>
-              <div>
-                <label className="block text-stone-500 text-xs font-bold mb-2 uppercase">{t.board?.label_content}</label>
-                <textarea className="w-full bg-stone-800 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-amber-500 min-h-[150px]" placeholder={t.board?.placeholder_content} value={newQuestion.content} onChange={e => setNewQuestion({ ...newQuestion, content: e.target.value })} />
-              </div>
-              <div>
-                <label className="block text-stone-500 text-xs font-bold mb-4 uppercase">{t.board?.label_type}</label>
-                <div className="grid grid-cols-2 gap-4">
-                  <button
-                    type="button"
-                    onClick={() => setNewQuestion({ ...newQuestion, is_secret: false })}
-                    className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${!newQuestion.is_secret ? 'bg-amber-600 border-amber-500 text-white' : 'bg-stone-900 border-white/10 text-stone-500 hover:border-white/30'}`}
-                  >
-                    <Globe size={24} />
-                    <span className="text-xs font-bold uppercase">{t.board?.type_public}</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setNewQuestion({ ...newQuestion, is_secret: true })}
-                    className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${newQuestion.is_secret ? 'bg-amber-600 border-amber-500 text-white' : 'bg-stone-900 border-white/10 text-stone-500 hover:border-white/30'}`}
-                  >
-                    <Lock size={24} />
-                    <span className="text-xs font-bold uppercase">{t.board?.type_secret}</span>
-                  </button>
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-stone-500 text-xs font-bold mb-2 uppercase">{t.board?.label_title}</label>
+                  <input className="w-full bg-stone-800 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-amber-500" placeholder={t.board?.placeholder_title} value={newQuestion.title} onChange={e => setNewQuestion({ ...newQuestion, title: e.target.value })} />
                 </div>
+                <div>
+                  <label className="block text-stone-500 text-xs font-bold mb-2 uppercase">{t.board?.label_content}</label>
+                  <textarea className="w-full bg-stone-800 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-amber-500 min-h-[150px]" placeholder={t.board?.placeholder_content} value={newQuestion.content} onChange={e => setNewQuestion({ ...newQuestion, content: e.target.value })} />
+                </div>
+                <div>
+                  <label className="block text-stone-500 text-xs font-bold mb-4 uppercase">{t.board?.label_type}</label>
+                  <div className="grid grid-cols-2 gap-4">
+                    <button
+                      type="button"
+                      onClick={() => setNewQuestion({ ...newQuestion, is_secret: false })}
+                      className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${!newQuestion.is_secret ? 'bg-amber-600 border-amber-500 text-white' : 'bg-stone-900 border-white/10 text-stone-500 hover:border-white/30'}`}
+                    >
+                      <Globe size={24} />
+                      <span className="text-xs font-bold uppercase">{t.board?.type_public}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setNewQuestion({ ...newQuestion, is_secret: true })}
+                      className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${newQuestion.is_secret ? 'bg-amber-600 border-amber-500 text-white' : 'bg-stone-900 border-white/10 text-stone-500 hover:border-white/30'}`}
+                    >
+                      <Lock size={24} />
+                      <span className="text-xs font-bold uppercase">{t.board?.type_secret}</span>
+                    </button>
+                  </div>
+                </div>
+                <button onClick={handleAskQuestion} className="w-full py-4 bg-amber-600 text-white font-bold rounded-xl uppercase tracking-widest hover:bg-amber-500 transition-all shadow-lg mt-4">{editingQuestionId ? t.board?.update_btn : t.board?.submit_btn}</button>
               </div>
-              <button onClick={handleAskQuestion} className="w-full py-4 bg-amber-600 text-white font-bold rounded-xl uppercase tracking-widest hover:bg-amber-500 transition-all shadow-lg mt-4">{editingQuestionId ? t.board?.update_btn : t.board?.submit_btn}</button>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {/* Footer */}
       <footer className="py-24 relative bg-stone-950 text-stone-500 border-t border-white/5">
@@ -1263,353 +1276,361 @@ const App: React.FC = () => {
       </footer>
 
       {/* Admin Dashboard Modal */}
-      {isAdminDashboardOpen && (
-        <div className="fixed inset-0 z-[70] bg-stone-950 flex flex-col animate-in slide-in-from-bottom duration-300">
-          {/* Header */}
-          <div className="px-6 py-4 bg-stone-900 border-b border-white/5 flex justify-between items-center shrink-0">
-            <div className="flex items-center gap-4">
-              <h2 className="text-xl font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-                Admin Dashboard
-              </h2>
-              <div className="flex bg-stone-800 p-1 rounded-lg">
-                <button onClick={() => setAdminTab('users')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase transition-all ${adminTab === 'users' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Users</button>
-                <button onClick={() => setAdminTab('reports')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase transition-all ${adminTab === 'reports' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Health Reports</button>
-                <button onClick={() => setAdminTab('qna')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase transition-all ${adminTab === 'qna' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Q&A Board</button>
+      {
+        isAdminDashboardOpen && (
+          <div className="fixed inset-0 z-[70] bg-stone-950 flex flex-col animate-in slide-in-from-bottom duration-300">
+            {/* Header */}
+            <div className="px-6 py-4 bg-stone-900 border-b border-white/5 flex justify-between items-center shrink-0">
+              <div className="flex items-center gap-4">
+                <h2 className="text-xl font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                  Admin Dashboard
+                </h2>
+                <div className="flex bg-stone-800 p-1 rounded-lg">
+                  <button onClick={() => setAdminTab('users')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase transition-all ${adminTab === 'users' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Users</button>
+                  <button onClick={() => setAdminTab('reports')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase transition-all ${adminTab === 'reports' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Health Reports</button>
+                  <button onClick={() => setAdminTab('qna')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase transition-all ${adminTab === 'qna' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Q&A Board</button>
+                </div>
               </div>
+              <button onClick={() => setIsAdminDashboardOpen(false)} className="p-2 -mr-2 text-stone-500 hover:text-white hover:bg-white/5 rounded-full transition-all">
+                <X size={24} />
+              </button>
             </div>
-            <button onClick={() => setIsAdminDashboardOpen(false)} className="p-2 -mr-2 text-stone-500 hover:text-white hover:bg-white/5 rounded-full transition-all">
-              <X size={24} />
-            </button>
-          </div>
 
-          {/* Content */}
-          <div className="flex-1 overflow-y-auto p-8 bg-stone-950">
-            {adminTab === 'users' && (
-              <div className="max-w-7xl mx-auto">
-                <div className="bg-stone-900 rounded-2xl border border-white/5 overflow-hidden">
-                  <table className="w-full text-left text-sm text-stone-400">
-                    <thead className="bg-stone-800 text-stone-300 uppercase text-xs font-bold">
-                      <tr>
-                        <th className="px-6 py-4">ID</th>
-                        <th className="px-6 py-4">Name</th>
-                        <th className="px-6 py-4">Email</th>
-                        <th className="px-6 py-4">Role</th>
-                        <th className="px-6 py-4">Created At</th>
-                        <th className="px-6 py-4 text-right">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-white/5">
-                      {userList.map(u => (
-                        <tr key={u.id} className="hover:bg-white/5 transition-colors">
-                          <td className="px-6 py-4 font-mono text-xs">{u.id}</td>
-                          <td className="px-6 py-4 text-white font-bold">{u.name}</td>
-                          <td className="px-6 py-4">{u.email}</td>
-                          <td className="px-6 py-4">
-                            <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase ${u.role === 'admin' ? 'bg-red-900/30 text-red-500 border border-red-500/20' : 'bg-stone-800 text-stone-500'}`}>
-                              {u.role}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 font-mono text-xs">{new Date(u.created_at).toLocaleDateString()}</td>
-                          <td className="px-6 py-4 text-right flex justify-end gap-2">
-                            <button onClick={() => setEditingUser(u)} className="p-2 bg-stone-800 hover:bg-amber-600 hover:text-white rounded transition-colors"><Edit size={14} /></button>
-                            <button onClick={() => handleDeleteUser(u.id)} className="p-2 bg-stone-800 hover:bg-red-600 hover:text-white rounded transition-colors"><Trash2 size={14} /></button>
-                          </td>
+            {/* Content */}
+            <div className="flex-1 overflow-y-auto p-8 bg-stone-950">
+              {adminTab === 'users' && (
+                <div className="max-w-7xl mx-auto">
+                  <div className="bg-stone-900 rounded-2xl border border-white/5 overflow-hidden">
+                    <table className="w-full text-left text-sm text-stone-400">
+                      <thead className="bg-stone-800 text-stone-300 uppercase text-xs font-bold">
+                        <tr>
+                          <th className="px-6 py-4">ID</th>
+                          <th className="px-6 py-4">Name</th>
+                          <th className="px-6 py-4">Email</th>
+                          <th className="px-6 py-4">Role</th>
+                          <th className="px-6 py-4">Created At</th>
+                          <th className="px-6 py-4 text-right">Actions</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody className="divide-y divide-white/5">
+                        {userList.map(u => (
+                          <tr key={u.id} className="hover:bg-white/5 transition-colors">
+                            <td className="px-6 py-4 font-mono text-xs">{u.id}</td>
+                            <td className="px-6 py-4 text-white font-bold">{u.name}</td>
+                            <td className="px-6 py-4">{u.email}</td>
+                            <td className="px-6 py-4">
+                              <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase ${u.role === 'admin' ? 'bg-red-900/30 text-red-500 border border-red-500/20' : 'bg-stone-800 text-stone-500'}`}>
+                                {u.role}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 font-mono text-xs">{new Date(u.created_at).toLocaleDateString()}</td>
+                            <td className="px-6 py-4 text-right flex justify-end gap-2">
+                              <button onClick={() => setEditingUser(u)} className="p-2 bg-stone-800 hover:bg-amber-600 hover:text-white rounded transition-colors"><Edit size={14} /></button>
+                              <button onClick={() => handleDeleteUser(u.id)} className="p-2 bg-stone-800 hover:bg-red-600 hover:text-white rounded transition-colors"><Trash2 size={14} /></button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {adminTab === 'reports' && (
-              <div className="max-w-5xl mx-auto space-y-6">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-2xl font-bold text-white">Health Reports Management</h3>
-                  <button onClick={() => setIsReportModalOpen(true)} className="px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase tracking-wider shadow-lg flex items-center gap-2">
-                    <Plus size={16} /> New Report
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {healthReports.map(report => (
-                    <div key={report.id} className="bg-stone-900 rounded-xl p-4 border border-white/5 flex gap-4">
-                      <div className="w-20 h-20 bg-stone-800 rounded-lg overflow-hidden shrink-0">
-                        {report.image_url ? <img src={report.image_url} alt="" className="w-full h-full object-cover" /> : <FileText className="m-auto mt-6 text-stone-600" />}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="text-white font-bold truncate mb-1">{report.title}</h4>
-                        <p className="text-stone-500 text-xs line-clamp-2">{report.summary}</p>
-                        <div className="mt-2 text-xs text-stone-600 font-mono flex items-center gap-2">
-                          <Eye size={10} /> {report.views} views
+              {adminTab === 'reports' && (
+                <div className="max-w-5xl mx-auto space-y-6">
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-2xl font-bold text-white">Health Reports Management</h3>
+                    <button onClick={() => setIsReportModalOpen(true)} className="px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase tracking-wider shadow-lg flex items-center gap-2">
+                      <Plus size={16} /> New Report
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {healthReports.map(report => (
+                      <div key={report.id} className="bg-stone-900 rounded-xl p-4 border border-white/5 flex gap-4">
+                        <div className="w-20 h-20 bg-stone-800 rounded-lg overflow-hidden shrink-0">
+                          {report.image_url ? <img src={report.image_url} alt="" className="w-full h-full object-cover" /> : <FileText className="m-auto mt-6 text-stone-600" />}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-white font-bold truncate mb-1">{report.title}</h4>
+                          <p className="text-stone-500 text-xs line-clamp-2">{report.summary}</p>
+                          <div className="mt-2 text-xs text-stone-600 font-mono flex items-center gap-2">
+                            <Eye size={10} /> {report.views} views
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {adminTab === 'qna' && (
-              <div className="max-w-4xl mx-auto">
-                <div className="bg-amber-900/20 text-amber-500 p-4 rounded-xl border border-amber-500/20 text-center mb-8">
-                  Please use the main Q&A Board interface for replying to questions. This tab is a placeholder for future bulk management tools.
+              {adminTab === 'qna' && (
+                <div className="max-w-4xl mx-auto">
+                  <div className="bg-amber-900/20 text-amber-500 p-4 rounded-xl border border-amber-500/20 text-center mb-8">
+                    Please use the main Q&A Board interface for replying to questions. This tab is a placeholder for future bulk management tools.
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Edit User Modal */}
+            {editingUser && (
+              <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+                <div className="bg-stone-900 p-8 rounded-2xl w-full max-w-md border border-white/10 shadow-2xl">
+                  <h3 className="text-xl font-bold text-white mb-6">Edit User</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-xs text-stone-500 font-bold uppercase block mb-1">Name</label>
+                      <input className="w-full bg-stone-800 text-white p-3 rounded-lg border border-white/5 outline-none focus:border-amber-500" value={editingUser.name} onChange={e => setEditingUser({ ...editingUser, name: e.target.value })} />
+                    </div>
+                    <div>
+                      <label className="text-xs text-stone-500 font-bold uppercase block mb-1">Email</label>
+                      <input className="w-full bg-stone-800 text-white p-3 rounded-lg border border-white/5 outline-none focus:border-amber-500" value={editingUser.email} onChange={e => setEditingUser({ ...editingUser, email: e.target.value })} />
+                    </div>
+                    <div>
+                      <label className="text-xs text-stone-500 font-bold uppercase block mb-1">Role</label>
+                      <select className="w-full bg-stone-800 text-white p-3 rounded-lg border border-white/5 outline-none focus:border-amber-500" value={editingUser.role} onChange={e => setEditingUser({ ...editingUser, role: e.target.value })}>
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-xs text-stone-500 font-bold uppercase block mb-1">New Password (Optional)</label>
+                      <input className="w-full bg-stone-800 text-white p-3 rounded-lg border border-white/5 outline-none focus:border-amber-500" type="password" placeholder="Leave blank to keep current" onChange={e => setEditingUser({ ...editingUser, password: e.target.value })} />
+                    </div>
+                    <div className="flex gap-4 pt-4">
+                      <button onClick={handleUpdateUser} className="flex-1 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase tracking-wide">Save Changes</button>
+                      <button onClick={() => setEditingUser(null)} className="flex-1 py-3 bg-stone-800 hover:bg-stone-700 text-stone-400 hover:text-white font-bold rounded-lg uppercase tracking-wide">Cancel</button>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
           </div>
-
-          {/* Edit User Modal */}
-          {editingUser && (
-            <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-              <div className="bg-stone-900 p-8 rounded-2xl w-full max-w-md border border-white/10 shadow-2xl">
-                <h3 className="text-xl font-bold text-white mb-6">Edit User</h3>
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-xs text-stone-500 font-bold uppercase block mb-1">Name</label>
-                    <input className="w-full bg-stone-800 text-white p-3 rounded-lg border border-white/5 outline-none focus:border-amber-500" value={editingUser.name} onChange={e => setEditingUser({ ...editingUser, name: e.target.value })} />
-                  </div>
-                  <div>
-                    <label className="text-xs text-stone-500 font-bold uppercase block mb-1">Email</label>
-                    <input className="w-full bg-stone-800 text-white p-3 rounded-lg border border-white/5 outline-none focus:border-amber-500" value={editingUser.email} onChange={e => setEditingUser({ ...editingUser, email: e.target.value })} />
-                  </div>
-                  <div>
-                    <label className="text-xs text-stone-500 font-bold uppercase block mb-1">Role</label>
-                    <select className="w-full bg-stone-800 text-white p-3 rounded-lg border border-white/5 outline-none focus:border-amber-500" value={editingUser.role} onChange={e => setEditingUser({ ...editingUser, role: e.target.value })}>
-                      <option value="user">User</option>
-                      <option value="admin">Admin</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="text-xs text-stone-500 font-bold uppercase block mb-1">New Password (Optional)</label>
-                    <input className="w-full bg-stone-800 text-white p-3 rounded-lg border border-white/5 outline-none focus:border-amber-500" type="password" placeholder="Leave blank to keep current" onChange={e => setEditingUser({ ...editingUser, password: e.target.value })} />
-                  </div>
-                  <div className="flex gap-4 pt-4">
-                    <button onClick={handleUpdateUser} className="flex-1 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase tracking-wide">Save Changes</button>
-                    <button onClick={() => setEditingUser(null)} className="flex-1 py-3 bg-stone-800 hover:bg-stone-700 text-stone-400 hover:text-white font-bold rounded-lg uppercase tracking-wide">Cancel</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
+        )
+      }
 
       {/* Create Report Modal */}
-      {isReportModalOpen && (
-        <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-in fade-in duration-300">
-          <div className="bg-stone-900 rounded-3xl w-full max-w-4xl max-h-[90vh] flex flex-col border border-white/10 shadow-2xl relative">
-            <div className="px-8 py-6 border-b border-white/5 flex justify-between items-center bg-stone-900 rounded-t-3xl">
-              <h3 className="text-2xl font-serif font-bold text-white">New Health Report</h3>
-              <button onClick={() => setIsReportModalOpen(false)} className="p-2 -mr-2 text-stone-500 hover:text-white"><X size={24} /></button>
-            </div>
-            <div className="flex-1 overflow-y-auto p-8 space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Title</label>
-                  <input className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5" placeholder="Report Title" value={newReport.title} onChange={e => setNewReport({ ...newReport, title: e.target.value })} />
+      {
+        isReportModalOpen && (
+          <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-in fade-in duration-300">
+            <div className="bg-stone-900 rounded-3xl w-full max-w-4xl max-h-[90vh] flex flex-col border border-white/10 shadow-2xl relative">
+              <div className="px-8 py-6 border-b border-white/5 flex justify-between items-center bg-stone-900 rounded-t-3xl">
+                <h3 className="text-2xl font-serif font-bold text-white">New Health Report</h3>
+                <button onClick={() => setIsReportModalOpen(false)} className="p-2 -mr-2 text-stone-500 hover:text-white"><X size={24} /></button>
+              </div>
+              <div className="flex-1 overflow-y-auto p-8 space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Title</label>
+                    <input className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5" placeholder="Report Title" value={newReport.title} onChange={e => setNewReport({ ...newReport, title: e.target.value })} />
+                  </div>
+                  <div>
+                    <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Key Point (Subtitle)</label>
+                    <input className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5" placeholder="Short highlight..." value={newReport.key_point} onChange={e => setNewReport({ ...newReport, key_point: e.target.value })} />
+                  </div>
                 </div>
                 <div>
-                  <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Key Point (Subtitle)</label>
-                  <input className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5" placeholder="Short highlight..." value={newReport.key_point} onChange={e => setNewReport({ ...newReport, key_point: e.target.value })} />
+                  <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Cover Image URL</label>
+                  <input className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 font-mono text-sm" placeholder="https://..." value={newReport.image_url} onChange={e => setNewReport({ ...newReport, image_url: e.target.value })} />
+                </div>
+                <div>
+                  <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Summary (Preview Text)</label>
+                  <textarea className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 h-24" placeholder="Brief summary for the card view..." value={newReport.summary} onChange={e => setNewReport({ ...newReport, summary: e.target.value })} />
+                </div>
+                <div>
+                  <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Full Content (Markdown Supported)</label>
+                  <textarea className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 h-64 font-mono leading-relaxed" placeholder="# Header\n\nBody text..." value={newReport.content} onChange={e => setNewReport({ ...newReport, content: e.target.value })} />
                 </div>
               </div>
-              <div>
-                <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Cover Image URL</label>
-                <input className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 font-mono text-sm" placeholder="https://..." value={newReport.image_url} onChange={e => setNewReport({ ...newReport, image_url: e.target.value })} />
+              <div className="p-6 border-t border-white/5 bg-stone-900 rounded-b-3xl flex justify-end gap-4">
+                <button onClick={() => setIsReportModalOpen(false)} className="px-8 py-3 bg-stone-800 hover:bg-stone-700 text-stone-400 font-bold rounded-lg uppercase">Cancel</button>
+                <button onClick={handleCreateReport} className="px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase shadow-lg">Publish Report</button>
               </div>
-              <div>
-                <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Summary (Preview Text)</label>
-                <textarea className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 h-24" placeholder="Brief summary for the card view..." value={newReport.summary} onChange={e => setNewReport({ ...newReport, summary: e.target.value })} />
-              </div>
-              <div>
-                <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Full Content (Markdown Supported)</label>
-                <textarea className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 h-64 font-mono leading-relaxed" placeholder="# Header\n\nBody text..." value={newReport.content} onChange={e => setNewReport({ ...newReport, content: e.target.value })} />
-              </div>
-            </div>
-            <div className="p-6 border-t border-white/5 bg-stone-900 rounded-b-3xl flex justify-end gap-4">
-              <button onClick={() => setIsReportModalOpen(false)} className="px-8 py-3 bg-stone-800 hover:bg-stone-700 text-stone-400 font-bold rounded-lg uppercase">Cancel</button>
-              <button onClick={handleCreateReport} className="px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase shadow-lg">Publish Report</button>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {/* Existing Footer Close Tag is Replaced Above */}
       {/* Admin Dashboard Modal */}
-      {isAdminDashboardOpen && (
-        <div className="fixed inset-0 z-[70] bg-stone-950 flex flex-col animate-in slide-in-from-bottom duration-300">
-          {/* Header */}
-          <div className="px-6 py-4 bg-stone-900 border-b border-white/5 flex justify-between items-center shrink-0">
-            <div className="flex items-center gap-4">
-              <h2 className="text-xl font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-                Admin Dashboard
-              </h2>
-              <div className="flex bg-stone-800 p-1 rounded-lg">
-                <button onClick={() => setAdminTab('users')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase transition-all ${adminTab === 'users' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Users</button>
-                <button onClick={() => setAdminTab('reports')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase transition-all ${adminTab === 'reports' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Health Reports</button>
-                <button onClick={() => setAdminTab('qna')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase transition-all ${adminTab === 'qna' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Q&A Board</button>
+      {
+        isAdminDashboardOpen && (
+          <div className="fixed inset-0 z-[70] bg-stone-950 flex flex-col animate-in slide-in-from-bottom duration-300">
+            {/* Header */}
+            <div className="px-6 py-4 bg-stone-900 border-b border-white/5 flex justify-between items-center shrink-0">
+              <div className="flex items-center gap-4">
+                <h2 className="text-xl font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                  Admin Dashboard
+                </h2>
+                <div className="flex bg-stone-800 p-1 rounded-lg">
+                  <button onClick={() => setAdminTab('users')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase transition-all ${adminTab === 'users' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Users</button>
+                  <button onClick={() => setAdminTab('reports')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase transition-all ${adminTab === 'reports' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Health Reports</button>
+                  <button onClick={() => setAdminTab('qna')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase transition-all ${adminTab === 'qna' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Q&A Board</button>
+                </div>
               </div>
+              <button onClick={() => setIsAdminDashboardOpen(false)} className="p-2 -mr-2 text-stone-500 hover:text-white hover:bg-white/5 rounded-full transition-all">
+                <X size={24} />
+              </button>
             </div>
-            <button onClick={() => setIsAdminDashboardOpen(false)} className="p-2 -mr-2 text-stone-500 hover:text-white hover:bg-white/5 rounded-full transition-all">
-              <X size={24} />
-            </button>
-          </div>
 
-          {/* Content */}
-          <div className="flex-1 overflow-y-auto p-8 bg-stone-950">
-            {adminTab === 'users' && (
-              <div className="max-w-7xl mx-auto">
-                <div className="bg-stone-900 rounded-2xl border border-white/5 overflow-hidden">
-                  <table className="w-full text-left text-sm text-stone-400">
-                    <thead className="bg-stone-800 text-stone-300 uppercase text-xs font-bold">
-                      <tr>
-                        <th className="px-6 py-4">ID</th>
-                        <th className="px-6 py-4">Name</th>
-                        <th className="px-6 py-4">Email</th>
-                        <th className="px-6 py-4">Role</th>
-                        <th className="px-6 py-4">Created At</th>
-                        <th className="px-6 py-4 text-right">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-white/5">
-                      {userList.map(u => (
-                        <tr key={u.id} className="hover:bg-white/5 transition-colors">
-                          <td className="px-6 py-4 font-mono text-xs">{u.id}</td>
-                          <td className="px-6 py-4 text-white font-bold">{u.name}</td>
-                          <td className="px-6 py-4">{u.email}</td>
-                          <td className="px-6 py-4">
-                            <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase ${u.role === 'admin' ? 'bg-red-900/30 text-red-500 border border-red-500/20' : 'bg-stone-800 text-stone-500'}`}>
-                              {u.role}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 font-mono text-xs">{new Date(u.created_at).toLocaleDateString()}</td>
-                          <td className="px-6 py-4 text-right flex justify-end gap-2">
-                            <button onClick={() => setEditingUser(u)} className="p-2 bg-stone-800 hover:bg-amber-600 hover:text-white rounded transition-colors"><Edit size={14} /></button>
-                            <button onClick={() => handleDeleteUser(u.id)} className="p-2 bg-stone-800 hover:bg-red-600 hover:text-white rounded transition-colors"><Trash2 size={14} /></button>
-                          </td>
+            {/* Content */}
+            <div className="flex-1 overflow-y-auto p-8 bg-stone-950">
+              {adminTab === 'users' && (
+                <div className="max-w-7xl mx-auto">
+                  <div className="bg-stone-900 rounded-2xl border border-white/5 overflow-hidden">
+                    <table className="w-full text-left text-sm text-stone-400">
+                      <thead className="bg-stone-800 text-stone-300 uppercase text-xs font-bold">
+                        <tr>
+                          <th className="px-6 py-4">ID</th>
+                          <th className="px-6 py-4">Name</th>
+                          <th className="px-6 py-4">Email</th>
+                          <th className="px-6 py-4">Role</th>
+                          <th className="px-6 py-4">Created At</th>
+                          <th className="px-6 py-4 text-right">Actions</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody className="divide-y divide-white/5">
+                        {userList.map(u => (
+                          <tr key={u.id} className="hover:bg-white/5 transition-colors">
+                            <td className="px-6 py-4 font-mono text-xs">{u.id}</td>
+                            <td className="px-6 py-4 text-white font-bold">{u.name}</td>
+                            <td className="px-6 py-4">{u.email}</td>
+                            <td className="px-6 py-4">
+                              <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase ${u.role === 'admin' ? 'bg-red-900/30 text-red-500 border border-red-500/20' : 'bg-stone-800 text-stone-500'}`}>
+                                {u.role}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 font-mono text-xs">{new Date(u.created_at).toLocaleDateString()}</td>
+                            <td className="px-6 py-4 text-right flex justify-end gap-2">
+                              <button onClick={() => setEditingUser(u)} className="p-2 bg-stone-800 hover:bg-amber-600 hover:text-white rounded transition-colors"><Edit size={14} /></button>
+                              <button onClick={() => handleDeleteUser(u.id)} className="p-2 bg-stone-800 hover:bg-red-600 hover:text-white rounded transition-colors"><Trash2 size={14} /></button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {adminTab === 'reports' && (
-              <div className="max-w-5xl mx-auto space-y-6">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-2xl font-bold text-white">Health Reports Management</h3>
-                  <button onClick={() => setIsReportModalOpen(true)} className="px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase tracking-wider shadow-lg flex items-center gap-2">
-                    <Plus size={16} /> New Report
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {healthReports.map(report => (
-                    <div key={report.id} className="bg-stone-900 rounded-xl p-4 border border-white/5 flex gap-4">
-                      <div className="w-20 h-20 bg-stone-800 rounded-lg overflow-hidden shrink-0">
-                        {report.image_url ? <img src={report.image_url} alt="" className="w-full h-full object-cover" /> : <FileText className="m-auto mt-6 text-stone-600" />}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="text-white font-bold truncate mb-1">{report.title}</h4>
-                        <p className="text-stone-500 text-xs line-clamp-2">{report.summary}</p>
-                        <div className="mt-2 text-xs text-stone-600 font-mono flex items-center gap-2">
-                          <Eye size={10} /> {report.views} views
+              {adminTab === 'reports' && (
+                <div className="max-w-5xl mx-auto space-y-6">
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-2xl font-bold text-white">Health Reports Management</h3>
+                    <button onClick={() => setIsReportModalOpen(true)} className="px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase tracking-wider shadow-lg flex items-center gap-2">
+                      <Plus size={16} /> New Report
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {healthReports.map(report => (
+                      <div key={report.id} className="bg-stone-900 rounded-xl p-4 border border-white/5 flex gap-4">
+                        <div className="w-20 h-20 bg-stone-800 rounded-lg overflow-hidden shrink-0">
+                          {report.image_url ? <img src={report.image_url} alt="" className="w-full h-full object-cover" /> : <FileText className="m-auto mt-6 text-stone-600" />}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-white font-bold truncate mb-1">{report.title}</h4>
+                          <p className="text-stone-500 text-xs line-clamp-2">{report.summary}</p>
+                          <div className="mt-2 text-xs text-stone-600 font-mono flex items-center gap-2">
+                            <Eye size={10} /> {report.views} views
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {adminTab === 'qna' && (
-              <div className="max-w-4xl mx-auto">
-                <div className="bg-amber-900/20 text-amber-500 p-4 rounded-xl border border-amber-500/20 text-center mb-8">
-                  Please use the main Q&A Board interface for replying to questions. This tab is a placeholder for future bulk management tools.
+              {adminTab === 'qna' && (
+                <div className="max-w-4xl mx-auto">
+                  <div className="bg-amber-900/20 text-amber-500 p-4 rounded-xl border border-amber-500/20 text-center mb-8">
+                    Please use the main Q&A Board interface for replying to questions. This tab is a placeholder for future bulk management tools.
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Edit User Modal */}
+            {editingUser && (
+              <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+                <div className="bg-stone-900 p-8 rounded-2xl w-full max-w-md border border-white/10 shadow-2xl">
+                  <h3 className="text-xl font-bold text-white mb-6">Edit User</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-xs text-stone-500 font-bold uppercase block mb-1">Name</label>
+                      <input className="w-full bg-stone-800 text-white p-3 rounded-lg border border-white/5 outline-none focus:border-amber-500" value={editingUser.name} onChange={e => setEditingUser({ ...editingUser, name: e.target.value })} />
+                    </div>
+                    <div>
+                      <label className="text-xs text-stone-500 font-bold uppercase block mb-1">Email</label>
+                      <input className="w-full bg-stone-800 text-white p-3 rounded-lg border border-white/5 outline-none focus:border-amber-500" value={editingUser.email} onChange={e => setEditingUser({ ...editingUser, email: e.target.value })} />
+                    </div>
+                    <div>
+                      <label className="text-xs text-stone-500 font-bold uppercase block mb-1">Role</label>
+                      <select className="w-full bg-stone-800 text-white p-3 rounded-lg border border-white/5 outline-none focus:border-amber-500" value={editingUser.role} onChange={e => setEditingUser({ ...editingUser, role: e.target.value })}>
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-xs text-stone-500 font-bold uppercase block mb-1">New Password (Optional)</label>
+                      <input className="w-full bg-stone-800 text-white p-3 rounded-lg border border-white/5 outline-none focus:border-amber-500" type="password" placeholder="Leave blank to keep current" onChange={e => setEditingUser({ ...editingUser, password: e.target.value })} />
+                    </div>
+                    <div className="flex gap-4 pt-4">
+                      <button onClick={handleUpdateUser} className="flex-1 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase tracking-wide">Save Changes</button>
+                      <button onClick={() => setEditingUser(null)} className="flex-1 py-3 bg-stone-800 hover:bg-stone-700 text-stone-400 hover:text-white font-bold rounded-lg uppercase tracking-wide">Cancel</button>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
           </div>
-
-          {/* Edit User Modal */}
-          {editingUser && (
-            <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-              <div className="bg-stone-900 p-8 rounded-2xl w-full max-w-md border border-white/10 shadow-2xl">
-                <h3 className="text-xl font-bold text-white mb-6">Edit User</h3>
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-xs text-stone-500 font-bold uppercase block mb-1">Name</label>
-                    <input className="w-full bg-stone-800 text-white p-3 rounded-lg border border-white/5 outline-none focus:border-amber-500" value={editingUser.name} onChange={e => setEditingUser({ ...editingUser, name: e.target.value })} />
-                  </div>
-                  <div>
-                    <label className="text-xs text-stone-500 font-bold uppercase block mb-1">Email</label>
-                    <input className="w-full bg-stone-800 text-white p-3 rounded-lg border border-white/5 outline-none focus:border-amber-500" value={editingUser.email} onChange={e => setEditingUser({ ...editingUser, email: e.target.value })} />
-                  </div>
-                  <div>
-                    <label className="text-xs text-stone-500 font-bold uppercase block mb-1">Role</label>
-                    <select className="w-full bg-stone-800 text-white p-3 rounded-lg border border-white/5 outline-none focus:border-amber-500" value={editingUser.role} onChange={e => setEditingUser({ ...editingUser, role: e.target.value })}>
-                      <option value="user">User</option>
-                      <option value="admin">Admin</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="text-xs text-stone-500 font-bold uppercase block mb-1">New Password (Optional)</label>
-                    <input className="w-full bg-stone-800 text-white p-3 rounded-lg border border-white/5 outline-none focus:border-amber-500" type="password" placeholder="Leave blank to keep current" onChange={e => setEditingUser({ ...editingUser, password: e.target.value })} />
-                  </div>
-                  <div className="flex gap-4 pt-4">
-                    <button onClick={handleUpdateUser} className="flex-1 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase tracking-wide">Save Changes</button>
-                    <button onClick={() => setEditingUser(null)} className="flex-1 py-3 bg-stone-800 hover:bg-stone-700 text-stone-400 hover:text-white font-bold rounded-lg uppercase tracking-wide">Cancel</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
+        )
+      }
 
       {/* Create Report Modal */}
-      {isReportModalOpen && (
-        <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-in fade-in duration-300">
-          <div className="bg-stone-900 rounded-3xl w-full max-w-4xl max-h-[90vh] flex flex-col border border-white/10 shadow-2xl relative">
-            <div className="px-8 py-6 border-b border-white/5 flex justify-between items-center bg-stone-900 rounded-t-3xl">
-              <h3 className="text-2xl font-serif font-bold text-white">New Health Report</h3>
-              <button onClick={() => setIsReportModalOpen(false)} className="p-2 -mr-2 text-stone-500 hover:text-white"><X size={24} /></button>
-            </div>
-            <div className="flex-1 overflow-y-auto p-8 space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Title</label>
-                  <input className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5" placeholder="Report Title" value={newReport.title} onChange={e => setNewReport({ ...newReport, title: e.target.value })} />
+      {
+        isReportModalOpen && (
+          <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-in fade-in duration-300">
+            <div className="bg-stone-900 rounded-3xl w-full max-w-4xl max-h-[90vh] flex flex-col border border-white/10 shadow-2xl relative">
+              <div className="px-8 py-6 border-b border-white/5 flex justify-between items-center bg-stone-900 rounded-t-3xl">
+                <h3 className="text-2xl font-serif font-bold text-white">New Health Report</h3>
+                <button onClick={() => setIsReportModalOpen(false)} className="p-2 -mr-2 text-stone-500 hover:text-white"><X size={24} /></button>
+              </div>
+              <div className="flex-1 overflow-y-auto p-8 space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Title</label>
+                    <input className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5" placeholder="Report Title" value={newReport.title} onChange={e => setNewReport({ ...newReport, title: e.target.value })} />
+                  </div>
+                  <div>
+                    <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Key Point (Subtitle)</label>
+                    <input className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5" placeholder="Short highlight..." value={newReport.key_point} onChange={e => setNewReport({ ...newReport, key_point: e.target.value })} />
+                  </div>
                 </div>
                 <div>
-                  <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Key Point (Subtitle)</label>
-                  <input className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5" placeholder="Short highlight..." value={newReport.key_point} onChange={e => setNewReport({ ...newReport, key_point: e.target.value })} />
+                  <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Cover Image URL</label>
+                  <input className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 font-mono text-sm" placeholder="https://..." value={newReport.image_url} onChange={e => setNewReport({ ...newReport, image_url: e.target.value })} />
+                </div>
+                <div>
+                  <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Summary (Preview Text)</label>
+                  <textarea className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 h-24" placeholder="Brief summary for the card view..." value={newReport.summary} onChange={e => setNewReport({ ...newReport, summary: e.target.value })} />
+                </div>
+                <div>
+                  <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Full Content (Markdown Supported)</label>
+                  <textarea className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 h-64 font-mono leading-relaxed" placeholder="# Header\n\nBody text..." value={newReport.content} onChange={e => setNewReport({ ...newReport, content: e.target.value })} />
                 </div>
               </div>
-              <div>
-                <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Cover Image URL</label>
-                <input className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 font-mono text-sm" placeholder="https://..." value={newReport.image_url} onChange={e => setNewReport({ ...newReport, image_url: e.target.value })} />
+              <div className="p-6 border-t border-white/5 bg-stone-900 rounded-b-3xl flex justify-end gap-4">
+                <button onClick={() => setIsReportModalOpen(false)} className="px-8 py-3 bg-stone-800 hover:bg-stone-700 text-stone-400 font-bold rounded-lg uppercase">Cancel</button>
+                <button onClick={handleCreateReport} className="px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase shadow-lg">Publish Report</button>
               </div>
-              <div>
-                <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Summary (Preview Text)</label>
-                <textarea className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 h-24" placeholder="Brief summary for the card view..." value={newReport.summary} onChange={e => setNewReport({ ...newReport, summary: e.target.value })} />
-              </div>
-              <div>
-                <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Full Content (Markdown Supported)</label>
-                <textarea className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 h-64 font-mono leading-relaxed" placeholder="# Header\n\nBody text..." value={newReport.content} onChange={e => setNewReport({ ...newReport, content: e.target.value })} />
-              </div>
-            </div>
-            <div className="p-6 border-t border-white/5 bg-stone-900 rounded-b-3xl flex justify-end gap-4">
-              <button onClick={() => setIsReportModalOpen(false)} className="px-8 py-3 bg-stone-800 hover:bg-stone-700 text-stone-400 font-bold rounded-lg uppercase">Cancel</button>
-              <button onClick={handleCreateReport} className="px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase shadow-lg">Publish Report</button>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
-    </div>
+    </div >
   );
 };
 
