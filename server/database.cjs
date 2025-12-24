@@ -9,10 +9,13 @@ const fs = require('fs');
 // For development, we use ./data/vitalcore.db (relative to this file).
 
 let dbPath;
-if (process.env.NODE_ENV === 'production') {
+// Check for Cloud Run environment variables or Production mode
+if (process.env.NODE_ENV === 'production' || process.env.K_SERVICE || process.env.PORT) {
+  // Cloud Run / Production -> Use /tmp (Writable)
   dbPath = path.join('/tmp', 'vitalcore.db');
+  console.log('[Database] Running in Production/Cloud Run mode. Using /tmp');
 } else {
-  // Development: Ensure 'data' directory exists locally
+  // Local Development -> Use ./data
   const dbDir = path.join(__dirname, 'data');
   if (!fs.existsSync(dbDir)) {
     try {
@@ -23,6 +26,7 @@ if (process.env.NODE_ENV === 'production') {
     }
   }
   dbPath = path.join(dbDir, 'vitalcore.db');
+  console.log('[Database] Running in Development mode. Using ./data');
 }
 
 console.log(`[Database] Initializing SQLite at: ${dbPath}`);

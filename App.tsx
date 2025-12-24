@@ -139,11 +139,17 @@ const App: React.FC = () => {
         return;
       }
 
+      // DEBUG:
+      // alert(`Submitting... Title: ${newQuestion.title}, Secret: ${newQuestion.is_secret}`);
+
       if (editingQuestionId) {
         await api.qna.update(editingQuestionId, newQuestion);
       } else {
-        await api.qna.create(newQuestion);
+        const res = await api.qna.create(newQuestion);
+        // alert(`Success! Server returned ID: ${res.id}`);
       }
+
+      alert("Question submitted successfully!");
       setIsQnaModalOpen(false);
       setNewQuestion({ title: '', content: '', is_secret: false });
       setEditingQuestionId(null);
