@@ -38,6 +38,23 @@ export const api = {
             const res = await fetch(`${API_URL}/users`, { headers: getHeaders() });
             if (!res.ok) throw await res.json();
             return res.json();
+        },
+        updateUser: async (id: number, data: any) => {
+            const res = await fetch(`${API_URL}/users/${id}`, {
+                method: 'PUT',
+                headers: getHeaders(),
+                body: JSON.stringify(data),
+            });
+            if (!res.ok) throw await res.json();
+            return res.json();
+        },
+        deleteUser: async (id: number) => {
+            const res = await fetch(`${API_URL}/users/${id}`, {
+                method: 'DELETE',
+                headers: getHeaders(),
+            });
+            if (!res.ok) throw await res.json();
+            return res.json();
         }
     },
     health: {

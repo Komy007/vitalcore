@@ -106,6 +106,43 @@ if (db) {
         } catch (e) { res.status(500).json({ error: e.message }); }
     });
 
+    // --- Admin User Management ---
+    app.get('/api/users', authenticateToken, isAdmin, (req, res) => {
+        try {
+            const stmt = db.prepare('SELECT id, email, name, role, country, phone, created_at FROM users ORDER BY created_at DESC');
+            res.json(stmt.all());
+        } catch (e) { res.status(500).json({ error: e.message }); }
+    });
+
+    app.put('/api/users/:id', authenticateToken, isAdmin, (req, res) => {
+        try {
+            const { id } = req.params;
+            const { name, email, role, password, country, phone } = req.body;
+
+            // Optional Password Update
+            if (password) {
+                const hashedPassword = bcrypt.hashSync(password, 10);
+                const stmt = db.prepare('UPDATE users SET name = ?, email = ?, role = ?, password = ?, country = ?, phone = ? WHERE id = ?');
+                stmt.run(name, email, role, hashedPassword, country, phone, id);
+            } else {
+                const stmt = db.prepare('UPDATE users SET name = ?, email = ?, role = ?, country = ?, phone = ? WHERE id = ?');
+                stmt.run(name, email, role, country, phone, id);
+            }
+            res.json({ message: 'User updated successfully' });
+        } catch (e) { res.status(500).json({ error: e.message }); }
+    });
+
+    app.delete('/api/users/:id', authenticateToken, isAdmin, (req, res) => {
+        try {
+            const { id } = req.params;
+            if (parseInt(id) === req.user.id) return res.status(400).json({ error: 'Cannot delete yourself' });
+
+            db.prepare('DELETE FROM questions WHERE user_id = ?').run(id); // Delete user's questions first
+            db.prepare('DELETE FROM users WHERE id = ?').run(id);
+            res.json({ message: 'User deleted successfully' });
+        } catch (e) { res.status(500).json({ error: e.message }); }
+    });
+
     // 2. Health Reports (Blog Style)
     app.get('/api/health-reports', (req, res) => {
         try {
