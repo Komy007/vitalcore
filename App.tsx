@@ -752,8 +752,8 @@ const App: React.FC = () => {
                 {t.benefits.items.map((item: string, i: number) => {
                   const Icon = benefitIcons[i] || Activity;
                   return (
-                    <button key={i} onClick={() => handleBenefitClick(i)} className={`flex items-center gap-5 px-8 py-5 rounded-[1.5rem] border transition-all duration-500 ${benefitActiveTab === i ? 'bg-amber-600 border-amber-600 text-white shadow-2xl scale-105' : 'bg-black/55 border-white/10 text-stone-400 hover:bg-black/75 hover:border-white/20'}`}>
-                      <Icon size={28} className={benefitActiveTab === i ? 'text-white' : 'text-stone-600'} />
+                    <button key={i} onClick={() => handleBenefitClick(i)} className={`flex items-center gap-5 px-8 py-5 rounded-[1.5rem] border transition-all duration-500 ${benefitActiveTab === i ? 'bg-amber-600 border-amber-600 text-white shadow-2xl scale-105' : 'bg-stone-800 border-white/20 text-stone-200 hover:bg-stone-700 hover:border-amber-500/50'}`}>
+                      <Icon size={28} className={benefitActiveTab === i ? 'text-white' : 'text-stone-400'} />
                       <span className="font-black text-sm xl:text-base tracking-tight uppercase whitespace-nowrap">{item}</span>
                     </button>
                   );
@@ -764,12 +764,12 @@ const App: React.FC = () => {
                 {t.benefits.details && t.benefits.details[benefitActiveTab] && (
                   <div className="space-y-8">
                     {/* In-Modal Navigation */}
-                    <div className="flex justify-between items-center gap-2 mb-2 p-1 bg-stone-800/50 rounded-xl overflow-x-auto no-scrollbar">
+                    <div className="flex justify-between items-center gap-2 mb-6 p-2 bg-stone-950/80 border border-white/10 rounded-2xl overflow-x-auto no-scrollbar shadow-inner">
                       {t.benefits.items.map((item: string, i: number) => {
                         const Icon = benefitIcons[i] || Activity;
                         return (
-                          <button key={i} onClick={() => setBenefitActiveTab(i)} className={`flex-1 min-w-[3rem] p-3 rounded-lg flex justify-center items-center transition-all ${benefitActiveTab === i ? 'bg-amber-600 text-white shadow-lg' : 'text-stone-500 hover:text-stone-300'}`}>
-                            <Icon size={20} />
+                          <button key={i} onClick={() => setBenefitActiveTab(i)} className={`flex-1 min-w-[3.5rem] py-4 rounded-xl flex justify-center items-center transition-all ${benefitActiveTab === i ? 'bg-amber-600 text-white shadow-lg ring-1 ring-amber-400/50' : 'text-stone-400 hover:text-stone-200 hover:bg-white/5'}`}>
+                            <Icon size={24} />
                           </button>
                         );
                       })}
@@ -781,7 +781,7 @@ const App: React.FC = () => {
                       <p className="text-amber-200 text-lg font-serif italic border-l-4 border-amber-600 pl-4 py-1">{t.benefits.details[benefitActiveTab].summary}</p>
                     </div>
                     <div className="h-px bg-white/10 w-full"></div>
-                    <p className="text-stone-300 text-base leading-[1.8] font-light opacity-95 whitespace-pre-wrap">{t.benefits.details[benefitActiveTab].content}</p>
+                    <p className="text-stone-100 text-base leading-[1.8] opacity-95 whitespace-pre-wrap">{t.benefits.details[benefitActiveTab].content}</p>
 
                     <div className="p-6 bg-amber-900/20 rounded-2xl border border-amber-500/30">
                       <h4 className="text-amber-500 font-black text-xs uppercase tracking-[0.2em] mb-4 flex items-center gap-2"><BookOpen size={16} /> Key Evidence</h4>
