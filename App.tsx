@@ -763,6 +763,18 @@ const App: React.FC = () => {
               <MobileModal isOpen={isBenefitModalOpen} onClose={() => setIsBenefitModalOpen(false)} title={t.benefits.items[benefitActiveTab]}>
                 {t.benefits.details && t.benefits.details[benefitActiveTab] && (
                   <div className="space-y-8">
+                    {/* In-Modal Navigation */}
+                    <div className="flex justify-between items-center gap-2 mb-2 p-1 bg-stone-800/50 rounded-xl overflow-x-auto no-scrollbar">
+                      {t.benefits.items.map((item: string, i: number) => {
+                        const Icon = benefitIcons[i] || Activity;
+                        return (
+                          <button key={i} onClick={() => setBenefitActiveTab(i)} className={`flex-1 min-w-[3rem] p-3 rounded-lg flex justify-center items-center transition-all ${benefitActiveTab === i ? 'bg-amber-600 text-white shadow-lg' : 'text-stone-500 hover:text-stone-300'}`}>
+                            <Icon size={20} />
+                          </button>
+                        );
+                      })}
+                    </div>
+
                     <div>
                       <span className="text-amber-500 font-black text-xs uppercase tracking-[0.2em] block mb-2">{t.benefits.details[benefitActiveTab].scientificTerm}</span>
                       <h3 className="text-2xl font-serif font-bold text-white leading-tight mb-4">{t.benefits.details[benefitActiveTab].title}</h3>
