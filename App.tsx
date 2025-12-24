@@ -110,7 +110,8 @@ const App: React.FC = () => {
       setIsAuthModalOpen(false);
       setAuthMessage(null);
     } catch (err: any) {
-      setAuthMessage(err.error || 'Login failed');
+      const msg = err.details ? `${err.error}: ${err.details}` : (err.error || 'Login failed');
+      setAuthMessage(msg);
     }
   };
 
@@ -124,7 +125,8 @@ const App: React.FC = () => {
       setAuthMode('login');
       setAuthMessage('Account created. Please login.');
     } catch (err: any) {
-      setAuthMessage(err.error || 'Registration failed');
+      const msg = err.details ? `${err.error}: ${err.details}` : (err.error || 'Registration failed');
+      setAuthMessage(msg);
     }
   };
 

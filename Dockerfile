@@ -11,6 +11,8 @@ RUN apt-get update && apt-get install -y python3 make g++
 COPY package.json ./
 
 # 3. Clean Install (Generates fresh package-lock for Linux)
+# Remove potential windows-generated lock files to avoid conflicts
+RUN rm -rf package-lock.json node_modules
 RUN npm install --build-from-source=better-sqlite3
 
 # 4. Copy Source Code
