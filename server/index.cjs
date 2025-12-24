@@ -216,6 +216,24 @@ if (db) {
         }
     });
 
+    app.delete('/api/questions/:id', authenticateToken, (req, res) => {
+        try {
+            const { id } = req.params;
+
+            // Verify ownership
+            const existing = db.prepare('SELECT user_id FROM questions WHERE id = ?').get(id);
+            if (!existing) return res.status(404).json({ error: 'Question not found' });
+
+            if (existing.user_id !== req.user.id && req.user.role !== 'admin') {
+                return res.status(403).json({ error: 'Not authorized' });
+            }
+
+            const stmt = db.prepare('DELETE FROM questions WHERE id = ?');
+            stmt.run(id);
+            res.json({ message: 'Question deleted' });
+        } catch (e) { res.status(500).json({ error: e.message }); }
+    });
+
     // Answer Question (Admin Only)
     app.post('/api/questions/:id/answer', authenticateToken, isAdmin, (req, res) => {
         try {

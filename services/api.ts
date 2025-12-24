@@ -93,6 +93,14 @@ export const api = {
             });
             if (!res.ok) throw await res.json();
             return res.json();
+        },
+        delete: async (id: number) => {
+            const res = await fetch(`${API_URL}/questions/${id}`, {
+                method: 'DELETE',
+                headers: getHeaders(),
+            });
+            if (!res.ok) throw await res.json();
+            return res.json();
         }
     }
 };

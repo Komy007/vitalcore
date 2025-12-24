@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Menu, X, Activity, HelpCircle, Shield, Brain, Heart, Droplet,
-  ArrowRight, User, Edit, ChevronLeft, Sparkles, Bot, Search, ExternalLink, Globe, Lock, Eye, EyeOff, MessageCircle, Flame, Clock, Thermometer, ChevronDown, Info, FlaskConical, Zap, BookOpen, GraduationCap, Award, CheckCircle2, Coffee, Layers, Quote, ShoppingBag, Star, ShieldCheck, Mail, Send, FileText
+  ArrowRight, User, Edit, ChevronLeft, Sparkles, Bot, Search, ExternalLink, Globe, Lock, Eye, EyeOff, MessageCircle, Flame, Clock, Thermometer, ChevronDown, Info, FlaskConical, Zap, BookOpen, GraduationCap, Award, CheckCircle2, Coffee, Layers, Quote, ShoppingBag, Star, ShieldCheck, Mail, Send, FileText, Trash2
 } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
@@ -199,6 +199,16 @@ const App: React.FC = () => {
   const handleEditClick = (q: any) => {
     setEditingQuestionId(q.id);
     setIsQnaModalOpen(true);
+  }
+
+  const handleDeleteQuestion = async (id: number) => {
+    if (!window.confirm("Are you sure you want to delete this question?")) return;
+    try {
+      await api.qna.delete(id);
+      fetchQuestions();
+    } catch (e: any) {
+      alert("Failed to delete question");
+    }
   }
 
   const handleAboutTabClick = (tab: string) => {
@@ -1088,6 +1098,9 @@ const App: React.FC = () => {
                       {user && user.id === q.user_id && (
                         <button onClick={() => handleEditClick(q)} className="text-xs text-amber-500 hover:text-white font-bold flex items-center gap-1 border border-amber-500/30 px-2 py-1 rounded bg-amber-900/10"><Edit size={10} /> Edit</button>
                       )}
+                      {(isAdmin || (user && user.id === q.user_id)) && (
+                        <button onClick={() => handleDeleteQuestion(q.id)} className="text-xs text-red-500 hover:text-white font-bold flex items-center gap-1 border border-red-500/30 px-2 py-1 rounded bg-red-900/10 ml-2"><Trash2 size={10} /> Delete</button>
+                      )}
                     </div>
                   </div>
                   <p className="text-stone-400 font-light mb-6 leading-relaxed">{q.content}</p>
@@ -1119,40 +1132,49 @@ const App: React.FC = () => {
 
       {/* Q&A Modal */}
       {isQnaModalOpen && (
-        <MobileModal isOpen={isQnaModalOpen} onClose={() => setIsQnaModalOpen(false)} title={editingQuestionId ? "Edit Question" : "Ask Question"}>
-          <div className="space-y-6 pt-4">
-            <div>
-              <label className="block text-stone-500 text-xs font-bold mb-2 uppercase">Title</label>
-              <input className="w-full bg-stone-800 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-amber-500" placeholder="Question Title" value={newQuestion.title} onChange={e => setNewQuestion({ ...newQuestion, title: e.target.value })} />
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/95 backdrop-blur-2xl p-4 md:p-10 animate-in fade-in duration-500 overflow-y-auto">
+          <div className="bg-stone-900 rounded-[2rem] p-8 w-full max-w-2xl shadow-2xl border border-white/5 relative flex flex-col">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold text-white">{editingQuestionId ? "Edit Question" : "Ask Question"}</h3>
+              <button onClick={() => setIsQnaModalOpen(false)} className="p-2 -mr-2 text-stone-500 hover:text-white transition-colors">
+                <X size={24} />
+              </button>
             </div>
-            <div>
-              <label className="block text-stone-500 text-xs font-bold mb-2 uppercase">Content</label>
-              <textarea className="w-full bg-stone-800 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-amber-500 min-h-[150px]" placeholder="Ask anything about Phellinus Linteus..." value={newQuestion.content} onChange={e => setNewQuestion({ ...newQuestion, content: e.target.value })} />
-            </div>
-            <div>
-              <label className="block text-stone-500 text-xs font-bold mb-4 uppercase">Question Type</label>
-              <div className="grid grid-cols-2 gap-4">
-                <button
-                  type="button"
-                  onClick={() => setNewQuestion({ ...newQuestion, is_secret: false })}
-                  className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${!newQuestion.is_secret ? 'bg-amber-600 border-amber-500 text-white' : 'bg-stone-900 border-white/10 text-stone-500 hover:border-white/30'}`}
-                >
-                  <Globe size={24} />
-                  <span className="text-xs font-bold uppercase">General (Public)</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setNewQuestion({ ...newQuestion, is_secret: true })}
-                  className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${newQuestion.is_secret ? 'bg-amber-600 border-amber-500 text-white' : 'bg-stone-900 border-white/10 text-stone-500 hover:border-white/30'}`}
-                >
-                  <Lock size={24} />
-                  <span className="text-xs font-bold uppercase">Secret (Private)</span>
-                </button>
+
+            <div className="space-y-6">
+              <div>
+                <label className="block text-stone-500 text-xs font-bold mb-2 uppercase">Title</label>
+                <input className="w-full bg-stone-800 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-amber-500" placeholder="Question Title" value={newQuestion.title} onChange={e => setNewQuestion({ ...newQuestion, title: e.target.value })} />
               </div>
+              <div>
+                <label className="block text-stone-500 text-xs font-bold mb-2 uppercase">Content</label>
+                <textarea className="w-full bg-stone-800 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-amber-500 min-h-[150px]" placeholder="Ask anything about Phellinus Linteus..." value={newQuestion.content} onChange={e => setNewQuestion({ ...newQuestion, content: e.target.value })} />
+              </div>
+              <div>
+                <label className="block text-stone-500 text-xs font-bold mb-4 uppercase">Question Type</label>
+                <div className="grid grid-cols-2 gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setNewQuestion({ ...newQuestion, is_secret: false })}
+                    className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${!newQuestion.is_secret ? 'bg-amber-600 border-amber-500 text-white' : 'bg-stone-900 border-white/10 text-stone-500 hover:border-white/30'}`}
+                  >
+                    <Globe size={24} />
+                    <span className="text-xs font-bold uppercase">General (Public)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setNewQuestion({ ...newQuestion, is_secret: true })}
+                    className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${newQuestion.is_secret ? 'bg-amber-600 border-amber-500 text-white' : 'bg-stone-900 border-white/10 text-stone-500 hover:border-white/30'}`}
+                  >
+                    <Lock size={24} />
+                    <span className="text-xs font-bold uppercase">Secret (Private)</span>
+                  </button>
+                </div>
+              </div>
+              <button onClick={handleAskQuestion} className="w-full py-4 bg-amber-600 text-white font-bold rounded-xl uppercase tracking-widest hover:bg-amber-500 transition-all shadow-lg mt-4">{editingQuestionId ? "Update Question" : "Submit Question"}</button>
             </div>
-            <button onClick={handleAskQuestion} className="w-full py-4 bg-amber-600 text-white font-bold rounded-xl uppercase tracking-widest hover:bg-amber-500 transition-all shadow-lg mt-4">{editingQuestionId ? "Update Question" : "Submit Question"}</button>
           </div>
-        </MobileModal>
+        </div>
       )}
 
       {/* Footer */}
