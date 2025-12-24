@@ -26,7 +26,11 @@ app.use(express.json());
 
 // --- Health Check (Critical) ---
 app.get('/api/health', (req, res) => {
-    res.status(200).send('OK (Full Monolith)');
+    res.status(200).json({
+        status: 'OK',
+        mode: 'Monolith',
+        db_connected: !!db
+    });
 });
 
 // --- Middleware ---

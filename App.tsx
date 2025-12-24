@@ -70,7 +70,12 @@ const App: React.FC = () => {
   const checkHealth = async () => {
     try {
       const res = await fetch('/api/health');
-      setHealthStatus(res.ok ? 'Online' : 'Offline');
+      if (res.ok) {
+        const data = await res.json();
+        setHealthStatus(data.db_connected ? 'Online (DB Connected)' : 'Online (DB Missing)');
+      } else {
+        setHealthStatus('Error ' + res.status);
+      }
     } catch (e) {
       setHealthStatus('Offline');
     }
