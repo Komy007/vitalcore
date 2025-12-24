@@ -58,6 +58,23 @@ const App: React.FC = () => {
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [newReport, setNewReport] = useState({ title: '', key_point: '', image_url: '', content: '' });
   const [newQuestion, setNewQuestion] = useState({ title: '', content: '', is_secret: false });
+  const [healthStatus, setHealthStatus] = useState<string>('Checking...');
+
+  useEffect(() => {
+    console.log("VitalCore App v1.5.0 Loaded");
+    checkHealth();
+    const interval = setInterval(checkHealth, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const checkHealth = async () => {
+    try {
+      const res = await fetch('/api/health');
+      setHealthStatus(res.ok ? 'Online' : 'Offline');
+    } catch (e) {
+      setHealthStatus('Offline');
+    }
+  };
 
   // Research Data
   const researchData = [
@@ -1132,6 +1149,7 @@ const App: React.FC = () => {
         <div className="max-w-7xl mx-auto px-10 text-center">
           <VitalCoreLogo className="w-20 h-20 mx-auto mb-8 opacity-25 group-hover:opacity-100 transition-opacity" />
           <h4 className="font-serif font-bold text-2xl text-white mb-4 uppercase tracking-tighter">VITAL CORE PREMIUM</h4>
+          <p className="text-xs text-stone-600 font-mono">v1.5.0 • System Status: {healthStatus}</p>
           <p className="text-stone-600 max-w-lg mx-auto mb-10 font-light text-base">Scientific myco-oncology from the Cambodian highlands.</p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-8 mb-10 text-stone-400 text-sm">
             <div className="flex items-center gap-2">
