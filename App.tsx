@@ -317,15 +317,33 @@ const App: React.FC = () => {
           <div className="fixed inset-0 z-[45] bg-stone-950/95 backdrop-blur-xl pt-32 px-8 animate-in slide-in-from-right-10 duration-300 lg:hidden">
             <div className="flex flex-col space-y-8">
               <div className="flex flex-col space-y-6">
-                {Object.entries(t.nav).map(([key, label]) => (
-                  <button
-                    key={key}
-                    onClick={() => scrollToSection(key)}
-                    className="text-3xl font-serif font-bold text-white hover:text-amber-500 text-left transition-colors"
-                  >
-                    {label as string}
-                  </button>
-                ))}
+                {Object.entries(t.nav).map(([key, label]) => {
+                  if (key === 'health' || key === 'faq') {
+                    return (
+                      <button
+                        key={key}
+                        onClick={() => { setCurrentView(key as any); setIsMenuOpen(false); window.scrollTo(0, 0); }}
+                        className={`text-3xl font-serif font-bold text-left transition-colors ${currentView === key ? 'text-amber-500' : 'text-white hover:text-amber-500'}`}
+                      >
+                        {label as string}
+                      </button>
+                    );
+                  }
+                  return (
+                    <button
+                      key={key}
+                      onClick={() => {
+                        setCurrentView('home');
+                        setIsMenuOpen(false);
+                        window.scrollTo(0, 0);
+                        setTimeout(() => scrollToSection(key), 100);
+                      }}
+                      className="text-3xl font-serif font-bold text-white hover:text-amber-500 text-left transition-colors"
+                    >
+                      {label as string}
+                    </button>
+                  );
+                })}
               </div>
 
               <div className="h-px bg-white/10"></div>
