@@ -108,6 +108,20 @@ const App: React.FC = () => {
 
   const handleAskQuestion = async () => {
     try {
+      if (!newQuestion.title.trim() || !newQuestion.content.trim()) {
+        alert("Please enter both title and content.");
+        return;
+      }
+
+      // Verify user still exists (handle ephemeral DB restart)
+      try {
+        await api.auth.me();
+      } catch (authErr) {
+        alert("Session expired or server restarted. Please login again.");
+        logout();
+        return;
+      }
+
       if (editingQuestionId) {
         await api.qna.update(editingQuestionId, newQuestion);
       } else {
@@ -117,7 +131,10 @@ const App: React.FC = () => {
       setNewQuestion({ title: '', content: '', is_secret: false });
       setEditingQuestionId(null);
       fetchQuestions();
-    } catch (e) { alert('Failed to submit question'); }
+    } catch (e: any) {
+      console.error(e);
+      alert(`Failed to submit question: ${e.error || e.message || 'Unknown error'}`);
+    }
   };
 
   const loadAdminData = async () => {
