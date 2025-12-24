@@ -365,7 +365,7 @@ const App: React.FC = () => {
       <nav className={`fixed w-full z-50 transition-all duration-700 ${isScrolled || isMenuOpen ? 'bg-stone-950/80 backdrop-blur-2xl py-4 border-b border-white/5' : 'bg-transparent py-8'}`}>
         <div className="max-w-[1700px] mx-auto px-6 lg:px-12">
           <div className="nav-container justify-between flex items-center">
-            <div className="flex items-center gap-4 cursor-pointer z-50 group shrink-0" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+            <div className="flex items-center gap-4 cursor-pointer z-50 group shrink-0" onClick={() => { setCurrentView('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
               <VitalCoreLogo className="w-14 h-14 md:w-20 md:h-20 drop-shadow-[0_0_20px_rgba(217,119,6,0.5)]" />
               <div className="flex flex-col justify-center">
                 <span className="font-serif font-bold text-2xl md:text-3xl tracking-tight text-white uppercase">VITAL <span className="text-amber-500">CORE</span></span>
@@ -1144,7 +1144,7 @@ const App: React.FC = () => {
             <div className="grid gap-4">
               {(!Array.isArray(questions) || questions.length === 0) && <p className="text-center text-stone-600 py-10">{t.board?.no_questions}</p>}
               {Array.isArray(questions) && questions.map((q: any) => (
-                <div key={q.id} className="bg-stone-900/50 p-8 rounded-[2rem] border border-white/5 hover:border-amber-500/30 transition-all">
+                <div key={q.id} className="bg-stone-900/50 p-6 md:p-8 rounded-[2rem] border border-white/5 hover:border-amber-500/30 transition-all">
                   <div className="flex justify-between items-start mb-4">
                     <h4 className="text-lg font-bold text-white flex items-center gap-3">
                       {q.is_secret === 1 && <Lock size={14} className="text-amber-500" />}
@@ -1162,7 +1162,7 @@ const App: React.FC = () => {
                   </div>
                   <p className="text-stone-400 font-light mb-6 leading-relaxed">{q.content}</p>
                   {q.answer && (
-                    <div className="ml-8 p-6 bg-amber-900/10 rounded-2xl border-l-2 border-amber-600">
+                    <div className="ml-4 md:ml-8 p-6 bg-amber-900/10 rounded-2xl border-l-2 border-amber-600">
                       <span className="text-[10px] font-black uppercase text-amber-600 mb-2 block">{t.board?.admin_answer}</span>
                       <p className="text-stone-300 text-sm">{q.answer}</p>
                     </div>
