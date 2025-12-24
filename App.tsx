@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Menu, X, Activity, HelpCircle, Shield, Brain, Heart, Droplet,
-  ArrowRight, User, Edit, ChevronLeft, Sparkles, Bot, Search, ExternalLink, Globe, Lock, Eye, EyeOff, MessageCircle, Flame, Clock, Thermometer, ChevronDown, Info, FlaskConical, Zap, BookOpen, GraduationCap, Award, CheckCircle2, Coffee, Layers, Quote, ShoppingBag, Star, ShieldCheck, Mail, Send
+  ArrowRight, User, Edit, ChevronLeft, Sparkles, Bot, Search, ExternalLink, Globe, Lock, Eye, EyeOff, MessageCircle, Flame, Clock, Thermometer, ChevronDown, Info, FlaskConical, Zap, BookOpen, GraduationCap, Award, CheckCircle2, Coffee, Layers, Quote, ShoppingBag, Star, ShieldCheck, Mail, Send, FileText
 } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
@@ -57,6 +57,7 @@ const App: React.FC = () => {
 
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [newReport, setNewReport] = useState({ title: '', key_point: '', image_url: '', content: '' });
+  const [newQuestion, setNewQuestion] = useState({ title: '', content: '', is_secret: false });
 
   // Research Data
   const researchData = [
@@ -82,13 +83,16 @@ const App: React.FC = () => {
     e.preventDefault();
     setAuthMessage(null);
     try {
-      await login(loginEmail, loginPw);
+      const { token, user } = await api.auth.login({ email: loginEmail, password: loginPw });
+      login(token, user);
       setIsAuthModalOpen(false);
       setAuthMessage(null);
     } catch (err: any) {
       setAuthMessage(err.error || 'Login failed');
     }
   };
+
+  const [currentView, setCurrentView] = useState('home'); // 'home', 'health', 'faq', 'admin'
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,6 +104,20 @@ const App: React.FC = () => {
     } catch (err: any) {
       setAuthMessage(err.error || 'Registration failed');
     }
+  };
+
+  const handleAskQuestion = async () => {
+    try {
+      if (editingQuestionId) {
+        await api.qna.update(editingQuestionId, newQuestion);
+      } else {
+        await api.qna.create(newQuestion);
+      }
+      setIsQnaModalOpen(false);
+      setNewQuestion({ title: '', content: '', is_secret: false });
+      setEditingQuestionId(null);
+      fetchQuestions();
+    } catch (e) { alert('Failed to submit question'); }
   };
 
   const loadAdminData = async () => {
@@ -243,13 +261,24 @@ const App: React.FC = () => {
               </div>
             </div>
 
-            <div className="hidden lg:flex items-center space-x-10 xl:space-x-12">
-              {Object.entries(t.nav).map(([key, label]) => (
-                <button key={key} onClick={() => scrollToSection(key)} className="text-white hover:text-amber-500 font-medium transition-all text-sm uppercase tracking-[0.2em] relative group py-2 whitespace-nowrap">
-                  {label as string}
-                  <span className="absolute bottom-0 left-0 w-full h-[1px] bg-amber-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></span>
-                </button>
-              ))}
+            {/* Desktop Nav */}
+            <div className="hidden lg:flex items-center gap-8">
+              <div className="flex bg-stone-900/50 rounded-full p-2 border border-white/5 backdrop-blur-md">
+                {Object.entries(t.nav).map(([key, label]) => {
+                  if (key === 'health' || key === 'faq') {
+                    return (
+                      <button key={key} onClick={() => { setCurrentView(key as any); window.scrollTo(0, 0); }} className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest transition-all ${currentView === key ? 'bg-amber-600 text-white shadow-lg scale-105' : 'text-stone-400 hover:text-white hover:bg-white/5'}`}>
+                        {label as string}
+                      </button>
+                    )
+                  }
+                  return (
+                    <button key={key} onClick={() => { setCurrentView('home'); setTimeout(() => scrollToSection(key), 100); }} className="px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest text-stone-400 hover:text-white hover:bg-white/5 transition-all">
+                      {label as string}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             <div className="hidden lg:flex items-center gap-8 pl-8 border-l border-white/10">
@@ -899,64 +928,152 @@ const App: React.FC = () => {
         )
       }
 
-      {/* Q&A Section */}
-      <section id="faq" className="py-24 relative bg-fixed bg-center bg-cover" style={{ backgroundImage: `url(${IMAGES.faq_bg})` }}>
-        <div className="absolute inset-0 bg-stone-950/85 backdrop-blur-md"></div>
-        <div className="max-w-5xl mx-auto px-8 relative z-10">
-          <div className="flex justify-between items-end mb-12 border-b border-white/10 pb-6">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-serif font-medium text-white uppercase tracking-tight mb-2">{t.nav.faq}</h2>
-              <p className="text-stone-400 text-sm">Community Questions & Answers</p>
-            </div>
-            {isAuthenticated && <button onClick={() => setIsQnaModalOpen(true)} className="px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-full text-xs uppercase tracking-widest shadow-lg flex items-center gap-2"><Edit size={14} /> Ask Question</button>}
-          </div>
-
-          <div className="grid gap-4">
-            {(!Array.isArray(questions) || questions.length === 0) && <p className="text-center text-stone-600 py-10">No questions yet. Be the first to ask!</p>}
-            {Array.isArray(questions) && questions.map((q: any) => (
-              <div key={q.id} className="bg-stone-900/50 p-8 rounded-[2rem] border border-white/5 hover:border-amber-500/30 transition-all">
-                <div className="flex justify-between items-start mb-4">
-                  <h4 className="text-lg font-bold text-white flex items-center gap-3">
-                    {q.is_secret === 1 && <Lock size={14} className="text-amber-500" />}
-                    {q.title}
-                  </h4>
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs text-stone-600 font-mono">{new Date(q.created_at).toLocaleDateString()}</span>
-                    {user && user.id === q.user_id && (
-                      <button onClick={() => handleEditClick(q)} className="text-xs text-amber-500 hover:text-white font-bold flex items-center gap-1 border border-amber-500/30 px-2 py-1 rounded bg-amber-900/10"><Edit size={10} /> Edit</button>
-                    )}
-                  </div>
+      {/* Conditional Content based on Current View */}
+      {currentView === 'home' && (
+        <>
+          <section id="health" className="py-24 relative bg-stone-900 border-t border-white/5">
+            <div className="max-w-7xl mx-auto px-6">
+              <div className="flex justify-between items-end mb-12 border-b border-white/10 pb-6">
+                <div>
+                  <h2 className="text-3xl md:text-5xl font-serif font-medium text-white uppercase tracking-tight mb-2">{t.nav.health}</h2>
+                  <p className="text-stone-400 text-sm">Vital Core Research Team</p>
                 </div>
-                <p className="text-stone-400 font-light mb-6 leading-relaxed">{q.content}</p>
-                {q.answer && (
-                  <div className="ml-8 p-6 bg-amber-900/10 rounded-2xl border-l-2 border-amber-600">
-                    <span className="text-[10px] font-black uppercase text-amber-600 mb-2 block">Admin Answer</span>
-                    <p className="text-stone-300 text-sm">{q.answer}</p>
+                <button onClick={() => { setCurrentView('health'); window.scrollTo(0, 0); }} className="px-6 py-3 bg-stone-800 text-stone-300 font-bold rounded-full text-xs uppercase tracking-widest hover:text-white transition-all">View All Reports &rarr;</button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {healthReports.slice(0, 3).map((report) => (
+                  <div key={report.id} onClick={() => { setSelectedReport(report); api.health.get(report.id).catch(console.error); }} className="cursor-pointer group">
+                    <div className="aspect-[4/3] rounded-2xl overflow-hidden mb-6 bg-stone-900 border border-white/5 relative">
+                      {report.image_url ? (
+                        <img src={report.image_url} alt={report.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-stone-800 text-stone-600"><FileText size={48} /></div>
+                      )}
+                      <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all"></div>
+                    </div>
+                    <span className="text-amber-500 font-bold text-xs uppercase tracking-widest mb-2 block">{new Date(report.created_at).toLocaleDateString()}</span>
+                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-amber-500 transition-colors lineHeight-tight">{report.title}</h3>
                   </div>
-                )}
-                {!q.answer && isAdmin && (
-                  <div className="mt-4 pt-4 border-t border-white/5">
-                    <div className="flex gap-2">
-                      <input
-                        className="flex-grow bg-black/30 p-3 rounded-lg text-white text-sm border border-white/5 outline-none focus:border-amber-500 transition-colors"
-                        placeholder="Write answer..."
-                        value={adminAnswer[q.id] || ''}
-                        onChange={(e) => setAdminAnswer({ ...adminAnswer, [q.id]: e.target.value })}
-                      />
-                      <button
-                        onClick={() => handleAdminAnswer(q.id)}
-                        className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg text-xs uppercase"
-                      >
-                        Reply
-                      </button>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section id="faq" className="py-24 relative bg-stone-950">
+            <div className="max-w-5xl mx-auto px-8 text-center">
+              <h2 className="text-3xl md:text-4xl font-serif font-medium text-white uppercase tracking-tight mb-6">{t.nav.faq}</h2>
+              <p className="text-stone-400 mb-8">Join our community discussions.</p>
+              <button onClick={() => { setCurrentView('faq'); window.scrollTo(0, 0); }} className="px-8 py-4 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-full uppercase tracking-widest shadow-lg transition-all">Go to Q&A Board</button>
+            </div>
+          </section>
+        </>
+      )}
+
+      {currentView === 'health' && (
+        <div className="pt-32 min-h-screen bg-stone-950">
+          <section className="max-w-7xl mx-auto px-6 mb-24">
+            <div className="flex justify-between items-end mb-12 border-b border-white/10 pb-6">
+              <div>
+                <h2 className="text-3xl md:text-5xl font-serif font-medium text-white uppercase tracking-tight mb-2">{t.nav.health}</h2>
+                <p className="text-stone-400 text-sm">Medical Evidence & Case Studies</p>
+              </div>
+              {isAdmin && <button onClick={() => setIsReportModalOpen(true)} className="px-6 py-3 bg-stone-800 hover:bg-stone-700 text-white font-bold rounded-full text-xs uppercase tracking-widest shadow-lg flex items-center gap-2 transition-all"><Edit size={14} /> Write Health Essay</button>}
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {healthReports.map((report) => (
+                <div key={report.id} onClick={() => { setSelectedReport(report); api.health.get(report.id).catch(console.error); }} className="cursor-pointer group">
+                  <div className="aspect-[4/3] rounded-2xl overflow-hidden mb-6 bg-stone-900 border border-white/5 relative">
+                    {report.image_url ? (
+                      <img src={report.image_url} alt={report.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-stone-800 text-stone-600"><FileText size={48} /></div>
+                    )}
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all"></div>
+                  </div>
+                  <span className="text-amber-500 font-bold text-xs uppercase tracking-widest mb-2 block">{new Date(report.created_at).toLocaleDateString()}</span>
+                  <h3 className="text-xl font-bold text-white mb-3 group-hover:text-amber-500 transition-colors lineHeight-tight">{report.title}</h3>
+                  <p className="text-stone-400 text-sm line-clamp-2">{report.summary || report.content?.substring(0, 100)}...</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      )}
+
+      {currentView === 'faq' && (
+        <div className="pt-32 min-h-screen bg-stone-950 px-6">
+          <section className="max-w-5xl mx-auto relative z-10 mb-24">
+            <div className="flex justify-between items-end mb-12 border-b border-white/10 pb-6">
+              <div>
+                <h2 className="text-3xl md:text-4xl font-serif font-medium text-white uppercase tracking-tight mb-2">{t.nav.faq}</h2>
+                <p className="text-stone-400 text-sm">Community Questions & Answers</p>
+              </div>
+              {isAuthenticated && <button onClick={() => setIsQnaModalOpen(true)} className="px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-full text-xs uppercase tracking-widest shadow-lg flex items-center gap-2"><Edit size={14} /> Ask Question</button>}
+            </div>
+
+            <div className="grid gap-4">
+              {(!Array.isArray(questions) || questions.length === 0) && <p className="text-center text-stone-600 py-10">No questions yet. Be the first to ask!</p>}
+              {Array.isArray(questions) && questions.map((q: any) => (
+                <div key={q.id} className="bg-stone-900/50 p-8 rounded-[2rem] border border-white/5 hover:border-amber-500/30 transition-all">
+                  <div className="flex justify-between items-start mb-4">
+                    <h4 className="text-lg font-bold text-white flex items-center gap-3">
+                      {q.is_secret === 1 && <Lock size={14} className="text-amber-500" />}
+                      {q.title}
+                    </h4>
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs text-stone-600 font-mono">{new Date(q.created_at).toLocaleDateString()}</span>
+                      {user && user.id === q.user_id && (
+                        <button onClick={() => handleEditClick(q)} className="text-xs text-amber-500 hover:text-white font-bold flex items-center gap-1 border border-amber-500/30 px-2 py-1 rounded bg-amber-900/10"><Edit size={10} /> Edit</button>
+                      )}
                     </div>
                   </div>
-                )}
-              </div>
-            ))}
-          </div>
+                  <p className="text-stone-400 font-light mb-6 leading-relaxed">{q.content}</p>
+                  {q.answer && (
+                    <div className="ml-8 p-6 bg-amber-900/10 rounded-2xl border-l-2 border-amber-600">
+                      <span className="text-[10px] font-black uppercase text-amber-600 mb-2 block">Admin Answer</span>
+                      <p className="text-stone-300 text-sm">{q.answer}</p>
+                    </div>
+                  )}
+                  {!q.answer && isAdmin && (
+                    <div className="mt-4 pt-4 border-t border-white/5">
+                      <div className="flex gap-2">
+                        <input
+                          className="flex-grow bg-black/30 p-3 rounded-lg text-white text-sm border border-white/5 outline-none focus:border-amber-500 transition-colors"
+                          placeholder="Write answer..."
+                          value={adminAnswer[q.id] || ''}
+                          onChange={(e) => setAdminAnswer({ ...adminAnswer, [q.id]: e.target.value })}
+                        />
+                        <button onClick={() => handleAdminAnswer(q.id)} className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg text-xs uppercase">Reply</button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
         </div>
-      </section>
+      )}
+
+      {/* Q&A Modal */}
+      {isQnaModalOpen && (
+        <MobileModal isOpen={isQnaModalOpen} onClose={() => setIsQnaModalOpen(false)} title={editingQuestionId ? "Edit Question" : "Ask Question"}>
+          <div className="space-y-6 pt-4">
+            <div>
+              <label className="block text-stone-500 text-xs font-bold mb-2 uppercase">Title</label>
+              <input className="w-full bg-stone-800 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-amber-500" placeholder="Question Title" value={newQuestion.title} onChange={e => setNewQuestion({ ...newQuestion, title: e.target.value })} />
+            </div>
+            <div>
+              <label className="block text-stone-500 text-xs font-bold mb-2 uppercase">Content</label>
+              <textarea className="w-full bg-stone-800 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-amber-500 min-h-[150px]" placeholder="Ask anything about Phellinus Linteus..." value={newQuestion.content} onChange={e => setNewQuestion({ ...newQuestion, content: e.target.value })} />
+            </div>
+            <div className="flex items-center gap-3">
+              <input type="checkbox" id="is_secret" checked={newQuestion.is_secret} onChange={e => setNewQuestion({ ...newQuestion, is_secret: e.target.checked })} className="w-5 h-5 accent-amber-600 rounded" />
+              <label htmlFor="is_secret" className="text-stone-400 text-sm select-none">Secret Question (Only Admin can see)</label>
+            </div>
+            <button onClick={handleAskQuestion} className="w-full py-4 bg-amber-600 text-white font-bold rounded-xl uppercase tracking-widest hover:bg-amber-500 transition-all">{editingQuestionId ? "Update Question" : "Submit Question"}</button>
+          </div>
+        </MobileModal>
+      )}
 
       {/* Footer */}
       <footer className="py-24 relative bg-stone-950 text-stone-500 border-t border-white/5">
