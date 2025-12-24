@@ -231,6 +231,27 @@ export const TRANSLATIONS: Record<string, any> = {
         telegram: "@cambodiabae",
         secret: "게시판 비밀글 문의 가능"
       }
+    },
+    board: {
+      ask_btn: "질문하기",
+      no_questions: "등록된 질문이 없습니다. 첫 번째 질문을 남겨보세요!",
+      secret_icon: "비밀글",
+      admin_answer: "관리자 답변",
+      admin_reply_placeholder: "답변을 입력하세요...",
+      reply_btn: "답변 등록",
+      edit_title: "질문 수정",
+      create_title: "새 질문 작성",
+      label_title: "제목",
+      label_content: "내용",
+      label_type: "질문 유형",
+      type_public: "일반 질문 (공개)",
+      type_secret: "비밀 질문 (비공개)",
+      placeholder_title: "궁금하신 내용을 입력해주세요",
+      placeholder_content: "상황버섯 효능, 복용법, 제품 문의 등 자유롭게 질문해주세요.",
+      submit_btn: "질문 등록",
+      update_btn: "수정 완료",
+      edit_btn: "수정",
+      delete_btn: "삭제"
     }
   },
   en: {
@@ -376,6 +397,27 @@ export const TRANSLATIONS: Record<string, any> = {
         telegram: "@cambodiabae",
         secret: "Private posts available on Q&A"
       }
+    },
+    board: {
+      ask_btn: "Ask Question",
+      no_questions: "No questions yet. Be the first to ask!",
+      secret_icon: "Secret",
+      admin_answer: "Admin Answer",
+      admin_reply_placeholder: "Write answer...",
+      reply_btn: "Reply",
+      edit_title: "Edit Question",
+      create_title: "Ask Question",
+      label_title: "Title",
+      label_content: "Content",
+      label_type: "Question Type",
+      type_public: "General (Public)",
+      type_secret: "Secret (Private)",
+      placeholder_title: "Question Title",
+      placeholder_content: "Ask anything about Phellinus Linteus...",
+      submit_btn: "Submit Question",
+      update_btn: "Update Question",
+      edit_btn: "Edit",
+      delete_btn: "Delete"
     }
   },
   zh: {
@@ -507,6 +549,27 @@ export const TRANSLATIONS: Record<string, any> = {
         telegram: "@cambodiabae",
         secret: "可在留言板发布秘密咨询"
       }
+    },
+    board: {
+      ask_btn: "提问",
+      no_questions: "暂无提问。成为第一个提问者吧！",
+      secret_icon: "秘密",
+      admin_answer: "管理员回复",
+      admin_reply_placeholder: "输入回复...",
+      reply_btn: "回复",
+      edit_title: "编辑提问",
+      create_title: "撰写新提问",
+      label_title: "标题",
+      label_content: "内容",
+      label_type: "提问类型",
+      type_public: "普通提问 (公开)",
+      type_secret: "秘密提问 (不公开)",
+      placeholder_title: "请输入标题",
+      placeholder_content: "请随意咨询关于桑黄的功效、服用方法、产品等问题。",
+      submit_btn: "提交提问",
+      update_btn: "完成修改",
+      edit_btn: "编辑",
+      delete_btn: "删除"
     }
   },
   ja: {
@@ -638,6 +701,27 @@ export const TRANSLATIONS: Record<string, any> = {
         telegram: "@cambodiabae",
         secret: "掲示板での秘密投稿が可能"
       }
+    },
+    board: {
+      ask_btn: "質問する",
+      no_questions: "登録された質問がありません。最初の質問を投稿してみましょう！",
+      secret_icon: "秘密",
+      admin_answer: "管理者回答",
+      admin_reply_placeholder: "回答を入力...",
+      reply_btn: "回答登録",
+      edit_title: "質問修正",
+      create_title: "新しい質問を作成",
+      label_title: "タイトル",
+      label_content: "内容",
+      label_type: "質問タイプ",
+      type_public: "一般質問 (公開)",
+      type_secret: "秘密質問 (非公開)",
+      placeholder_title: "タイトルを入力してください",
+      placeholder_content: "メシマコブの効能、服用方法、製品のお問い合わせなど、お気軽にご質問ください。",
+      submit_btn: "質問登録",
+      update_btn: "修正完了",
+      edit_btn: "修正",
+      delete_btn: "削除"
     }
   }
 

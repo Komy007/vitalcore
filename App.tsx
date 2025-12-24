@@ -1038,7 +1038,7 @@ const App: React.FC = () => {
             <div className="max-w-5xl mx-auto px-8 text-center">
               <h2 onClick={() => { setCurrentView('faq'); window.scrollTo(0, 0); }} className="text-3xl md:text-4xl font-serif font-medium text-white uppercase tracking-tight mb-6 cursor-pointer hover:text-amber-500 transition-colors">{t.nav.faq}</h2>
               <p className="text-stone-400 mb-8">Join our community discussions.</p>
-              <button onClick={() => { setCurrentView('faq'); window.scrollTo(0, 0); }} className="px-8 py-4 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-full uppercase tracking-widest shadow-lg transition-all">Go to Q&A Board</button>
+              <button onClick={() => { setCurrentView('faq'); window.scrollTo(0, 0); }} className="px-8 py-4 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-full uppercase tracking-widest shadow-lg transition-all">{t.board?.ask_btn || "Ask Question"}</button>
             </div>
           </section>
         </>
@@ -1083,11 +1083,11 @@ const App: React.FC = () => {
                 <h2 className="text-3xl md:text-4xl font-serif font-medium text-white uppercase tracking-tight mb-2">{t.nav.faq}</h2>
                 <p className="text-stone-400 text-sm">Community Questions & Answers</p>
               </div>
-              {isAuthenticated && <button onClick={() => setIsQnaModalOpen(true)} className="px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-full text-xs uppercase tracking-widest shadow-lg flex items-center gap-2"><Edit size={14} /> Ask Question</button>}
+              {isAuthenticated && <button onClick={() => setIsQnaModalOpen(true)} className="px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-full text-xs uppercase tracking-widest shadow-lg flex items-center gap-2"><Edit size={14} /> {t.board?.ask_btn}</button>}
             </div>
 
             <div className="grid gap-4">
-              {(!Array.isArray(questions) || questions.length === 0) && <p className="text-center text-stone-600 py-10">No questions yet. Be the first to ask!</p>}
+              {(!Array.isArray(questions) || questions.length === 0) && <p className="text-center text-stone-600 py-10">{t.board?.no_questions}</p>}
               {Array.isArray(questions) && questions.map((q: any) => (
                 <div key={q.id} className="bg-stone-900/50 p-8 rounded-[2rem] border border-white/5 hover:border-amber-500/30 transition-all">
                   <div className="flex justify-between items-start mb-4">
@@ -1098,17 +1098,17 @@ const App: React.FC = () => {
                     <div className="flex items-center gap-3">
                       <span className="text-xs text-stone-600 font-mono">{new Date(q.created_at).toLocaleDateString()}</span>
                       {user && user.id === q.user_id && (
-                        <button onClick={() => handleEditClick(q)} className="text-xs text-amber-500 hover:text-white font-bold flex items-center gap-1 border border-amber-500/30 px-2 py-1 rounded bg-amber-900/10"><Edit size={10} /> Edit</button>
+                        <button onClick={() => handleEditClick(q)} className="text-xs text-amber-500 hover:text-white font-bold flex items-center gap-1 border border-amber-500/30 px-2 py-1 rounded bg-amber-900/10"><Edit size={10} /> {t.board?.edit_btn}</button>
                       )}
                       {(isAdmin || (user && user.id === q.user_id)) && (
-                        <button onClick={() => handleDeleteQuestion(q.id)} className="text-xs text-red-500 hover:text-white font-bold flex items-center gap-1 border border-red-500/30 px-2 py-1 rounded bg-red-900/10 ml-2"><Trash2 size={10} /> Delete</button>
+                        <button onClick={() => handleDeleteQuestion(q.id)} className="text-xs text-red-500 hover:text-white font-bold flex items-center gap-1 border border-red-500/30 px-2 py-1 rounded bg-red-900/10 ml-2"><Trash2 size={10} /> {t.board?.delete_btn}</button>
                       )}
                     </div>
                   </div>
                   <p className="text-stone-400 font-light mb-6 leading-relaxed">{q.content}</p>
                   {q.answer && (
                     <div className="ml-8 p-6 bg-amber-900/10 rounded-2xl border-l-2 border-amber-600">
-                      <span className="text-[10px] font-black uppercase text-amber-600 mb-2 block">Admin Answer</span>
+                      <span className="text-[10px] font-black uppercase text-amber-600 mb-2 block">{t.board?.admin_answer}</span>
                       <p className="text-stone-300 text-sm">{q.answer}</p>
                     </div>
                   )}
@@ -1117,11 +1117,11 @@ const App: React.FC = () => {
                       <div className="flex gap-2">
                         <input
                           className="flex-grow bg-black/30 p-3 rounded-lg text-white text-sm border border-white/5 outline-none focus:border-amber-500 transition-colors"
-                          placeholder="Write answer..."
+                          placeholder={t.board?.admin_reply_placeholder}
                           value={adminAnswer[q.id] || ''}
                           onChange={(e) => setAdminAnswer({ ...adminAnswer, [q.id]: e.target.value })}
                         />
-                        <button onClick={() => handleAdminAnswer(q.id)} className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg text-xs uppercase">Reply</button>
+                        <button onClick={() => handleAdminAnswer(q.id)} className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg text-xs uppercase">{t.board?.reply_btn}</button>
                       </div>
                     </div>
                   )}
@@ -1137,7 +1137,7 @@ const App: React.FC = () => {
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/95 backdrop-blur-2xl p-4 md:p-10 animate-in fade-in duration-500 overflow-y-auto">
           <div className="bg-stone-900 rounded-[2rem] p-8 w-full max-w-2xl shadow-2xl border border-white/5 relative flex flex-col">
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl font-bold text-white">{editingQuestionId ? "Edit Question" : "Ask Question"}</h3>
+              <h3 className="text-xl font-bold text-white">{editingQuestionId ? t.board?.edit_title : t.board?.create_title}</h3>
               <button onClick={() => setIsQnaModalOpen(false)} className="p-2 -mr-2 text-stone-500 hover:text-white transition-colors">
                 <X size={24} />
               </button>
@@ -1145,15 +1145,15 @@ const App: React.FC = () => {
 
             <div className="space-y-6">
               <div>
-                <label className="block text-stone-500 text-xs font-bold mb-2 uppercase">Title</label>
-                <input className="w-full bg-stone-800 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-amber-500" placeholder="Question Title" value={newQuestion.title} onChange={e => setNewQuestion({ ...newQuestion, title: e.target.value })} />
+                <label className="block text-stone-500 text-xs font-bold mb-2 uppercase">{t.board?.label_title}</label>
+                <input className="w-full bg-stone-800 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-amber-500" placeholder={t.board?.placeholder_title} value={newQuestion.title} onChange={e => setNewQuestion({ ...newQuestion, title: e.target.value })} />
               </div>
               <div>
-                <label className="block text-stone-500 text-xs font-bold mb-2 uppercase">Content</label>
-                <textarea className="w-full bg-stone-800 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-amber-500 min-h-[150px]" placeholder="Ask anything about Phellinus Linteus..." value={newQuestion.content} onChange={e => setNewQuestion({ ...newQuestion, content: e.target.value })} />
+                <label className="block text-stone-500 text-xs font-bold mb-2 uppercase">{t.board?.label_content}</label>
+                <textarea className="w-full bg-stone-800 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-amber-500 min-h-[150px]" placeholder={t.board?.placeholder_content} value={newQuestion.content} onChange={e => setNewQuestion({ ...newQuestion, content: e.target.value })} />
               </div>
               <div>
-                <label className="block text-stone-500 text-xs font-bold mb-4 uppercase">Question Type</label>
+                <label className="block text-stone-500 text-xs font-bold mb-4 uppercase">{t.board?.label_type}</label>
                 <div className="grid grid-cols-2 gap-4">
                   <button
                     type="button"
@@ -1161,7 +1161,7 @@ const App: React.FC = () => {
                     className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${!newQuestion.is_secret ? 'bg-amber-600 border-amber-500 text-white' : 'bg-stone-900 border-white/10 text-stone-500 hover:border-white/30'}`}
                   >
                     <Globe size={24} />
-                    <span className="text-xs font-bold uppercase">General (Public)</span>
+                    <span className="text-xs font-bold uppercase">{t.board?.type_public}</span>
                   </button>
                   <button
                     type="button"
@@ -1169,11 +1169,11 @@ const App: React.FC = () => {
                     className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${newQuestion.is_secret ? 'bg-amber-600 border-amber-500 text-white' : 'bg-stone-900 border-white/10 text-stone-500 hover:border-white/30'}`}
                   >
                     <Lock size={24} />
-                    <span className="text-xs font-bold uppercase">Secret (Private)</span>
+                    <span className="text-xs font-bold uppercase">{t.board?.type_secret}</span>
                   </button>
                 </div>
               </div>
-              <button onClick={handleAskQuestion} className="w-full py-4 bg-amber-600 text-white font-bold rounded-xl uppercase tracking-widest hover:bg-amber-500 transition-all shadow-lg mt-4">{editingQuestionId ? "Update Question" : "Submit Question"}</button>
+              <button onClick={handleAskQuestion} className="w-full py-4 bg-amber-600 text-white font-bold rounded-xl uppercase tracking-widest hover:bg-amber-500 transition-all shadow-lg mt-4">{editingQuestionId ? t.board?.update_btn : t.board?.submit_btn}</button>
             </div>
           </div>
         </div>
