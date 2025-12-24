@@ -1630,7 +1630,12 @@ const App: React.FC = () => {
         )
       }
 
-    </div >
+      {/* Mobile Developer Credit */}
+      <div className="fixed bottom-6 left-0 w-full text-center z-40 pointer-events-none md:hidden">
+        <p className="text-[10px] text-white/40 font-bold uppercase tracking-[0.2em] drop-shadow-md">Web Developer: KwangYoon Bae</p>
+      </div>
+
+    </div>
   );
 };
 
