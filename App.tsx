@@ -953,7 +953,7 @@ const App: React.FC = () => {
             <div className="max-w-7xl mx-auto px-6">
               <div className="flex justify-between items-end mb-12 border-b border-white/10 pb-6">
                 <div>
-                  <h2 className="text-3xl md:text-5xl font-serif font-medium text-white uppercase tracking-tight mb-2">{t.nav.health}</h2>
+                  <h2 onClick={() => { setCurrentView('health'); window.scrollTo(0, 0); }} className="text-3xl md:text-5xl font-serif font-medium text-white uppercase tracking-tight mb-2 cursor-pointer hover:text-amber-500 transition-colors">{t.nav.health}</h2>
                   <p className="text-stone-400 text-sm">Vital Core Research Team</p>
                 </div>
                 <button onClick={() => { setCurrentView('health'); window.scrollTo(0, 0); }} className="px-6 py-3 bg-stone-800 text-stone-300 font-bold rounded-full text-xs uppercase tracking-widest hover:text-white transition-all">View All Reports &rarr;</button>
@@ -979,7 +979,7 @@ const App: React.FC = () => {
 
           <section id="faq" className="py-24 relative bg-stone-950">
             <div className="max-w-5xl mx-auto px-8 text-center">
-              <h2 className="text-3xl md:text-4xl font-serif font-medium text-white uppercase tracking-tight mb-6">{t.nav.faq}</h2>
+              <h2 onClick={() => { setCurrentView('faq'); window.scrollTo(0, 0); }} className="text-3xl md:text-4xl font-serif font-medium text-white uppercase tracking-tight mb-6 cursor-pointer hover:text-amber-500 transition-colors">{t.nav.faq}</h2>
               <p className="text-stone-400 mb-8">Join our community discussions.</p>
               <button onClick={() => { setCurrentView('faq'); window.scrollTo(0, 0); }} className="px-8 py-4 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-full uppercase tracking-widest shadow-lg transition-all">Go to Q&A Board</button>
             </div>
