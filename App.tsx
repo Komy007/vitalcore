@@ -390,6 +390,11 @@ const App: React.FC = () => {
 
   const handleEditClick = (q: any) => {
     setEditingQuestionId(q.id);
+    setNewQuestion({
+      title: q.title,
+      content: q.content,
+      is_secret: q.is_secret === 1 // Convert 1/0 to boolean if needed, or keep check matched with how it's stored
+    });
     setIsQnaModalOpen(true);
   }
 
