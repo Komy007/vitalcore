@@ -368,8 +368,9 @@ const App: React.FC = () => {
             <div className="flex items-center gap-4 cursor-pointer z-50 group shrink-0" onClick={() => { setCurrentView('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
               <VitalCoreLogo className="w-14 h-14 md:w-20 md:h-20 drop-shadow-[0_0_20px_rgba(217,119,6,0.5)]" />
               <div className="flex flex-col justify-center">
-                <span className="font-serif font-bold text-2xl md:text-3xl tracking-tight text-white uppercase">VITAL <span className="text-amber-500">CORE</span></span>
-                <span className="text-[10px] text-stone-500 tracking-[0.4em] font-black uppercase hidden md:block">Phellinus Lab</span>
+                <span className="text-[10px] text-stone-500 font-mono mb-0.5 tracking-wider group-hover:text-amber-500 transition-colors">www.linteus.com</span>
+                <span className="font-serif font-bold text-2xl md:text-3xl tracking-tight text-white uppercase leading-none">VITAL <span className="text-amber-500">CORE</span></span>
+                <span className="text-[10px] text-stone-500 tracking-[0.4em] font-black uppercase hidden md:block mt-1">Phellinus Lab</span>
               </div>
             </div>
 

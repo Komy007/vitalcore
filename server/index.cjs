@@ -23,7 +23,8 @@ const app = express();
 const JWT_SECRET = process.env.JWT_SECRET || 'vitalcore-secret-key-change-this-production';
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // --- Health Check (Critical) ---
 app.get('/api/health', (req, res) => {
@@ -165,7 +166,12 @@ if (db) {
     app.post('/api/health-reports', authenticateToken, isAdmin, (req, res) => {
         try {
             const { title, content, summary, key_point, image_url } = req.body;
-            if (!title || !content) return res.status(400).json({ error: 'Title and content are required' });
+            console.log('[Health Report] Create Attempt:', { title, contentLength: content?.length, keys: Object.keys(req.body) });
+
+            if (!title || !content) {
+                console.error('[Health Report] Validation Failed: Missing title or content. Received keys:', Object.keys(req.body));
+                return res.status(400).json({ error: `Title and content are required. Received keys: ${Object.keys(req.body).join(', ')}` });
+            }
 
             const stmt = db.prepare('INSERT INTO health_reports (title, content, summary, key_point, image_url) VALUES (?, ?, ?, ?, ?)');
             const info = stmt.run(title, content, summary || '', key_point || '', image_url || '');
