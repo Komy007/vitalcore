@@ -1667,17 +1667,16 @@ const App: React.FC = () => {
               <div className="p-8 md:p-14">
                 {!selectedReport.image_url && <div className="h-12"></div>}
 
-                <h2 className="text-2xl md:text-3xl font-serif font-bold text-white mb-6 leading-tight">{selectedReport.title}</h2>
+                <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-8 leading-tight tracking-tight">{selectedReport.title}</h2>
 
                 {selectedReport.key_point && (
-                  <div className="mb-10 p-8 bg-amber-900/20 border-l-4 border-amber-600 rounded-lg">
-                    <h5 className="text-amber-500 font-bold text-xs uppercase mb-3 flex items-center gap-2"><Sparkles size={14} /> Key Insight</h5>
-                    <p className="text-lg md:text-2xl font-serif text-amber-100 italic">"{selectedReport.key_point}"</p>
+                  <div className="mb-10 pl-6 border-l-2 border-amber-500 py-2">
+                    <p className="text-xl md:text-2xl font-serif text-amber-500 italic leading-relaxed">"{selectedReport.key_point}"</p>
                   </div>
                 )}
 
                 {/* Content - Explicitly styled for visibility */}
-                <div className="text-stone-200 text-lg leading-loose font-light whitespace-pre-wrap min-h-[100px] font-sans">
+                <div className="text-stone-200 text-lg md:text-xl leading-8 font-light whitespace-pre-wrap min-h-[100px] font-sans max-w-3xl">
                   {selectedReport.content}
                 </div>
 
