@@ -295,6 +295,17 @@ export const TRANSLATIONS: Record<string, any> = {
         { name: "Phellinus Gift Set", price: "₩1,200,000", originalPrice: "₩1,400,000", discount: "14%", tag: "Gift Set", img: linteus3 },
         { name: "Phellinus Powder", price: "₩450,000", originalPrice: "₩500,000", discount: "10%", tag: "Powder", img: linteus4 },
         { name: "Vital Core Signature", price: "₩5,500,000", originalPrice: "₩6,000,000", discount: "8%", tag: "Limited", img: linteus5 }
+      ],
+      evidence: [
+        { title: "Pancreatic Cancer Survival +1 Year", journal: "Severance Hospital Clinical Study", pmid: "40590265", summary: "In post-op chemotherapy patients, Phellinus group showed average survival of 47.0 months vs 35.0 months in control group.", url: "https://pubmed.ncbi.nlm.nih.gov/40590265/" },
+        { title: "Colorectal Cancer & Microbiome", journal: "Gut Microbiome Journal", pmid: "40752028", summary: "Reduces chemotherapy (5-FU) side effects and increases treatment efficiency by 1.5x. Improves gut environment via Akkermansia proliferation.", url: "https://pubmed.ncbi.nlm.nih.gov/40752028/" },
+        { title: "Dementia: Beta-Amyloid Inhibition", journal: "Neuroscience Research", pmid: "40234762", summary: "Blocks beta-amyloid toxicity (cause of Alzheimer's) and protects hippocampal cells, significantly improving memory and cognition.", url: "https://pubmed.ncbi.nlm.nih.gov/40234762/" },
+        { title: "Skin Photoaging & Whitening", journal: "Dermatological Science", pmid: "40497052", summary: "Inhibits MMP-1 (collagen destruction) caused by UV, preventing wrinkles. Proved whitening effect equal to Arbutin.", url: "https://pubmed.ncbi.nlm.nih.gov/40497052/" },
+        { title: "Liver Fibrosis & Hangover Relief", journal: "Liver International", pmid: "40228217", summary: "Blocks liver fibrosis and promotes alcohol breakdown. Induces rapid normalization of fatty liver and GOT/GPT levels.", url: "https://pubmed.ncbi.nlm.nih.gov/40228217/" },
+        { title: "Arthritis & Joint Protection", journal: "Rheumatology International", pmid: "40094337", summary: "Acts as natural COX-2 inhibitor relieving pain and edema. Prevents cartilage destruction, caring for both degenerative and rheumatoid arthritis.", url: "https://pubmed.ncbi.nlm.nih.gov/40094337/" },
+        { title: "Prostate Health & Cancer Prevention", journal: "Urology Journal", pmid: "39806945", summary: "Inhibits DHT transformation preventing BPH and improving nocturia. Simultaneous inhibition of prostate cancer cell proliferation.", url: "https://pubmed.ncbi.nlm.nih.gov/39806945/" },
+        { title: "Lung Defense: Dust & Smoking", journal: "Pulmonary Pharmacology", pmid: "39758739", summary: "Inhibits alveolar inflammation and fibrosis caused by fine dust and smoking. Enhances respiratory mucosal immunity (IgA).", url: "https://pubmed.ncbi.nlm.nih.gov/39758739/" },
+        { title: "Diabetes & Weight Management", journal: "Diabetes & Metabolism", pmid: "39692936", summary: "Prevents post-meal glucose spikes and improves insulin resistance. Proved weight loss effect by inhibiting visceral fat differentiation.", url: "https://pubmed.ncbi.nlm.nih.gov/39692936/" }
       ]
     },
     research: {
@@ -440,6 +451,20 @@ export const TRANSLATIONS: Record<string, any> = {
         { title: "抗癌机理", desc: "桑黄并不直接攻击癌细胞，而是通过最大化人体的先天免疫力使癌细胞自愈。它激活NK细胞（自然杀伤细胞）以强化体内监视系统，并阻断癌细胞生存所需的血管生成。此外，它还调节细胞因子的分泌，抑制过度炎症反应。" },
         { title: "学术依据", desc: "桑黄的功效已通过数千篇国际学术论文得到证实。PubMed中每年都会更新关于其抗肿瘤和调节免疫的研究。日本国立癌症中心的研究显示，桑黄多糖的肿瘤抑制率达到96.7%。我们基于这些最新成就提供最可靠的信息。" }
       ],
+      introDetails: [
+        {
+          title: "1. 名字的由来与含义",
+          content: "韩语称为‘木质泥菇’，寓意其质地坚硬如木，色泽如泥。汉字‘桑黄’源自生长在桑树上的黄色蘑菇，但实际上它寄生在多种阔叶树上，质地皆为坚硬木质。"
+        },
+        {
+          title: "2. 是植物还是动物?",
+          content: "桑黄不属于植物，而是‘真菌(Fungi)’，即霉菌科。它不像植物那样扎根于土壤，因此‘菌种’比产地更关键。在220多种真菌中，韩国食药厅仅认可2种作为药用。"
+        },
+        {
+          title: "3. 选择标准与种类",
+          content: "食药厅认可的2大菌种：\n• Phellinus Linteus (林特乌斯)：自然产同源菌种。生长极慢（10年以上），极稀有，但抗癌及免疫功效最卓越。\n• Phellinus Baumi (鲍米)：由于易于农家栽培，是常见的黄色改良种，生长快且普遍。"
+        }
+      ],
       products: [
         { name: "自然桑黄 374g", price: "₩1,900,000", originalPrice: "₩2,300,000", discount: "17%", tag: "自然, 干燥", img: linteus0 },
         { name: "自然桑黄 926g", price: "₩4,700,000", originalPrice: "₩5,000,000", discount: "6%", tag: "自然, 干燥", img: linteus1 },
@@ -447,6 +472,17 @@ export const TRANSLATIONS: Record<string, any> = {
         { name: "桑黄礼盒套装", price: "₩1,200,000", originalPrice: "₩1,400,000", discount: "14%", tag: "礼品", img: linteus3 },
         { name: "桑黄粉末", price: "₩450,000", originalPrice: "₩500,000", discount: "10%", tag: "粉末", img: linteus4 },
         { name: "Vital Core 签名版", price: "₩5,500,000", originalPrice: "₩6,000,000", discount: "8%", tag: "限量版", img: linteus5 }
+      ],
+      evidence: [
+        { title: "胰腺癌患者生存期延长1年", journal: "Severance Hospital Clinical Study", pmid: "40590265", summary: "术后化疗患者追踪观察结果显示，桑黄并用组平均生存期为47.0个月，比对照组（35.0个月）延长12个月。", url: "https://pubmed.ncbi.nlm.nih.gov/40590265/" },
+        { title: "改善大肠癌及肠道微生物", journal: "Gut Microbiome Journal", pmid: "40752028", summary: "减少化疗（5-FU）副作用，提高治疗效率1.5倍。通过增殖次世代有益菌Akkermansia改善肠道环境。", url: "https://pubmed.ncbi.nlm.nih.gov/40752028/" },
+        { title: "抑制痴呆原因Beta-淀粉样蛋白", journal: "Neuroscience Research", pmid: "40234762", summary: "阻断阿尔茨海默病致病物质Beta-淀粉样蛋白毒性，保护海马体细胞，显著改善记忆力和认知功能。", url: "https://pubmed.ncbi.nlm.nih.gov/40234762/" },
+        { title: "抑制皮肤光老化及美白", journal: "Dermatological Science", pmid: "40497052", summary: "抑制紫外线引起的胶原蛋白破坏酶（MMP-1），防止黑色素生成，证实有防皱及美白（同等熊果苷）效果。", url: "https://pubmed.ncbi.nlm.nih.gov/40497052/" },
+        { title: "抑制肝纤维化及解酒", journal: "Liver International", pmid: "40228217", summary: "阻断肝脏变硬的纤维化过程，促进酒精分解。诱导脂肪肝及肝指数（GOT/GPT）快速正常化。", url: "https://pubmed.ncbi.nlm.nih.gov/40228217/" },
+        { title: "缓解关节炎疼痛及保护软骨", journal: "Rheumatology International", pmid: "40094337", summary: "作为天然COX-2抑制剂缓解关节疼痛和水肿。阻止软骨破坏酶，同时护理退行性和类风湿性关节炎。", url: "https://pubmed.ncbi.nlm.nih.gov/40094337/" },
+        { title: "前列腺肥大及癌症预防", journal: "Urology Journal", pmid: "39806945", summary: "抑制男性荷尔蒙变形（DHT），防止前列腺肥大，改善夜尿。同时确认抑制前列腺癌细胞增殖效果。", url: "https://pubmed.ncbi.nlm.nih.gov/39806945/" },
+        { title: "雾霾/吸烟肺损伤防御", journal: "Pulmonary Pharmacology", pmid: "39758739", summary: "抑制因雾霾和吸烟引起的肺泡炎症及肺纤维化。强化呼吸道黏膜免疫（IgA），增进病毒防御力。", url: "https://pubmed.ncbi.nlm.nih.gov/39758739/" },
+        { title: "糖尿病血糖调节及减肥", journal: "Diabetes & Metabolism", pmid: "39692936", summary: "防止餐后血糖飙升，改善胰岛素抵抗。证实抑制内脏脂肪细胞分化带来的体重减轻效果。", url: "https://pubmed.ncbi.nlm.nih.gov/39692936/" }
       ]
     },
     research: {
@@ -592,6 +628,20 @@ export const TRANSLATIONS: Record<string, any> = {
         { title: "作用機序", desc: "癌細胞を直接攻撃するのではなく、体内の先天的な免疫力を極大化させます。NK細胞を活性化させて監視システムを強化し、癌細胞が必要とする新生血管の形成を遮断します。また、炎症反応を抑制し、バランスの取れた免疫状態を維持させます。" },
         { title: "学術的根拠", desc: "数千の学術論文を通じてその価値が立証されています。PubMedには抗腫瘍や免疫調節に関する研究結果が毎年更新されています。日本の国立がんセンターの研究では、腫瘍阻止率が96.7%に達するという結果が発表されました。信頼できる情報を提供します。" }
       ],
+      introDetails: [
+        {
+          title: "1. 名前の由来と意味",
+          content: "韓国語では「木質泥キノコ」と呼ばれ、木のように硬い質感と泥のような色を帯びているという意味が込められています。漢字語の「桑黄」は桑の木で育つ黄色いキノコという意味に由来しますが、実際には桑の木以外にも様々な広葉樹に自生し、すべて硬い木質で構成されています。"
+        },
+        {
+          title: "2. 植物か？動物か？",
+          content: "メシマコブは植物ではなく「菌類(Fungi)」、つまりカビ科(真菌)に属します。植物のように土壌に根を下ろすわけではないため、産地(身土不二)よりもどのような「種菌」であるかが効能の核心です。全220種余りの真菌のうち、韓国食品医薬品安全庁が薬用として認めているのはわずか2種類だけです。"
+        },
+        {
+          title: "3. 選択の基準と種類",
+          content: "食品医薬品安全庁認定の2大種菌：\n• Phellinus Linteus (リンテウス)：自然産と同一の種菌。成長速度が非常に遅く（10年以上）、希少ですが、抗がんおよび免疫効能が最も優れています。\n• Phellinus Baumi (バウミ)：農家で栽培しやすい黄色い改良種で、成長が早く一般的です。"
+        }
+      ],
       products: [
         { name: "自然産メシマコブ 374g", price: "₩1,900,000", originalPrice: "₩2,300,000", discount: "17%", tag: "自然産, 乾燥", img: linteus0 },
         { name: "自然産メシマコブ 926g", price: "₩4,700,000", originalPrice: "₩5,000,000", discount: "6%", tag: "自然産, 乾燥", img: linteus1 },
@@ -599,6 +649,17 @@ export const TRANSLATIONS: Record<string, any> = {
         { name: "メシマコブギフトセット", price: "₩1,200,000", originalPrice: "₩1,400,000", discount: "14%", tag: "ギフト", img: linteus3 },
         { name: "メシマコブ粉末", price: "₩450,000", originalPrice: "₩500,000", discount: "10%", tag: "粉末", img: linteus4 },
         { name: "Vital Core シグネチャー", price: "₩5,500,000", originalPrice: "₩6,000,000", discount: "8%", tag: "限定版", img: linteus5 }
+      ],
+      evidence: [
+        { title: "膵臓がん患者の生存率1年延長", journal: "Severance Hospital Clinical Study", pmid: "40590265", summary: "術後抗がん治療患者の追跡観察の結果、メシマコブ併用群の平均生存期間が47.0ヶ月で、対照群（35.0ヶ月）より12ヶ月延長。", url: "https://pubmed.ncbi.nlm.nih.gov/40590265/" },
+        { title: "大腸がんおよび腸内微生物改善", journal: "Gut Microbiome Journal", pmid: "40752028", summary: "抗がん剤（5-FU）の副作用を減らし、治療効率を1.5倍向上。次世代有益菌アッカーマンシアの増殖による腸内環境改善。", url: "https://pubmed.ncbi.nlm.nih.gov/40752028/" },
+        { title: "認知症原因ベータアミロイド抑制", journal: "Neuroscience Research", pmid: "40234762", summary: "アルツハイマーの原因物質であるベータアミロイド毒性を遮断し、海馬細胞を保護して記憶力と認知機能を画期的に改善。", url: "https://pubmed.ncbi.nlm.nih.gov/40234762/" },
+        { title: "皮膚光老化抑制および美白", journal: "Dermatological Science", pmid: "40497052", summary: "紫外線によるコラーゲン破壊酵素（MMP-1）を抑制し、メラニン生成を防いでシワ防止および美白（アルブチン同等）効果を立証。", url: "https://pubmed.ncbi.nlm.nih.gov/40497052/" },
+        { title: "肝線維化抑制および二日酔い解消", journal: "Liver International", pmid: "40228217", summary: "肝臓が硬くなる線維化過程を遮断し、アルコール分解を促進。脂肪肝および肝数値（GOT/GPT）の急速な正常化を誘導。", url: "https://pubmed.ncbi.nlm.nih.gov/40228217/" },
+        { title: "関節炎の痛み緩和および軟骨保護", journal: "Rheumatology International", pmid: "40094337", summary: "天然COX-2阻害剤として作用し、関節の痛みとむくみを緩和。軟骨破壊酵素を防ぎ、変形性および関節リウマチを同時ケア。", url: "https://pubmed.ncbi.nlm.nih.gov/40094337/" },
+        { title: "前立腺肥大症およびがん予防", journal: "Urology Journal", pmid: "39806945", summary: "男性ホルモンの変形（DHT）を抑制して前立腺肥大を防ぎ、夜間頻尿を改善。前立腺がん細胞の増殖抑制効果も同時に確認。", url: "https://pubmed.ncbi.nlm.nih.gov/39806945/" },
+        { title: "PM2.5/喫煙による肺損傷防御", journal: "Pulmonary Pharmacology", pmid: "39758739", summary: "PM2.5と喫煙による肺胞炎症および肺線維化を抑制。呼吸器粘膜免疫（IgA）を強化し、ウイルス防御力を増進。", url: "https://pubmed.ncbi.nlm.nih.gov/39758739/" },
+        { title: "糖尿病血糖調節およびダイエット", journal: "Diabetes & Metabolism", pmid: "39692936", summary: "食後の血糖値スパイクを防ぎ、インスリン抵抗性を改善。内臓脂肪細胞の分化を抑制することによる体重減少効果を立証。", url: "https://pubmed.ncbi.nlm.nih.gov/39692936/" }
       ]
     },
     research: {

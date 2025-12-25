@@ -1,3 +1,4 @@
+require('dotenv').config(); // Load environment variables first
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
@@ -35,8 +36,12 @@ app.get('/api/health', (req, res) => {
     });
 });
 
-// --- Translation Endpoint ---
-const TRANSLATE_API_KEY = process.env.GOOGLE_TRANSLATE_API_KEY || 'AIzaSyA1QboyKQWa7Jfh3zyCRY2UuW8onvWySQ8';
+// Ensure API Key is loaded
+const TRANSLATE_API_KEY = process.env.GOOGLE_TRANSLATE_API_KEY;
+
+if (!TRANSLATE_API_KEY) {
+    console.warn('[Server] WARNING: GOOGLE_TRANSLATE_API_KEY is not set in .env. Translation features will fail.');
+}
 
 app.post('/api/translate', async (req, res) => {
     try {
