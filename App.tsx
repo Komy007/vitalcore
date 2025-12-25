@@ -189,6 +189,18 @@ const App: React.FC = () => {
     } catch (err: any) { alert(`Failed to ${editingReportId ? 'update' : 'publish'} report: ${err.error || err.message || 'Unknown error'}`); }
   };
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) return alert('File size too large. Max 5MB.');
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setNewReport({ ...newReport, image_url: reader.result as string });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   useEffect(() => {
     if (isAdmin && isAdminDashboardOpen && adminTab === 'users') {
       fetchUsers();
@@ -1589,8 +1601,21 @@ const App: React.FC = () => {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Cover Image URL</label>
-                  <input className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 font-mono text-sm" placeholder="https://..." value={newReport.image_url} onChange={e => setNewReport({ ...newReport, image_url: e.target.value })} />
+                  <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Cover Image (Upload or URL)</label>
+                  <div className="space-y-3">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="block w-full text-sm text-stone-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-stone-800 file:text-amber-500 hover:file:bg-stone-700"
+                    />
+                    <input
+                      className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 font-mono text-sm"
+                      placeholder="Or paste image URL..."
+                      value={newReport.image_url}
+                      onChange={e => setNewReport({ ...newReport, image_url: e.target.value })}
+                    />
+                  </div>
                 </div>
                 <div>
                   <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Summary (Preview Text)</label>
@@ -1637,7 +1662,7 @@ const App: React.FC = () => {
               <div className="p-8 md:p-14">
                 {!selectedReport.image_url && <div className="h-12"></div>}
 
-                <h2 className="text-3xl md:text-5xl font-serif font-bold text-white mb-8 leading-tight">{selectedReport.title}</h2>
+                <h2 className="text-2xl md:text-3xl font-serif font-bold text-white mb-6 leading-tight">{selectedReport.title}</h2>
 
                 {selectedReport.key_point && (
                   <div className="mb-10 p-8 bg-amber-900/20 border-l-4 border-amber-600 rounded-lg">
@@ -1646,7 +1671,7 @@ const App: React.FC = () => {
                   </div>
                 )}
 
-                <div className="prose prose-invert prose-lg max-w-none text-stone-300 font-light leading-8 whitespace-pre-wrap">
+                <div className="prose prose-invert prose-lg max-w-none text-stone-200 font-light leading-relaxed whitespace-pre-wrap min-h-[100px]">
                   {selectedReport.content}
                 </div>
 
