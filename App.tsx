@@ -103,6 +103,7 @@ const App: React.FC = () => {
   useEffect(() => {
     fetchQuestions();
     fetchReports();
+    fetchNotices();
   }, []);
 
   const scrollToSection = (id: string) => {
@@ -138,6 +139,12 @@ const App: React.FC = () => {
   const [newReport, setNewReport] = useState<any>({ title: '', content: '', summary: '', key_point: '', image_url: '' });
   const [reportLang, setReportLang] = useState<'ko' | 'en' | 'zh' | 'ja'>('ko');
 
+  // Notices State
+  const [notices, setNotices] = useState<any[]>([]);
+  const [isNoticeModalOpen, setIsNoticeModalOpen] = useState(false);
+  const [newNotice, setNewNotice] = useState<any>({ title: '', content: '' });
+  const [noticeLang, setNoticeLang] = useState<'ko' | 'en' | 'zh' | 'ja'>('ko');
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthMessage(null);
@@ -156,6 +163,13 @@ const App: React.FC = () => {
       const data = await api.auth.getUsers();
       setUserList(data);
     } catch (err) { console.error(err); }
+  };
+
+  const fetchNotices = async () => {
+    try {
+      const data = await api.notices.list();
+      setNotices(data);
+    } catch (e) { console.error(e); }
   };
 
   const handleUpdateUser = async () => {
@@ -251,6 +265,32 @@ const App: React.FC = () => {
     }
   };
 
+  const handleCreateNotice = async () => {
+    if (!newNotice.title || !newNotice.content) return alert('Title and content required');
+    try {
+      await api.notices.create(newNotice);
+      alert('Notice posted');
+      setIsNoticeModalOpen(false);
+      setNewNotice({ title: '', content: '' });
+      fetchNotices();
+    } catch (e: any) { alert(e.error || 'Failed'); }
+  };
+
+  const handleDeleteNotice = async (id: number) => {
+    if (!confirm('Delete this notice?')) return;
+    try { await api.notices.delete(id); fetchNotices(); } catch (e) { alert('Failed'); }
+  };
+
+  const handleDeleteReport = async (id: number) => {
+    if (!confirm('Delete this report?')) return;
+    try { await api.health.delete(id); fetchReports(); } catch (e) { alert('Failed'); }
+  };
+
+  const handleDeleteQuestion = async (id: number) => {
+    if (!confirm('Delete this question?')) return;
+    try { await api.qna.delete(id); fetchQuestions(); } catch (e) { alert('Failed'); }
+  };
+
   const loadAdminData = async () => {
     if (!isAdmin) return;
     fetchQuestions();
@@ -288,15 +328,7 @@ const App: React.FC = () => {
     setIsQnaModalOpen(true);
   }
 
-  const handleDeleteQuestion = async (id: number) => {
-    if (!window.confirm("Are you sure you want to delete this question?")) return;
-    try {
-      await api.qna.delete(id);
-      fetchQuestions();
-    } catch (e: any) {
-      alert("Failed to delete question");
-    }
-  }
+
 
   const handleAboutTabClick = (tab: string) => {
     setAboutActiveTab(tab);
@@ -1147,6 +1179,24 @@ const App: React.FC = () => {
                 {isAuthenticated && <button onClick={() => setIsQnaModalOpen(true)} className="px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-full text-xs uppercase tracking-widest shadow-lg flex items-center gap-2"><Edit size={14} /> {t.board?.ask_btn}</button>}
               </div>
 
+              {/* Admin Notices */}
+              {notices.length > 0 && (
+                <div className="mb-12 space-y-4">
+                  <h3 className="text-amber-500 text-xs font-bold uppercase tracking-widest mb-4">📢 Admin Notices</h3>
+                  {notices.map(notice => {
+                    const nTitle = notice[`title_${lang}`] || notice.title;
+                    const nContent = notice[`content_${lang}`] || notice.content;
+                    return (
+                      <div key={notice.id} className="bg-amber-900/20 border border-amber-500/30 p-6 rounded-2xl">
+                        <h4 className="text-lg font-bold text-white mb-2">{nTitle}</h4>
+                        <p className="text-stone-400 text-sm whitespace-pre-wrap">{nContent}</p>
+                        <p className="text-xs text-amber-700 font-mono mt-4">{new Date(notice.created_at).toLocaleDateString()}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
               <div className="grid gap-4">
                 {(!Array.isArray(questions) || questions.length === 0) && <p className="text-center text-stone-600 py-10">{t.board?.no_questions}</p>}
                 {Array.isArray(questions) && questions.map((q: any) => (
@@ -1291,7 +1341,8 @@ const App: React.FC = () => {
                 <div className="flex bg-stone-800 p-1 rounded-lg">
                   <button onClick={() => setAdminTab('users')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase transition-all ${adminTab === 'users' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Users</button>
                   <button onClick={() => setAdminTab('reports')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase transition-all ${adminTab === 'reports' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Health Reports</button>
-                  <button onClick={() => setAdminTab('qna')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase transition-all ${adminTab === 'qna' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Q&A Board</button>
+                  <button onClick={() => setAdminTab('qna')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase transition-all ${adminTab === 'qna' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Questions</button>
+                  <button onClick={() => setAdminTab('notices' as any)} className={`px-4 py-2 rounded-md text-xs font-bold uppercase transition-all ${adminTab === 'notices' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Notices</button>
                 </div>
               </div>
               <button onClick={() => setIsAdminDashboardOpen(false)} className="p-2 -mr-2 text-stone-500 hover:text-white hover:bg-white/5 rounded-full transition-all">
@@ -1364,6 +1415,7 @@ const App: React.FC = () => {
                         </div>
                         <div className="flex gap-2 pt-2 border-t border-white/5 mt-auto">
                           <button onClick={() => { setEditingReportId(report.id); setNewReport(report); setIsReportModalOpen(true); }} className="flex-1 py-2 bg-stone-800 text-stone-400 hover:text-white text-xs font-bold rounded uppercase">Edit</button>
+                          <button onClick={() => handleDeleteReport(report.id)} className="flex-1 py-2 bg-stone-800 text-red-500 hover:text-white hover:bg-red-600 text-xs font-bold rounded uppercase transition-colors">Delete</button>
                         </div>
                       </div>
                     ))}
@@ -1372,9 +1424,64 @@ const App: React.FC = () => {
               )}
 
               {adminTab === 'qna' && (
-                <div className="max-w-4xl mx-auto">
-                  <div className="bg-amber-900/20 text-amber-500 p-4 rounded-xl border border-amber-500/20 text-center mb-8">
-                    Please use the main Q&A Board interface for replying to questions. This tab is a placeholder for future bulk management tools.
+                <div className="max-w-7xl mx-auto space-y-6">
+                  <h3 className="text-2xl font-bold text-white mb-4">Questions Management</h3>
+                  <div className="bg-stone-900 rounded-2xl border border-white/5 overflow-hidden">
+                    <table className="w-full text-left text-sm text-stone-400">
+                      <thead className="bg-stone-800 text-stone-300 uppercase text-xs font-bold">
+                        <tr>
+                          <th className="px-6 py-4">Title</th>
+                          <th className="px-6 py-4">User</th>
+                          <th className="px-6 py-4">Date</th>
+                          <th className="px-6 py-4">Status</th>
+                          <th className="px-6 py-4 text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-white/5">
+                        {questions.map((q: any) => (
+                          <tr key={q.id} className="hover:bg-white/5">
+                            <td className="px-6 py-4 font-bold text-white">{q.title} {q.is_secret === 1 && <Lock size={12} className="inline text-amber-500" />}</td>
+                            <td className="px-6 py-4">{q.user_name}</td>
+                            <td className="px-6 py-4 font-mono text-xs">{new Date(q.created_at).toLocaleDateString()}</td>
+                            <td className="px-6 py-4"><span className={`text-[10px] uppercase font-bold px-2 py-1 rounded ${q.answer ? 'bg-green-900/30 text-green-500' : 'bg-stone-800'}`}>{q.answer ? 'Answered' : 'Pending'}</span></td>
+                            <td className="px-6 py-4 text-right">
+                              <button onClick={() => handleDeleteQuestion(q.id)} className="p-2 bg-stone-800 hover:bg-red-600 hover:text-white rounded"><Trash2 size={14} /></button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {adminTab === 'notices' && (
+                <div className="max-w-7xl mx-auto space-y-6">
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-2xl font-bold text-white">Admin Notices</h3>
+                    <button onClick={() => { setIsNoticeModalOpen(true); setNewNotice({ title: '', content: '' }); }} className="px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase tracking-wider shadow-lg flex items-center gap-2"><Plus size={16} /> New Notice</button>
+                  </div>
+                  <div className="bg-stone-900 rounded-2xl border border-white/5 overflow-hidden">
+                    <table className="w-full text-left text-sm text-stone-400">
+                      <thead className="bg-stone-800 text-stone-300 uppercase text-xs font-bold">
+                        <tr>
+                          <th className="px-6 py-4">Title ({noticeLang})</th>
+                          <th className="px-6 py-4">Date</th>
+                          <th className="px-6 py-4 text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-white/5">
+                        {notices.map((n: any) => (
+                          <tr key={n.id} className="hover:bg-white/5">
+                            <td className="px-6 py-4 font-bold text-white">{n.title}</td>
+                            <td className="px-6 py-4 font-mono text-xs">{new Date(n.created_at).toLocaleDateString()}</td>
+                            <td className="px-6 py-4 text-right">
+                              <button onClick={() => handleDeleteNotice(n.id)} className="p-2 bg-stone-800 hover:bg-red-600 hover:text-white rounded"><Trash2 size={14} /></button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               )}
@@ -1681,6 +1788,50 @@ const App: React.FC = () => {
           </div>
         )
       }
+
+      {/* Create Notice Modal */}
+      {isNoticeModalOpen && (
+        <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-in fade-in duration-300">
+          <div className="bg-stone-900 rounded-3xl w-full max-w-2xl flex flex-col border border-white/10 shadow-2xl relative">
+            <div className="px-8 py-6 border-b border-white/5 flex justify-between items-center bg-stone-900 rounded-t-3xl">
+              <div>
+                <h3 className="text-2xl font-serif font-bold text-white">New Notice</h3>
+                <div className="flex gap-2 mt-4">
+                  {['ko', 'en', 'zh', 'ja'].map((l) => (
+                    <button key={l} onClick={() => setNoticeLang(l as any)} className={`px-3 py-1 text-xs font-bold uppercase rounded-full transition-all ${noticeLang === l ? 'bg-amber-600 text-white' : 'bg-stone-800 text-stone-500 hover:text-stone-300'}`}>
+                      {l === 'ko' ? '🇰🇷 Korean' : l === 'en' ? '🇺🇸 English' : l === 'zh' ? '🇨🇳 Chinese' : 'Ja'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <button onClick={() => setIsNoticeModalOpen(false)} className="p-2 -mr-2 text-stone-500 hover:text-white"><X size={24} /></button>
+            </div>
+            <div className="p-8 space-y-6">
+              <div>
+                <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Title ({noticeLang})</label>
+                <input
+                  className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5"
+                  placeholder="Notice Title"
+                  value={newNotice[noticeLang === 'ko' ? 'title' : `title_${noticeLang}`] || ''}
+                  onChange={e => setNewNotice({ ...newNotice, [noticeLang === 'ko' ? 'title' : `title_${noticeLang}`]: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Content ({noticeLang})</label>
+                <textarea
+                  className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 h-40"
+                  placeholder="Content..."
+                  value={newNotice[noticeLang === 'ko' ? 'content' : `content_${noticeLang}`] || ''}
+                  onChange={e => setNewNotice({ ...newNotice, [noticeLang === 'ko' ? 'content' : `content_${noticeLang}`]: e.target.value })}
+                />
+              </div>
+              <div className="flex justify-end pt-4">
+                <button onClick={handleCreateNotice} className="px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase shadow-lg">Post Notice</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Global Report Reader Modal */}
       {selectedReport && (

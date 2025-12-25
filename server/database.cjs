@@ -70,6 +70,13 @@ try {
       views INTEGER DEFAULT 0,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
+
+    CREATE TABLE IF NOT EXISTS notices (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      content TEXT NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
   `);
   console.log('[Database] Schema initialized.');
 
@@ -77,55 +84,76 @@ try {
   try {
     const tableInfo = db.prepare("PRAGMA table_info(health_reports)").all();
     const columns = tableInfo.map(c => c.name);
+    // ... logic for health reports ...
+
+    // Migrations for Notices
+    const noticeInfo = db.prepare("PRAGMA table_info(notices)").all();
+    const noticeCols = noticeInfo.map(c => c.name);
 
     const languages = ['en', 'zh', 'ja'];
-    const fields = ['title', 'content', 'summary', 'key_point'];
+    const fields = ['title', 'content'];
 
     languages.forEach(lang => {
       fields.forEach(field => {
         const colName = `${field}_${lang}`;
-        if (!columns.includes(colName)) {
-          console.log(`[Database] Adding column ${colName} to health_reports...`);
-          db.prepare(`ALTER TABLE health_reports ADD COLUMN ${colName} TEXT`).run();
+        if (!noticeCols.includes(colName)) {
+          console.log(`[Database] Adding column ${colName} to notices...`);
+          db.prepare(`ALTER TABLE notices ADD COLUMN ${colName} TEXT`).run();
         }
       });
     });
+    try {
+      const tableInfo = db.prepare("PRAGMA table_info(health_reports)").all();
+      const columns = tableInfo.map(c => c.name);
+
+      const languages = ['en', 'zh', 'ja'];
+      const fields = ['title', 'content', 'summary', 'key_point'];
+
+      languages.forEach(lang => {
+        fields.forEach(field => {
+          const colName = `${field}_${lang}`;
+          if (!columns.includes(colName)) {
+            console.log(`[Database] Adding column ${colName} to health_reports...`);
+            db.prepare(`ALTER TABLE health_reports ADD COLUMN ${colName} TEXT`).run();
+          }
+        });
+      });
+    } catch (err) {
+      console.error('[Database] Migration Failed:', err);
+    }
+
+    // --- Seed Data (Welcome Question) ---
+    try {
+      const count = db.prepare('SELECT count(*) as count FROM questions').get();
+      if (count && count.count === 0) {
+        // Need a dummy user first
+        db.exec("INSERT OR IGNORE INTO users (id, email, password, name, role) VALUES (1, 'system@vitalcore.com', 'system', 'VitalCore Admin', 'admin')");
+        // db.exec("INSERT INTO questions (user_id, title, content, is_secret, answer) VALUES (1, 'Welcome to Vital Core Q&A', 'This is a test question to verify the database connection. If you see this, the system is working!', 0, 'Welcome! Feel free to ask any questions.')");
+        console.log('[Database] System User Checked.');
+      }
+    } catch (e) {
+      console.error('[Database] Failed to insert welcome question:', e);
+    }
+
+    // --- Create Default Admin ---
+    const createAdmin = () => {
+      const adminEmail = 'cambodia.bae@gmail.com';
+      const stmt = db.prepare('SELECT * FROM users WHERE email = ?');
+      const admin = stmt.get(adminEmail);
+
+      if (!admin) {
+        const hashedPassword = bcrypt.hashSync('123456', 10);
+        const insert = db.prepare('INSERT INTO users (email, password, name, role) VALUES (?, ?, ?, ?)');
+        insert.run(adminEmail, hashedPassword, 'Admin', 'admin');
+        console.log('[Database] Default admin account created.');
+      }
+    };
+    createAdmin();
+
   } catch (err) {
-    console.error('[Database] Migration Failed:', err);
+    console.error('[Database] Initialization FAILED:', err);
+    // Do NOT exit here. Throw error so index.cjs can catch it and Soft Start.
+    throw err;
   }
 
-  // --- Seed Data (Welcome Question) ---
-  try {
-    const count = db.prepare('SELECT count(*) as count FROM questions').get();
-    if (count && count.count === 0) {
-      // Need a dummy user first
-      db.exec("INSERT OR IGNORE INTO users (id, email, password, name, role) VALUES (1, 'system@vitalcore.com', 'system', 'VitalCore Admin', 'admin')");
-      // db.exec("INSERT INTO questions (user_id, title, content, is_secret, answer) VALUES (1, 'Welcome to Vital Core Q&A', 'This is a test question to verify the database connection. If you see this, the system is working!', 0, 'Welcome! Feel free to ask any questions.')");
-      console.log('[Database] System User Checked.');
-    }
-  } catch (e) {
-    console.error('[Database] Failed to insert welcome question:', e);
-  }
-
-  // --- Create Default Admin ---
-  const createAdmin = () => {
-    const adminEmail = 'cambodia.bae@gmail.com';
-    const stmt = db.prepare('SELECT * FROM users WHERE email = ?');
-    const admin = stmt.get(adminEmail);
-
-    if (!admin) {
-      const hashedPassword = bcrypt.hashSync('123456', 10);
-      const insert = db.prepare('INSERT INTO users (email, password, name, role) VALUES (?, ?, ?, ?)');
-      insert.run(adminEmail, hashedPassword, 'Admin', 'admin');
-      console.log('[Database] Default admin account created.');
-    }
-  };
-  createAdmin();
-
-} catch (err) {
-  console.error('[Database] Initialization FAILED:', err);
-  // Do NOT exit here. Throw error so index.cjs can catch it and Soft Start.
-  throw err;
-}
-
-module.exports = db;
+  module.exports = db;

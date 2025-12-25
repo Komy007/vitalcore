@@ -226,6 +226,15 @@ if (db) {
         } catch (e) { res.status(500).json({ error: e.message }); }
     });
 
+    // Delete Report (Admin Only)
+    app.delete('/api/health-reports/:id', authenticateToken, isAdmin, (req, res) => {
+        try {
+            const { id } = req.params;
+            db.prepare('DELETE FROM health_reports WHERE id = ?').run(id);
+            res.json({ message: 'Report deleted' });
+        } catch (e) { res.status(500).json({ error: e.message }); }
+    });
+
     // 3. Questions (Q&A)
     app.get('/api/questions', (req, res) => {
         try {
@@ -269,6 +278,106 @@ if (db) {
             });
 
             res.json(filtered);
+        } catch (e) { res.status(500).json({ error: e.message }); }
+    });
+
+    app.put('/api/questions/:id', authenticateToken, (req, res) => {
+        try {
+            const { id } = req.params;
+            const { title, content, is_secret } = req.body;
+
+            // Verify ownership
+            const existing = db.prepare('SELECT user_id FROM questions WHERE id = ?').get(id);
+            if (!existing) return res.status(404).json({ error: 'Question not found' });
+            if (existing.user_id !== req.user.id && req.user.role !== 'admin') {
+                return res.status(403).json({ error: 'Not authorized' });
+            }
+
+            const stmt = db.prepare('UPDATE questions SET title = ?, content = ?, is_secret = ? WHERE id = ?');
+            stmt.run(title, content, is_secret ? 1 : 0, id);
+            res.json({ message: 'Question updated' });
+        } catch (e) { res.status(500).json({ error: e.message }); }
+    });
+
+    app.post('/api/questions', authenticateToken, (req, res) => {
+        try {
+            const { title, content, is_secret } = req.body;
+            console.log(`[Q&A] Received submission from User ${req.user.id}: ${title} (Secret: ${is_secret})`);
+
+            if (!title || !content) return res.status(400).json({ error: 'Title and content are required' });
+
+            const stmt = db.prepare('INSERT INTO questions (user_id, title, content, is_secret) VALUES (?, ?, ?, ?)');
+            const info = stmt.run(req.user.id, title, content, is_secret ? 1 : 0);
+            res.json({ id: info.lastInsertRowid, message: 'Question submitted' });
+        } catch (e) { res.status(500).json({ error: e.message }); }
+    });
+
+    // 4. Admin Answer (Special PUT)
+    app.put('/api/questions/:id/answer', authenticateToken, isAdmin, (req, res) => {
+        try {
+            const { id } = req.params;
+            const { answer } = req.body;
+            db.prepare('UPDATE questions SET answer = ? WHERE id = ?').run(answer, id);
+            res.json({ message: 'Answer updated' });
+        } catch (e) { res.status(500).json({ error: e.message }); }
+    });
+
+    app.delete('/api/questions/:id', authenticateToken, (req, res) => {
+        try {
+            const { id } = req.params;
+            const q = db.prepare('SELECT user_id FROM questions WHERE id = ?').get(id);
+            if (!q) return res.status(404).json({ error: 'Question not found' });
+
+            if (q.user_id !== req.user.id && req.user.role !== 'admin') {
+                return res.status(403).json({ error: 'Not authorized' });
+            }
+
+            db.prepare('DELETE FROM questions WHERE id = ?').run(id);
+            res.json({ message: 'Question deleted' });
+        } catch (e) { res.status(500).json({ error: e.message }); }
+    });
+
+    // 4. Admin Notices
+    app.get('/api/notices', (req, res) => {
+        try {
+            const notices = db.prepare('SELECT * FROM notices ORDER BY created_at DESC').all();
+            res.json(notices);
+        } catch (e) { res.status(500).json({ error: e.message }); }
+    });
+
+    app.post('/api/notices', authenticateToken, isAdmin, (req, res) => {
+        try {
+            const {
+                title, content,
+                title_en, content_en,
+                title_zh, content_zh,
+                title_ja, content_ja
+            } = req.body;
+
+            if (!title || !content) return res.status(400).json({ error: 'Title and content required' });
+
+            const stmt = db.prepare(`
+                INSERT INTO notices (
+                    title, content,
+                    title_en, content_en,
+                    title_zh, content_zh,
+                    title_ja, content_ja
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            `);
+            const info = stmt.run(
+                title, content,
+                title_en || '', content_en || '',
+                title_zh || '', content_zh || '',
+                title_ja || '', content_ja || ''
+            );
+            res.json({ id: info.lastInsertRowid });
+        } catch (e) { res.status(500).json({ error: e.message }); }
+    });
+
+    app.delete('/api/notices/:id', authenticateToken, isAdmin, (req, res) => {
+        try {
+            db.prepare('DELETE FROM notices WHERE id = ?').run(req.params.id);
+            res.json({ message: 'Notice deleted' });
         } catch (e) { res.status(500).json({ error: e.message }); }
     });
 

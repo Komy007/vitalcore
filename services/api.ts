@@ -86,6 +86,14 @@ export const api = {
             if (!res.ok) throw await res.json();
             return res.json();
         },
+        delete: async (id: number) => {
+            const res = await fetch(`${API_URL}/health-reports/${id}`, {
+                method: 'DELETE',
+                headers: getHeaders(),
+            });
+            if (!res.ok) throw await res.json();
+            return res.json();
+        },
     },
     qna: {
         list: async () => {
@@ -113,7 +121,7 @@ export const api = {
         },
         answer: async (id: number, answer: string) => {
             const res = await fetch(`${API_URL}/questions/${id}/answer`, {
-                method: 'POST',
+                method: 'PUT',
                 headers: getHeaders(),
                 body: JSON.stringify({ answer }),
             });
@@ -122,6 +130,30 @@ export const api = {
         },
         delete: async (id: number) => {
             const res = await fetch(`${API_URL}/questions/${id}`, {
+                method: 'DELETE',
+                headers: getHeaders(),
+            });
+            if (!res.ok) throw await res.json();
+            return res.json();
+        }
+    },
+    notices: {
+        list: async () => {
+            const res = await fetch(`${API_URL}/notices`);
+            if (!res.ok) throw await res.json();
+            return res.json();
+        },
+        create: async (data: any) => {
+            const res = await fetch(`${API_URL}/notices`, {
+                method: 'POST',
+                headers: getHeaders(),
+                body: JSON.stringify(data),
+            });
+            if (!res.ok) throw await res.json();
+            return res.json();
+        },
+        delete: async (id: number) => {
+            const res = await fetch(`${API_URL}/notices/${id}`, {
                 method: 'DELETE',
                 headers: getHeaders(),
             });
