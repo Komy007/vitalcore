@@ -1040,56 +1040,7 @@ const App: React.FC = () => {
           }
 
           {/* Report Reader Modal - Improved Mobile UX */}
-          {
-            selectedReport && (
-              <div className="fixed inset-0 z-[75] bg-stone-950/95 backdrop-blur-3xl animate-in fade-in flex flex-col">
-                {/* Sticky Header */}
-                <div className="flex-none p-4 flex justify-between items-center bg-stone-900/80 border-b border-white/5 backdrop-blur-md sticky top-0 z-50">
-                  <span className="text-amber-500 text-xs font-bold uppercase tracking-widest pl-2">Medical Report</span>
-                  <button
-                    onClick={() => setSelectedReport(null)}
-                    className="p-3 bg-stone-800 rounded-full text-stone-300 hover:text-white hover:bg-stone-700 transition-all flex items-center gap-2 pr-4"
-                  >
-                    <X size={20} /> <span className="text-xs font-bold uppercase">Close</span>
-                  </button>
-                </div>
 
-                {/* Scrollable Content Area */}
-                <div className="flex-grow overflow-y-auto custom-scrollbar p-6 md:p-0">
-                  <div className="max-w-4xl mx-auto bg-stone-900/50 md:my-10 rounded-[2rem] overflow-hidden border border-white/5 shadow-2xl min-h-[50vh]">
-                    {selectedReport.image_url && (
-                      <div className="w-full h-64 md:h-96 relative">
-                        <img src={selectedReport.image_url} className="w-full h-full object-cover" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-stone-900 via-transparent to-transparent"></div>
-                      </div>
-                    )}
-
-                    <div className="p-8 md:p-14">
-                      {!selectedReport.image_url && <div className="h-12"></div>}
-
-                      <h2 className="text-3xl md:text-5xl font-serif font-bold text-white mb-8 leading-tight">{selectedReport.title}</h2>
-
-                      {selectedReport.key_point && (
-                        <div className="mb-10 p-8 bg-amber-900/20 border-l-4 border-amber-600 rounded-lg">
-                          <h5 className="text-amber-500 font-bold text-xs uppercase mb-3 flex items-center gap-2"><Sparkles size={14} /> Key Insight</h5>
-                          <p className="text-lg md:text-2xl font-serif text-amber-100 italic">"{selectedReport.key_point}"</p>
-                        </div>
-                      )}
-
-                      <div className="prose prose-invert prose-lg max-w-none text-stone-300 font-light leading-8 whitespace-pre-wrap">
-                        {selectedReport.content}
-                      </div>
-
-                      <div className="mt-16 pt-10 border-t border-white/5 text-center flex flex-col items-center gap-4">
-                        <p className="text-stone-500 text-sm">Vital Core Premium Lab</p>
-                        <button onClick={() => setSelectedReport(null)} className="px-10 py-4 bg-stone-800 hover:bg-stone-700 text-white font-bold rounded-full uppercase tracking-widest text-xs transition-all">Close Article</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )
-          }
 
           {/* Conditional Content based on Current View */}
           <section id="health" className="py-24 relative bg-stone-900 border-t border-white/5">
@@ -1658,6 +1609,56 @@ const App: React.FC = () => {
           </div>
         )
       }
+
+      {/* Global Report Reader Modal */}
+      {selectedReport && (
+        <div className="fixed inset-0 z-[75] bg-stone-950/95 backdrop-blur-3xl animate-in fade-in flex flex-col">
+          {/* Sticky Header */}
+          <div className="flex-none p-4 flex justify-between items-center bg-stone-900/80 border-b border-white/5 backdrop-blur-md sticky top-0 z-50">
+            <span className="text-amber-500 text-xs font-bold uppercase tracking-widest pl-2">Medical Report</span>
+            <button
+              onClick={() => setSelectedReport(null)}
+              className="p-3 bg-stone-800 rounded-full text-stone-300 hover:text-white hover:bg-stone-700 transition-all flex items-center gap-2 pr-4"
+            >
+              <X size={20} /> <span className="text-xs font-bold uppercase">Close</span>
+            </button>
+          </div>
+
+          {/* Scrollable Content Area */}
+          <div className="flex-grow overflow-y-auto custom-scrollbar p-6 md:p-0">
+            <div className="max-w-4xl mx-auto bg-stone-900/50 md:my-10 rounded-[2rem] overflow-hidden border border-white/5 shadow-2xl min-h-[50vh]">
+              {selectedReport.image_url && (
+                <div className="w-full h-64 md:h-96 relative">
+                  <img src={selectedReport.image_url} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-stone-900 via-transparent to-transparent"></div>
+                </div>
+              )}
+
+              <div className="p-8 md:p-14">
+                {!selectedReport.image_url && <div className="h-12"></div>}
+
+                <h2 className="text-3xl md:text-5xl font-serif font-bold text-white mb-8 leading-tight">{selectedReport.title}</h2>
+
+                {selectedReport.key_point && (
+                  <div className="mb-10 p-8 bg-amber-900/20 border-l-4 border-amber-600 rounded-lg">
+                    <h5 className="text-amber-500 font-bold text-xs uppercase mb-3 flex items-center gap-2"><Sparkles size={14} /> Key Insight</h5>
+                    <p className="text-lg md:text-2xl font-serif text-amber-100 italic">"{selectedReport.key_point}"</p>
+                  </div>
+                )}
+
+                <div className="prose prose-invert prose-lg max-w-none text-stone-300 font-light leading-8 whitespace-pre-wrap">
+                  {selectedReport.content}
+                </div>
+
+                <div className="mt-16 pt-10 border-t border-white/5 text-center flex flex-col items-center gap-4">
+                  <p className="text-stone-500 text-sm">Vital Core Premium Lab</p>
+                  <button onClick={() => setSelectedReport(null)} className="px-10 py-4 bg-stone-800 hover:bg-stone-700 text-white font-bold rounded-full uppercase tracking-widest text-xs transition-all">Close Article</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Mobile Developer Credit */}
       <div className="fixed bottom-6 left-0 w-full text-center z-40 pointer-events-none md:hidden">
