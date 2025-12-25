@@ -179,6 +179,19 @@ if (db) {
         } catch (e) { res.status(500).json({ error: e.message }); }
     });
 
+    // Update Report (Admin Only)
+    app.put('/api/health-reports/:id', authenticateToken, isAdmin, (req, res) => {
+        try {
+            const { id } = req.params;
+            const { title, content, summary, key_point, image_url } = req.body;
+            if (!title || !content) return res.status(400).json({ error: 'Title and content are required' });
+
+            const stmt = db.prepare('UPDATE health_reports SET title = ?, content = ?, summary = ?, key_point = ?, image_url = ? WHERE id = ?');
+            stmt.run(title, content, summary || '', key_point || '', image_url || '', id);
+            res.json({ message: 'Report updated successfully' });
+        } catch (e) { res.status(500).json({ error: e.message }); }
+    });
+
     // 3. Questions (Q&A)
     app.get('/api/questions', (req, res) => {
         try {

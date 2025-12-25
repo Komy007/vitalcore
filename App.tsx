@@ -129,6 +129,7 @@ const App: React.FC = () => {
 
   // Create Report State
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [editingReportId, setEditingReportId] = useState<number | null>(null);
   const [newReport, setNewReport] = useState({ title: '', content: '', summary: '', key_point: '', image_url: '' });
 
   const handleRegister = async (e: React.FormEvent) => {
@@ -174,12 +175,18 @@ const App: React.FC = () => {
     if (!newReport.content) return alert('Please enter the full content.');
 
     try {
-      await api.health.create(newReport);
+      if (editingReportId) {
+        await api.health.update(editingReportId, newReport);
+        alert('Report updated successfully');
+      } else {
+        await api.health.create(newReport);
+        alert('Report published successfully');
+      }
       setIsReportModalOpen(false);
       setNewReport({ title: '', content: '', summary: '', key_point: '', image_url: '' });
+      setEditingReportId(null);
       fetchReports();
-      alert('Report published successfully');
-    } catch (err: any) { alert(`Failed to publish report: ${err.error || err.message || 'Unknown error'}`); }
+    } catch (err: any) { alert(`Failed to ${editingReportId ? 'update' : 'publish'} report: ${err.error || err.message || 'Unknown error'}`); }
   };
 
   useEffect(() => {
@@ -1358,22 +1365,27 @@ const App: React.FC = () => {
                 <div className="max-w-5xl mx-auto space-y-6">
                   <div className="flex justify-between items-center">
                     <h3 className="text-2xl font-bold text-white">Health Reports Management</h3>
-                    <button onClick={() => setIsReportModalOpen(true)} className="px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase tracking-wider shadow-lg flex items-center gap-2">
+                    <button onClick={() => { setEditingReportId(null); setNewReport({ title: '', content: '', summary: '', key_point: '', image_url: '' }); setIsReportModalOpen(true); }} className="px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase tracking-wider shadow-lg flex items-center gap-2">
                       <Plus size={16} /> New Report
                     </button>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {healthReports.map(report => (
-                      <div key={report.id} className="bg-stone-900 rounded-xl p-4 border border-white/5 flex gap-4">
-                        <div className="w-20 h-20 bg-stone-800 rounded-lg overflow-hidden shrink-0">
-                          {report.image_url ? <img src={report.image_url} alt="" className="w-full h-full object-cover" /> : <FileText className="m-auto mt-6 text-stone-600" />}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="text-white font-bold truncate mb-1">{report.title}</h4>
-                          <p className="text-stone-500 text-xs line-clamp-2">{report.summary}</p>
-                          <div className="mt-2 text-xs text-stone-600 font-mono flex items-center gap-2">
-                            <Eye size={10} /> {report.views} views
+                      <div key={report.id} className="bg-stone-900 rounded-xl p-4 border border-white/5 flex flex-col gap-4">
+                        <div className="flex gap-4">
+                          <div className="w-20 h-20 bg-stone-800 rounded-lg overflow-hidden shrink-0">
+                            {report.image_url ? <img src={report.image_url} alt="" className="w-full h-full object-cover" /> : <FileText className="m-auto mt-6 text-stone-600" />}
                           </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="text-white font-bold truncate mb-1">{report.title}</h4>
+                            <p className="text-stone-500 text-xs line-clamp-2">{report.summary}</p>
+                            <div className="mt-2 text-xs text-stone-600 font-mono flex items-center gap-2">
+                              <Eye size={10} /> {report.views} views
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex gap-2 pt-2 border-t border-white/5 mt-auto">
+                          <button onClick={() => { setEditingReportId(report.id); setNewReport(report); setIsReportModalOpen(true); }} className="flex-1 py-2 bg-stone-800 text-stone-400 hover:text-white text-xs font-bold rounded uppercase">Edit</button>
                         </div>
                       </div>
                     ))}
@@ -1433,7 +1445,7 @@ const App: React.FC = () => {
           <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-in fade-in duration-300">
             <div className="bg-stone-900 rounded-3xl w-full max-w-4xl max-h-[90vh] flex flex-col border border-white/10 shadow-2xl relative">
               <div className="px-8 py-6 border-b border-white/5 flex justify-between items-center bg-stone-900 rounded-t-3xl">
-                <h3 className="text-2xl font-serif font-bold text-white">New Health Report</h3>
+                <h3 className="text-2xl font-serif font-bold text-white">{editingReportId ? 'Edit Health Report' : 'New Health Report'}</h3>
                 <button onClick={() => setIsReportModalOpen(false)} className="p-2 -mr-2 text-stone-500 hover:text-white"><X size={24} /></button>
               </div>
               <div className="flex-1 overflow-y-auto p-8 space-y-6">
@@ -1462,7 +1474,7 @@ const App: React.FC = () => {
               </div>
               <div className="p-6 border-t border-white/5 bg-stone-900 rounded-b-3xl flex justify-end gap-4">
                 <button onClick={() => setIsReportModalOpen(false)} className="px-8 py-3 bg-stone-800 hover:bg-stone-700 text-stone-400 font-bold rounded-lg uppercase">Cancel</button>
-                <button onClick={handleCreateReport} className="px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase shadow-lg">Publish Report</button>
+                <button onClick={handleCreateReport} className="px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase shadow-lg">{editingReportId ? 'Update Report' : 'Publish Report'}</button>
               </div>
             </div>
           </div>
@@ -1679,6 +1691,11 @@ export const HealthReportModal: React.FC<{ report: any; onClose: () => void }> =
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto p-6 md:p-10">
           <h2 className="text-2xl md:text-4xl font-serif font-bold text-white mb-8 leading-tight">{report.title}</h2>
+          {report.image_url && (
+            <div className="mb-8 rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+              <img src={report.image_url} alt={report.title} className="w-full h-auto max-h-[500px] object-cover" />
+            </div>
+          )}
           <div className="prose prose-invert prose-amber max-w-none">
             <div className="text-stone-300 leading-loose text-base md:text-lg whitespace-pre-wrap font-light">
               {report.content}
