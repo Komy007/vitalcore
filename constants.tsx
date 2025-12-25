@@ -8,7 +8,7 @@ import usage_step_02 from './img/usage_step_02.jpg';
 import usage_step_03 from './img/usage_step_03.png';
 import usage_step_04 from './img/usage_step_04.png';
 import linteus0 from './img/linteus0.png';
-import linteus1 from './img/linteus1.png';
+import linteus1 from './img/linteus1_new.png';
 import linteus2 from './img/linteus2.jpg';
 import linteus3 from './img/linteus3.jpg';
 import linteus4 from './img/linteus4.png';
@@ -97,6 +97,7 @@ export const TRANSLATIONS: Record<string, any> = {
         { title: "항암 및 면역 기전", desc: "상황버섯은 암세포를 직접 공격하는 기존 항암제와 달리, 우리 몸의 1차 방어군인 NK세포(자연살해세포)와 대식세포를 활성화하여 암세포를 스스로 사멸(Apoptosis)시키도록 유도합니다. 특히 암세포가 생존을 위해 만드는 신생 혈관 생성을 억제(Anti-angiogenesis)하여 암의 성장과 전이를 근본적으로 차단합니다. 항암 치료 시 발생하는 백혈구 감소증을 예방하고 구토, 탈모 등 부작용을 완화하는 '최고의 보조 치료제'로 인정받고 있습니다." },
         { title: "전문 학술 증거", desc: "상황버섯의 효능은 전 세계 3,000여 편 이상의 SCI급 논문으로 입증되었습니다. 단순한 경험 의학을 넘어, 현대 의학의 임상 데이터가 그 가치를 증명합니다. 하단의 '학술 증거' 탭에서 실제 임상 연구 결과와 미국 국립보건원(NIH) 데이터를 직접 확인하실 수 있습니다." }
       ],
+      linteus_note: "아래 사진이 Linteus 입니다.", // New translation added
       introDetails: [
         {
           title: "1. 이름의 유래와 의미",

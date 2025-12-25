@@ -675,7 +675,10 @@ const App: React.FC = () => {
                   <div className="max-w-7xl mx-auto">
                     <div className="flex items-center gap-4 mb-12 border-b border-white/10 pb-6">
                       <ShoppingBag className="text-amber-500" size={32} />
-                      <h3 className="text-2xl md:text-3xl font-serif font-bold text-white">Good Products</h3>
+                      <h3 className="text-2xl md:text-3xl font-serif font-bold text-white">
+                        Good Products
+                        {t.about.linteus_note && <span className="ml-4 text-sm font-light text-amber-500/80 tracking-wide font-sans">{t.about.linteus_note}</span>}
+                      </h3>
                     </div>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                       {t.about.products?.map((p: any, i: number) => (
