@@ -747,7 +747,7 @@ const App: React.FC = () => {
             <div className="max-w-[1600px] mx-auto px-8 relative z-10 text-white">
               <div className="text-center mb-16">
                 <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-medium tracking-tight mb-6 uppercase text-white">{t.benefits.title}</h2>
-                <p className="text-amber-500 text-xs font-bold tracking-[0.4em] uppercase opacity-80">{t.benefits.desc}</p>
+                <p className="text-white text-sm md:text-base font-bold tracking-[0.2em] uppercase">{t.benefits.desc}</p>
               </div>
               <div className="flex flex-wrap justify-center gap-5 mb-16 relative z-20">
                 {t.benefits.items.map((item: string, i: number) => {
