@@ -16,7 +16,12 @@ const benefitIcons = [Shield, Droplet, Zap, Sparkles, Brain];
 const App: React.FC = () => {
   const { user, login, logout, isAuthenticated, isAdmin } = useAuth();
 
-  const [lang, setLang] = useState<Language>('ko');
+  const [lang, setLang] = useState<Language>(() => {
+    if (typeof navigator !== 'undefined' && navigator.language) {
+      return navigator.language.startsWith('ko') ? 'ko' : 'en';
+    }
+    return 'ko';
+  });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeTab, setActiveTab] = useState('summary');
@@ -1671,7 +1676,8 @@ const App: React.FC = () => {
                   </div>
                 )}
 
-                <div className="prose prose-invert prose-lg max-w-none text-stone-200 font-light leading-relaxed whitespace-pre-wrap min-h-[100px]">
+                {/* Content - Explicitly styled for visibility */}
+                <div className="text-stone-200 text-lg leading-loose font-light whitespace-pre-wrap min-h-[100px] font-sans">
                   {selectedReport.content}
                 </div>
 
