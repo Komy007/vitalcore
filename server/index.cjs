@@ -165,16 +165,30 @@ if (db) {
     // Create Report (Admin Only)
     app.post('/api/health-reports', authenticateToken, isAdmin, (req, res) => {
         try {
-            const { title, content, summary, key_point, image_url } = req.body;
-            console.log('[Health Report] Create Attempt:', { title, contentLength: content?.length, keys: Object.keys(req.body) });
+            const {
+                title, content, summary, key_point, image_url,
+                title_en, content_en, summary_en, key_point_en,
+                title_zh, content_zh, summary_zh, key_point_zh,
+                title_ja, content_ja, summary_ja, key_point_ja
+            } = req.body;
 
-            if (!title || !content) {
-                console.error('[Health Report] Validation Failed: Missing title or content. Received keys:', Object.keys(req.body));
-                return res.status(400).json({ error: `Title and content are required. Received keys: ${Object.keys(req.body).join(', ')}` });
-            }
+            if (!title || !content) return res.status(400).json({ error: 'Title and content are required' });
 
-            const stmt = db.prepare('INSERT INTO health_reports (title, content, summary, key_point, image_url) VALUES (?, ?, ?, ?, ?)');
-            const info = stmt.run(title, content, summary || '', key_point || '', image_url || '');
+            const stmt = db.prepare(`
+              INSERT INTO health_reports (
+                title, content, summary, key_point, image_url,
+                title_en, content_en, summary_en, key_point_en,
+                title_zh, content_zh, summary_zh, key_point_zh,
+                title_ja, content_ja, summary_ja, key_point_ja
+              ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `);
+
+            const info = stmt.run(
+                title, content, summary || '', key_point || '', image_url || '',
+                title_en || '', content_en || '', summary_en || '', key_point_en || '',
+                title_zh || '', content_zh || '', summary_zh || '', key_point_zh || '',
+                title_ja || '', content_ja || '', summary_ja || '', key_point_ja || ''
+            );
             res.json({ id: info.lastInsertRowid, message: 'Report created successfully' });
         } catch (e) { res.status(500).json({ error: e.message }); }
     });
@@ -183,11 +197,31 @@ if (db) {
     app.put('/api/health-reports/:id', authenticateToken, isAdmin, (req, res) => {
         try {
             const { id } = req.params;
-            const { title, content, summary, key_point, image_url } = req.body;
+            const {
+                title, content, summary, key_point, image_url,
+                title_en, content_en, summary_en, key_point_en,
+                title_zh, content_zh, summary_zh, key_point_zh,
+                title_ja, content_ja, summary_ja, key_point_ja
+            } = req.body;
+
             if (!title || !content) return res.status(400).json({ error: 'Title and content are required' });
 
-            const stmt = db.prepare('UPDATE health_reports SET title = ?, content = ?, summary = ?, key_point = ?, image_url = ? WHERE id = ?');
-            stmt.run(title, content, summary || '', key_point || '', image_url || '', id);
+            const stmt = db.prepare(`
+              UPDATE health_reports SET 
+                title = ?, content = ?, summary = ?, key_point = ?, image_url = ?,
+                title_en = ?, content_en = ?, summary_en = ?, key_point_en = ?,
+                title_zh = ?, content_zh = ?, summary_zh = ?, key_point_zh = ?,
+                title_ja = ?, content_ja = ?, summary_ja = ?, key_point_ja = ?
+              WHERE id = ?
+            `);
+
+            stmt.run(
+                title, content, summary || '', key_point || '', image_url || '',
+                title_en || '', content_en || '', summary_en || '', key_point_en || '',
+                title_zh || '', content_zh || '', summary_zh || '', key_point_zh || '',
+                title_ja || '', content_ja || '', summary_ja || '', key_point_ja || '',
+                id
+            );
             res.json({ message: 'Report updated successfully' });
         } catch (e) { res.status(500).json({ error: e.message }); }
     });

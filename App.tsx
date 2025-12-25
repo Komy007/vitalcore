@@ -135,7 +135,8 @@ const App: React.FC = () => {
   // Create Report State
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [editingReportId, setEditingReportId] = useState<number | null>(null);
-  const [newReport, setNewReport] = useState({ title: '', content: '', summary: '', key_point: '', image_url: '' });
+  const [newReport, setNewReport] = useState<any>({ title: '', content: '', summary: '', key_point: '', image_url: '' });
+  const [reportLang, setReportLang] = useState<'ko' | 'en' | 'zh' | 'ja'>('ko');
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -189,6 +190,7 @@ const App: React.FC = () => {
       }
       setIsReportModalOpen(false);
       setNewReport({ title: '', content: '', summary: '', key_point: '', image_url: '' });
+      setReportLang('ko');
       setEditingReportId(null);
       fetchReports();
     } catch (err: any) { alert(`Failed to ${editingReportId ? 'update' : 'publish'} report: ${err.error || err.message || 'Unknown error'}`); }
@@ -1138,7 +1140,9 @@ const App: React.FC = () => {
               <div className="flex justify-between items-end mb-12 border-b border-white/10 pb-6">
                 <div>
                   <h2 className="text-3xl md:text-4xl font-serif font-medium text-white uppercase tracking-tight mb-2">{t.nav.faq}</h2>
-                  <p className="text-stone-400 text-sm">Community Questions & Answers</p>
+                  <p className="text-stone-400 text-sm">
+                    귀하의 언어로 편하게 문의 하세요 / Please feel free to ask in your own language
+                  </p>
                 </div>
                 {isAuthenticated && <button onClick={() => setIsQnaModalOpen(true)} className="px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-full text-xs uppercase tracking-widest shadow-lg flex items-center gap-2"><Edit size={14} /> {t.board?.ask_btn}</button>}
               </div>
@@ -1597,22 +1601,27 @@ const App: React.FC = () => {
           <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-in fade-in duration-300">
             <div className="bg-stone-900 rounded-3xl w-full max-w-4xl max-h-[90vh] flex flex-col border border-white/10 shadow-2xl relative">
               <div className="px-8 py-6 border-b border-white/5 flex justify-between items-center bg-stone-900 rounded-t-3xl">
-                <h3 className="text-2xl font-serif font-bold text-white">New Health Report</h3>
+                <div>
+                  <h3 className="text-2xl font-serif font-bold text-white">{editingReportId ? 'Edit Health Report' : 'New Health Report'}</h3>
+                  <div className="flex gap-2 mt-4">
+                    {['ko', 'en', 'zh', 'ja'].map((l) => (
+                      <button
+                        key={l}
+                        onClick={() => setReportLang(l as any)}
+                        className={`px-3 py-1 text-xs font-bold uppercase rounded-full transition-all ${reportLang === l ? 'bg-amber-600 text-white' : 'bg-stone-800 text-stone-500 hover:text-stone-300'}`}
+                      >
+                        {l === 'ko' ? '🇰🇷 Korean (Orig)' : l === 'en' ? '🇺🇸 English' : l === 'zh' ? '🇨🇳 Chinese' : '🇯🇵 Japanese'}
+                      </button>
+                    ))}
+                  </div>
+                </div>
                 <button onClick={() => setIsReportModalOpen(false)} className="p-2 -mr-2 text-stone-500 hover:text-white"><X size={24} /></button>
               </div>
               <div className="flex-1 overflow-y-auto p-8 space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Title</label>
-                    <input className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5" placeholder="Report Title" value={newReport.title} onChange={e => setNewReport({ ...newReport, title: e.target.value })} />
-                  </div>
-                  <div>
-                    <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Key Point (Subtitle)</label>
-                    <input className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5" placeholder="Short highlight..." value={newReport.key_point} onChange={e => setNewReport({ ...newReport, key_point: e.target.value })} />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Cover Image (Upload or URL)</label>
+
+                {/* Image is Shared */}
+                <div className="bg-stone-800/50 p-4 rounded-xl border border-white/5">
+                  <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Cover Image (Shared)</label>
                   <div className="space-y-3">
                     <input
                       type="file"
@@ -1620,26 +1629,53 @@ const App: React.FC = () => {
                       onChange={handleImageUpload}
                       className="block w-full text-sm text-stone-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-stone-800 file:text-amber-500 hover:file:bg-stone-700"
                     />
+                    <input className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 font-mono text-sm" placeholder="https://..." value={newReport.image_url || ''} onChange={e => setNewReport({ ...newReport, image_url: e.target.value })} />
+                  </div>
+                </div>
+
+                {/* Localized Fields */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Title ({reportLang.toUpperCase()})</label>
                     <input
-                      className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 font-mono text-sm"
-                      placeholder="Or paste image URL..."
-                      value={newReport.image_url}
-                      onChange={e => setNewReport({ ...newReport, image_url: e.target.value })}
+                      className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5"
+                      placeholder="Report Title"
+                      value={newReport[reportLang === 'ko' ? 'title' : `title_${reportLang}`] || ''}
+                      onChange={e => setNewReport({ ...newReport, [reportLang === 'ko' ? 'title' : `title_${reportLang}`]: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Key Point ({reportLang.toUpperCase()})</label>
+                    <input
+                      className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5"
+                      placeholder="Short highlight..."
+                      value={newReport[reportLang === 'ko' ? 'key_point' : `key_point_${reportLang}`] || ''}
+                      onChange={e => setNewReport({ ...newReport, [reportLang === 'ko' ? 'key_point' : `key_point_${reportLang}`]: e.target.value })}
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Summary (Preview Text)</label>
-                  <textarea className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 h-24" placeholder="Brief summary for the card view..." value={newReport.summary} onChange={e => setNewReport({ ...newReport, summary: e.target.value })} />
+                  <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Summary ({reportLang.toUpperCase()})</label>
+                  <textarea
+                    className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 h-24"
+                    placeholder="Brief summary..."
+                    value={newReport[reportLang === 'ko' ? 'summary' : `summary_${reportLang}`] || ''}
+                    onChange={e => setNewReport({ ...newReport, [reportLang === 'ko' ? 'summary' : `summary_${reportLang}`]: e.target.value })}
+                  />
                 </div>
                 <div>
-                  <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Full Content (Markdown Supported)</label>
-                  <textarea className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 h-64 font-mono leading-relaxed" placeholder="# Header\n\nBody text..." value={newReport.content} onChange={e => setNewReport({ ...newReport, content: e.target.value })} />
+                  <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Full Content ({reportLang.toUpperCase()})</label>
+                  <textarea
+                    className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 h-64 font-mono leading-relaxed"
+                    placeholder="# Header\n\nBody text..."
+                    value={newReport[reportLang === 'ko' ? 'content' : `content_${reportLang}`] || ''}
+                    onChange={e => setNewReport({ ...newReport, [reportLang === 'ko' ? 'content' : `content_${reportLang}`]: e.target.value })}
+                  />
                 </div>
               </div>
               <div className="p-6 border-t border-white/5 bg-stone-900 rounded-b-3xl flex justify-end gap-4">
                 <button onClick={() => setIsReportModalOpen(false)} className="px-8 py-3 bg-stone-800 hover:bg-stone-700 text-stone-400 font-bold rounded-lg uppercase">Cancel</button>
-                <button onClick={handleCreateReport} className="px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase shadow-lg">Publish Report</button>
+                <button onClick={handleCreateReport} className="px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase shadow-lg">{editingReportId ? 'Update Report' : 'Publish Report'}</button>
               </div>
             </div>
           </div>
