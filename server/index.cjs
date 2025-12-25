@@ -35,6 +35,41 @@ app.get('/api/health', (req, res) => {
     });
 });
 
+// --- Translation Endpoint ---
+const TRANSLATE_API_KEY = process.env.GOOGLE_TRANSLATE_API_KEY || 'AIzaSyA1QboyKQWa7Jfh3zyCRY2UuW8onvWySQ8';
+
+app.post('/api/translate', async (req, res) => {
+    try {
+        const { text, targetLang } = req.body;
+        if (!text) return res.json({ translatedText: '' });
+
+        // Dynamic import for node-fetch if needed, or use global fetch (Node 18+)
+        const fetch = global.fetch || (await import('node-fetch')).default;
+
+        const response = await fetch(`https://translation.googleapis.com/language/translate/v2?key=${TRANSLATE_API_KEY}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                q: text,
+                target: targetLang,
+                format: 'text'
+            })
+        });
+
+        const data = await response.json();
+        if (data.error) {
+            console.error('[Translation API Error]', data.error);
+            return res.status(500).json({ error: data.error.message });
+        }
+
+        const translatedText = data.data.translations[0].translatedText;
+        res.json({ translatedText });
+    } catch (e) {
+        console.error('[Translation Server Error]', e);
+        res.status(500).json({ error: e.message });
+    }
+});
+
 // --- Middleware ---
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];

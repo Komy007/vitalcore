@@ -10,6 +10,15 @@ const getHeaders = () => {
 };
 
 export const api = {
+    translate: async (text: string, targetLang: string) => {
+        const res = await fetch(`${API_URL}/translate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text, targetLang }),
+        });
+        if (!res.ok) throw await res.json();
+        return res.json();
+    },
     auth: {
         register: async (data: any) => {
             const res = await fetch(`${API_URL}/auth/register`, {

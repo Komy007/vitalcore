@@ -144,6 +144,30 @@ const App: React.FC = () => {
   const [isNoticeModalOpen, setIsNoticeModalOpen] = useState(false);
   const [newNotice, setNewNotice] = useState<any>({ title: '', content: '' });
   const [noticeLang, setNoticeLang] = useState<'ko' | 'en' | 'zh' | 'ja'>('ko');
+  const [isTranslating, setIsTranslating] = useState(false);
+
+  // SEO: Sync URL <-> Lang & Auto-Detect
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const urlLang = params.get('lang');
+    if (urlLang && ['en', 'zh', 'ja', 'ko'].includes(urlLang)) {
+      setLang(urlLang as any);
+    } else {
+      // Auto-detect browser language if no URL param
+      const browserLang = navigator.language.split('-')[0];
+      if (['en', 'zh', 'ja', 'ko'].includes(browserLang)) {
+        setLang(browserLang as any);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (lang !== 'ko') params.set('lang', lang);
+    else params.delete('lang');
+    const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+    window.history.replaceState({}, '', newUrl);
+  }, [lang]);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -313,6 +337,47 @@ const App: React.FC = () => {
       loadAdminData();
     } catch (e: any) { alert(`Failed to post report: ${e.error || e.message}`); }
   }
+
+
+
+  const handleAutoTranslate = async () => {
+    if (!newReport.title || !newReport.content) return alert('Please enter at least Title and Content in Korean first.');
+    if (!confirm('Auto-translate to English, Chinese, and Japanese? This will overwrite existing translations.')) return;
+
+    setIsTranslating(true);
+    try {
+      const fields = ['title', 'content', 'summary', 'key_point'];
+      const targets = ['en', 'zh', 'ja'];
+
+      // Parallel translation
+      const promises = [];
+      for (const target of targets) {
+        for (const field of fields) {
+          const text = newReport[field] || '';
+          if (text) {
+            promises.push(
+              api.translate(text, target).then(res => ({ field, target, text: res.translatedText }))
+            );
+          }
+        }
+      }
+
+      const results = await Promise.all(promises);
+      const updated = { ...newReport };
+
+      results.forEach(({ field, target, text }) => {
+        updated[`${field}_${target}`] = text;
+      });
+
+      setNewReport(updated);
+      alert('✨ Transformation Complete! Please review the tabs.');
+    } catch (e) {
+      console.error(e);
+      alert('Translation failed. Please try again.');
+    } finally {
+      setIsTranslating(false);
+    }
+  };
 
   const handleAdminAnswer = async (qid: number) => {
     if (!adminAnswer[qid]) return;
@@ -1710,16 +1775,25 @@ const App: React.FC = () => {
               <div className="px-8 py-6 border-b border-white/5 flex justify-between items-center bg-stone-900 rounded-t-3xl">
                 <div>
                   <h3 className="text-2xl font-serif font-bold text-white">{editingReportId ? 'Edit Health Report' : 'New Health Report'}</h3>
-                  <div className="flex gap-2 mt-4">
+                  <div className="flex flex-wrap gap-2 mt-4 items-center">
                     {['ko', 'en', 'zh', 'ja'].map((l) => (
                       <button
                         key={l}
                         onClick={() => setReportLang(l as any)}
                         className={`px-3 py-1 text-xs font-bold uppercase rounded-full transition-all ${reportLang === l ? 'bg-amber-600 text-white' : 'bg-stone-800 text-stone-500 hover:text-stone-300'}`}
                       >
-                        {l === 'ko' ? '🇰🇷 Korean (Orig)' : l === 'en' ? '🇺🇸 English' : l === 'zh' ? '🇨🇳 Chinese' : '🇯🇵 Japanese'}
+                        {l === 'ko' ? '🇰🇷 KR' : l === 'en' ? '🇺🇸 EN' : l === 'zh' ? '🇨🇳 CN' : '🇯🇵 JP'}
                       </button>
                     ))}
+                    <div className="w-px h-6 bg-white/10 mx-2"></div>
+                    <button
+                      onClick={handleAutoTranslate}
+                      disabled={isTranslating}
+                      className="px-4 py-1.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white text-xs font-bold rounded-full uppercase shadow-lg flex items-center gap-2 disabled:opacity-50"
+                    >
+                      {isTranslating ? <div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Sparkles size={12} />}
+                      AI Translate All
+                    </button>
                   </div>
                 </div>
                 <button onClick={() => setIsReportModalOpen(false)} className="p-2 -mr-2 text-stone-500 hover:text-white"><X size={24} /></button>
