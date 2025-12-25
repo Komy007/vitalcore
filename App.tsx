@@ -1203,6 +1203,12 @@ const App: React.FC = () => {
               </div>
 
               <div className="space-y-6">
+                <div className="bg-amber-900/10 border border-amber-500/20 p-4 rounded-xl mb-6">
+                  <p className="text-amber-500 text-xs md:text-sm font-bold text-center">
+                    귀하의 언어로 편하게 문의 하세요. <br />
+                    Please feel free to ask in your own language.
+                  </p>
+                </div>
                 <div>
                   <label className="block text-stone-500 text-xs font-bold mb-2 uppercase">{t.board?.label_title}</label>
                   <input className="w-full bg-stone-800 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-amber-500" placeholder={t.board?.placeholder_title} value={newQuestion.title} onChange={e => setNewQuestion({ ...newQuestion, title: e.target.value })} />
@@ -1667,18 +1673,28 @@ const App: React.FC = () => {
               <div className="p-8 md:p-14">
                 {!selectedReport.image_url && <div className="h-12"></div>}
 
-                <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-8 leading-tight tracking-tight">{selectedReport.title}</h2>
+                {(() => {
+                  const displayTitle = selectedReport[`title_${lang}`] || selectedReport.title;
+                  const displayContent = selectedReport[`content_${lang}`] || selectedReport.content;
+                  const displayKeyPoint = selectedReport[`key_point_${lang}`] || selectedReport.key_point;
 
-                {selectedReport.key_point && (
-                  <div className="mb-10 pl-6 border-l-2 border-amber-500 py-2">
-                    <p className="text-xl md:text-2xl font-serif text-amber-500 italic leading-relaxed">"{selectedReport.key_point}"</p>
-                  </div>
-                )}
+                  return (
+                    <>
+                      <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-8 leading-tight tracking-tight">{displayTitle}</h2>
 
-                {/* Content - Explicitly styled for visibility */}
-                <div className="text-stone-200 text-lg md:text-xl leading-8 font-light whitespace-pre-wrap min-h-[100px] font-sans max-w-3xl">
-                  {selectedReport.content}
-                </div>
+                      {displayKeyPoint && (
+                        <div className="mb-10 pl-6 border-l-2 border-amber-500 py-2">
+                          <p className="text-xl md:text-2xl font-serif text-amber-500 italic leading-relaxed">"{displayKeyPoint}"</p>
+                        </div>
+                      )}
+
+                      {/* Content - Explicitly styled for visibility */}
+                      <div className="text-stone-200 text-lg md:text-xl leading-8 font-light whitespace-pre-wrap min-h-[100px] font-sans max-w-3xl">
+                        {displayContent}
+                      </div>
+                    </>
+                  );
+                })()}
 
                 <div className="mt-16 pt-10 border-t border-white/5 text-center flex flex-col items-center gap-4">
                   <p className="text-stone-500 text-sm">Vital Core Premium Lab</p>

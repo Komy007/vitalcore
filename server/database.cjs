@@ -73,6 +73,27 @@ try {
   `);
   console.log('[Database] Schema initialized.');
 
+  // --- Migrations for Multi-Language Support ---
+  try {
+    const tableInfo = db.prepare("PRAGMA table_info(health_reports)").all();
+    const columns = tableInfo.map(c => c.name);
+
+    const languages = ['en', 'zh', 'ja'];
+    const fields = ['title', 'content', 'summary', 'key_point'];
+
+    languages.forEach(lang => {
+      fields.forEach(field => {
+        const colName = `${field}_${lang}`;
+        if (!columns.includes(colName)) {
+          console.log(`[Database] Adding column ${colName} to health_reports...`);
+          db.prepare(`ALTER TABLE health_reports ADD COLUMN ${colName} TEXT`).run();
+        }
+      });
+    });
+  } catch (err) {
+    console.error('[Database] Migration Failed:', err);
+  }
+
   // --- Seed Data (Welcome Question) ---
   try {
     const count = db.prepare('SELECT count(*) as count FROM questions').get();
