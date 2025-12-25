@@ -1071,7 +1071,7 @@ const App: React.FC = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {healthReports.slice(0, 3).map((report) => (
-                  <div key={report.id} onClick={() => { setSelectedReport(report); api.health.get(report.id).catch(console.error); }} className="cursor-pointer group">
+                  <div key={report.id} onClick={async () => { setSelectedReport(report); try { const full = await api.health.get(report.id); setSelectedReport(full); } catch (e) { console.error(e); } }} className="cursor-pointer group">
                     <div className="aspect-[4/3] rounded-2xl overflow-hidden mb-6 bg-stone-900 border border-white/5 relative">
                       {report.image_url ? (
                         <img src={report.image_url} alt={report.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
@@ -1111,7 +1111,7 @@ const App: React.FC = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {healthReports.map((report) => (
-                  <div key={report.id} onClick={() => { setSelectedReport(report); api.health.get(report.id).catch(console.error); }} className="cursor-pointer group">
+                  <div key={report.id} onClick={async () => { setSelectedReport(report); try { const full = await api.health.get(report.id); setSelectedReport(full); } catch (e) { console.error(e); } }} className="cursor-pointer group">
                     <div className="aspect-[4/3] rounded-2xl overflow-hidden mb-6 bg-stone-900 border border-white/5 relative">
                       {report.image_url ? (
                         <img src={report.image_url} alt={report.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
