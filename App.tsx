@@ -170,13 +170,16 @@ const App: React.FC = () => {
   };
 
   const handleCreateReport = async () => {
+    if (!newReport.title) return alert('Please enter a title.');
+    if (!newReport.content) return alert('Please enter the full content.');
+
     try {
       await api.health.create(newReport);
       setIsReportModalOpen(false);
       setNewReport({ title: '', content: '', summary: '', key_point: '', image_url: '' });
       fetchReports();
       alert('Report published successfully');
-    } catch (err) { alert('Failed to publish report'); }
+    } catch (err: any) { alert(`Failed to publish report: ${err.error || err.message || 'Unknown error'}`); }
   };
 
   useEffect(() => {
@@ -236,12 +239,13 @@ const App: React.FC = () => {
   }
 
   const handlePostReport = async () => {
+    if (!newReport.title || !newReport.content) return alert('Title and content are required.');
     try {
       await api.health.create(newReport);
       setIsReportModalOpen(false);
-      setNewReport({ title: '', key_point: '', image_url: '', content: '' });
+      setNewReport({ title: '', key_point: '', image_url: '', content: '', summary: '' });
       loadAdminData();
-    } catch (e) { alert('Failed to post report'); }
+    } catch (e: any) { alert(`Failed to post report: ${e.error || e.message}`); }
   }
 
   const handleAdminAnswer = async (qid: number) => {
