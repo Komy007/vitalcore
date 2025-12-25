@@ -97,7 +97,7 @@ export const TRANSLATIONS: Record<string, any> = {
         { title: "항암 및 면역 기전", desc: "상황버섯은 암세포를 직접 공격하는 기존 항암제와 달리, 우리 몸의 1차 방어군인 NK세포(자연살해세포)와 대식세포를 활성화하여 암세포를 스스로 사멸(Apoptosis)시키도록 유도합니다. 특히 암세포가 생존을 위해 만드는 신생 혈관 생성을 억제(Anti-angiogenesis)하여 암의 성장과 전이를 근본적으로 차단합니다. 항암 치료 시 발생하는 백혈구 감소증을 예방하고 구토, 탈모 등 부작용을 완화하는 '최고의 보조 치료제'로 인정받고 있습니다." },
         { title: "전문 학술 증거", desc: "상황버섯의 효능은 전 세계 3,000여 편 이상의 SCI급 논문으로 입증되었습니다. 단순한 경험 의학을 넘어, 현대 의학의 임상 데이터가 그 가치를 증명합니다. 하단의 '학술 증거' 탭에서 실제 임상 연구 결과와 미국 국립보건원(NIH) 데이터를 직접 확인하실 수 있습니다." }
       ],
-      linteus_note: "아래 사진이 Linteus 입니다.", // New translation added
+      linteus_note: "아래 사진이 Linteus (린테우스) 입니다.",
       introDetails: [
         {
           title: "1. 이름의 유래와 의미",
@@ -275,6 +275,7 @@ export const TRANSLATIONS: Record<string, any> = {
         { title: "Mechanism", desc: "Phellinus doesn't directly strike cancer cells but maximizes innate immunity. It activates NK cells and blocks the formation of new blood vessels that cancer cells need to survive. It regulates cytokine secretion, preventing excessive inflammation and maintaining a balanced immune state." },
         { title: "Academic Foundations", desc: "Proven through thousands of international papers. In PubMed, research on anti-tumor and anti-diabetic effects is updated annually. Japanese research revealed a 96.7% tumor inhibition rate for its polysaccharides. We provide reliable info based on cutting-edge science." }
       ],
+      linteus_note: "The photo below is Phellinus Linteus.",
       introDetails: [
         {
           title: "1. Origin of Name",
@@ -452,6 +453,7 @@ export const TRANSLATIONS: Record<string, any> = {
         { title: "抗癌机理", desc: "桑黄并不直接攻击癌细胞，而是通过最大化人体的先天免疫力使癌细胞自愈。它激活NK细胞（自然杀伤细胞）以强化体内监视系统，并阻断癌细胞生存所需的血管生成。此外，它还调节细胞因子的分泌，抑制过度炎症反应。" },
         { title: "学术依据", desc: "桑黄的功效已通过数千篇国际学术论文得到证实。PubMed中每年都会更新关于其抗肿瘤和调节免疫的研究。日本国立癌症中心的研究显示，桑黄多糖的肿瘤抑制率达到96.7%。我们基于这些最新成就提供最可靠的信息。" }
       ],
+      linteus_note: "下图是林特乌斯 (Phellinus Linteus)。",
       introDetails: [
         {
           title: "1. 名字的由来与含义",
@@ -629,6 +631,7 @@ export const TRANSLATIONS: Record<string, any> = {
         { title: "作用機序", desc: "癌細胞を直接攻撃するのではなく、体内の先天的な免疫力を極大化させます。NK細胞を活性化させて監視システムを強化し、癌細胞が必要とする新生血管の形成を遮断します。また、炎症反応を抑制し、バランスの取れた免疫状態を維持させます。" },
         { title: "学術的根拠", desc: "数千の学術論文を通じてその価値が立証されています。PubMedには抗腫瘍や免疫調節に関する研究結果が毎年更新されています。日本の国立がんセンターの研究では、腫瘍阻止率が96.7%に達するという結果が発表されました。信頼できる情報を提供します。" }
       ],
+      linteus_note: "下の写真は Phellinus Linteus (リンテウス) です。",
       introDetails: [
         {
           title: "1. 名前の由来と意味",
