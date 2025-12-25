@@ -742,14 +742,14 @@ const App: React.FC = () => {
           </section>
 
           {/* Benefits Section */}
-          <section id="benefits" className="py-24 relative bg-fixed bg-center bg-cover" style={{ backgroundImage: `url(${IMAGES.benefits_bg})` }}>
+          <section id="benefits" className="py-24 relative bg-scroll md:bg-fixed bg-center bg-cover bg-stone-950" style={{ backgroundImage: `url(${IMAGES.benefits_bg})` }}>
             <div className="absolute inset-0 bg-stone-950/30 backdrop-blur-lg"></div>
             <div className="max-w-[1600px] mx-auto px-8 relative z-10 text-white">
               <div className="text-center mb-16">
                 <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-medium tracking-tight mb-6 uppercase text-white">{t.benefits.title}</h2>
                 <p className="text-amber-500 text-xs font-bold tracking-[0.4em] uppercase opacity-80">{t.benefits.desc}</p>
               </div>
-              <div className="flex flex-wrap justify-center gap-5 mb-16">
+              <div className="flex flex-wrap justify-center gap-5 mb-16 relative z-20">
                 {t.benefits.items.map((item: string, i: number) => {
                   const Icon = benefitIcons[i] || Activity;
                   return (
