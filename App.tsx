@@ -1737,10 +1737,11 @@ const App: React.FC = () => {
                   <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
                   Admin Dashboard
                 </h2>
-                <div className="flex bg-stone-800 p-1 rounded-lg">
-                  <button onClick={() => setAdminTab('users')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase transition-all ${adminTab === 'users' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Users</button>
-                  <button onClick={() => setAdminTab('reports')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase transition-all ${adminTab === 'reports' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Health Reports</button>
-                  <button onClick={() => setAdminTab('qna')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase transition-all ${adminTab === 'qna' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Q&A Board</button>
+                <div className="flex bg-stone-800 p-1 rounded-lg overflow-x-auto no-scrollbar max-w-[50vw]">
+                  <button onClick={() => setAdminTab('users')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase whitespace-nowrap transition-all ${adminTab === 'users' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Users</button>
+                  <button onClick={() => setAdminTab('reports')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase whitespace-nowrap transition-all ${adminTab === 'reports' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Health Reports</button>
+                  <button onClick={() => setAdminTab('notices')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase whitespace-nowrap transition-all ${adminTab === 'notices' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Notices</button>
+                  <button onClick={() => setAdminTab('qna')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase whitespace-nowrap transition-all ${adminTab === 'qna' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Q&A Board</button>
                 </div>
               </div>
               <button onClick={() => setIsAdminDashboardOpen(false)} className="p-2 -mr-2 text-stone-500 hover:text-white hover:bg-white/5 rounded-full transition-all">
@@ -1791,14 +1792,14 @@ const App: React.FC = () => {
               {adminTab === 'reports' && (
                 <div className="max-w-5xl mx-auto space-y-6">
                   <div className="flex justify-between items-center">
-                    <h3 className="text-2xl font-bold text-white">Health Reports Management</h3>
-                    <button onClick={() => setIsReportModalOpen(true)} className="px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase tracking-wider shadow-lg flex items-center gap-2">
+                    <h3 className="text-xl md:text-2xl font-bold text-white">Health Reports Management</h3>
+                    <button onClick={() => setIsReportModalOpen(true)} className="px-4 py-2 md:px-6 md:py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase tracking-wider shadow-lg flex items-center gap-2 text-xs md:text-sm">
                       <Plus size={16} /> New Report
                     </button>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {healthReports.map(report => (
-                      <div key={report.id} className="bg-stone-900 rounded-xl p-4 border border-white/5 flex gap-4">
+                      <div key={report.id} className="bg-stone-900 rounded-xl p-4 border border-white/5 flex gap-4 relative group">
                         <div className="w-20 h-20 bg-stone-800 rounded-lg overflow-hidden shrink-0">
                           {report.image_url ? <img src={report.image_url} alt="" className="w-full h-full object-cover" /> : <FileText className="m-auto mt-6 text-stone-600" />}
                         </div>
@@ -1809,8 +1810,51 @@ const App: React.FC = () => {
                             <Eye size={10} /> {report.views} views
                           </div>
                         </div>
+                        <button onClick={() => handleDeleteReport(report.id)} className="absolute top-2 right-2 p-1.5 bg-black/50 hover:bg-red-600 rounded text-white opacity-0 group-hover:opacity-100 transition-all"><Trash2 size={12} /></button>
                       </div>
                     ))}
+                  </div>
+                </div>
+              )}
+
+              {adminTab === 'notices' && (
+                <div className="max-w-5xl mx-auto space-y-6">
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-xl md:text-2xl font-bold text-white">Notice Management</h3>
+                    <button onClick={() => setIsNoticeModalOpen(true)} className="px-4 py-2 md:px-6 md:py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase tracking-wider shadow-lg flex items-center gap-2 text-xs md:text-sm">
+                      <Plus size={16} /> New Notice
+                    </button>
+                  </div>
+                  <div className="space-y-4">
+                    {notices.map(notice => (
+                      <div key={notice.id} className="bg-stone-900 rounded-xl p-6 border border-white/5 flex justify-between items-center group hover:border-amber-500/30 transition-colors">
+                        <div className="flex items-center gap-4">
+                          <div className={`w-10 h-10 rounded-full flex items-center justify-center ${notice.type === 'popup' ? 'bg-amber-600 text-white' : notice.type === 'banner' ? 'bg-amber-900/40 text-amber-500' : 'bg-stone-800 text-stone-400'}`}>
+                            {notice.type === 'popup' ? <Zap size={18} /> : notice.type === 'banner' ? <Activity size={18} /> : <MessageCircle size={18} />}
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${notice.type === 'popup' ? 'bg-red-900/30 text-red-500 border border-red-500/20' : notice.type === 'banner' ? 'bg-amber-900/30 text-amber-500 border border-amber-500/20' : 'bg-stone-800 text-stone-500'}`}>{notice.type}</span>
+                              <h4 className="text-white font-bold">{notice.title}</h4>
+                            </div>
+                            <p className="text-stone-500 text-sm line-clamp-1">{notice.content}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <div className="text-right hidden md:block">
+                            <span className="text-[10px] text-stone-600 block uppercase tracking-widest">Date</span>
+                            <span className="text-stone-400 text-xs font-mono">{new Date(notice.created_at).toLocaleDateString()}</span>
+                          </div>
+                          <button onClick={() => handleDeleteNotice(notice.id)} className="p-3 bg-stone-800 hover:bg-red-600 text-stone-400 hover:text-white rounded-lg transition-all"><Trash2 size={16} /></button>
+                        </div>
+                      </div>
+                    ))}
+                    {notices.length === 0 && (
+                      <div className="text-center py-20 bg-stone-900/50 rounded-2xl border border-white/5 border-dashed">
+                        <MessageCircle size={48} className="mx-auto text-stone-700 mb-4" />
+                        <p className="text-stone-500 font-medium">No notices found.</p>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
