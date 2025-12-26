@@ -1168,9 +1168,11 @@ const App: React.FC = () => {
                 {Array.isArray(healthReports) && healthReports.map((report) => (
                   <div key={report.id} className="bg-gradient-to-br from-stone-900 to-stone-950 p-8 rounded-[2rem] border border-amber-500/10 hover:border-amber-500/30 shadow-2xl relative overflow-hidden group transition-all">
                     <span className="text-amber-500 text-[10px] font-black uppercase tracking-widest mb-4 block">Exclusive Report</span>
-                    <h3 className="text-xl font-serif font-bold text-white mb-4 group-hover:text-amber-500 transition-colors">{report.title}</h3>
+                    <h3 className="text-xl font-serif font-bold text-white mb-4 group-hover:text-amber-500 transition-colors">
+                      {report[`title_${lang}`] || report.title}
+                    </h3>
                     <p className="text-stone-400 text-sm leading-relaxed mb-6 line-clamp-3">
-                      {report.summary || "Detailed analysis of Phellinus Linteus effects."}
+                      {report[`summary_${lang}`] || report.summary || "Detailed analysis of Phellinus Linteus effects."}
                     </p>
                     <div className="flex justify-between items-center mt-auto">
                       <span className="text-xs text-stone-600 font-mono">{new Date(report.created_at).toLocaleDateString()} • {report.views} views</span>
@@ -1317,8 +1319,12 @@ const App: React.FC = () => {
                       <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all"></div>
                     </div>
                     <span className="text-amber-500 font-bold text-xs uppercase tracking-widest mb-2 block">{new Date(report.created_at).toLocaleDateString()}</span>
-                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-amber-500 transition-colors lineHeight-tight">{report.title}</h3>
-                    <p className="text-stone-400 text-sm line-clamp-2">{report.summary || report.content?.substring(0, 100)}...</p>
+                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-amber-500 transition-colors lineHeight-tight">
+                      {report[`title_${lang}`] || report.title}
+                    </h3>
+                    <p className="text-stone-400 text-sm line-clamp-2">
+                      {report[`summary_${lang}`] || report.summary || report.content?.substring(0, 100)}...
+                    </p>
                   </div>
                 ))}
               </div>
