@@ -102,6 +102,16 @@ try {
       }
     });
   });
+
+  // Migration for Notice Type
+  if (!noticeCols.includes('type')) {
+    console.log('[Database] Adding column type to notices...');
+    db.prepare("ALTER TABLE notices ADD COLUMN type TEXT DEFAULT 'normal'").run(); // 'normal', 'banner', 'popup'
+  }
+  if (!noticeCols.includes('is_active')) {
+    console.log('[Database] Adding column is_active to notices...');
+    db.prepare("ALTER TABLE notices ADD COLUMN is_active INTEGER DEFAULT 1").run();
+  }
   try {
     const tableInfo = db.prepare("PRAGMA table_info(health_reports)").all();
     const columns = tableInfo.map(c => c.name);

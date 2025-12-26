@@ -388,7 +388,7 @@ if (db) {
     app.post('/api/notices', authenticateToken, isAdmin, (req, res) => {
         try {
             const {
-                title, content,
+                title, content, type, is_active,
                 title_en, content_en,
                 title_zh, content_zh,
                 title_ja, content_ja
@@ -398,14 +398,14 @@ if (db) {
 
             const stmt = db.prepare(`
                 INSERT INTO notices (
-                    title, content,
+                    title, content, type, is_active,
                     title_en, content_en,
                     title_zh, content_zh,
                     title_ja, content_ja
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `);
             const info = stmt.run(
-                title, content,
+                title, content, type || 'normal', is_active !== undefined ? is_active : 1,
                 title_en || '', content_en || '',
                 title_zh || '', content_zh || '',
                 title_ja || '', content_ja || ''
@@ -443,6 +443,40 @@ if (db) {
         try {
             const { title, content, is_secret } = req.body;
             console.log(`[Q&A] Received submission from User ${req.user.id}: ${title} (Secret: ${is_secret})`);
+
+            // --- Security & Moderation ---
+            if (req.user.role !== 'admin') {
+                // 1. Rate Limit (Cool-down 3 minutes)
+                const lastQ = db.prepare("SELECT (strftime('%s','now') - strftime('%s', created_at)) as diff FROM questions WHERE user_id = ? ORDER BY created_at DESC LIMIT 1").get(req.user.id);
+                if (lastQ && lastQ.diff < 180) { // 180 seconds = 3 minutes
+                    return res.status(429).json({ error: 'Please wait 3 minutes before posting again (Anti-Spam).' });
+                }
+
+                // 2. Daily Quota (Max 5 per day)
+                const dailyCount = db.prepare("SELECT count(*) as count FROM questions WHERE user_id = ? AND date(created_at) = date('now')").get(req.user.id);
+                if (dailyCount && dailyCount.count >= 5) {
+                    return res.status(429).json({ error: 'You have reached the daily limit of 5 questions.' });
+                }
+
+                // 3. Duplication Check
+                const dupCheck = db.prepare('SELECT count(*) as count FROM questions WHERE user_id = ? AND title = ? AND content = ?').get(req.user.id, title, content);
+                if (dupCheck && dupCheck.count > 0) {
+                    return res.status(400).json({ error: 'You have already posted this exact question.' });
+                }
+
+                // 4. Content Filter (Ads, Links, Bad Words)
+                const BAD_WORDS = ['sex', 'porn', 'casino', 'gambling', 'viagra', '섹스', '포르노', '카지노', '도박', '바카라', '비아그라', '성인용품', '조건만남', '19금'];
+                const SPAM_PATTERN = /https?:\/\/|www\.|[a-zA-Z0-9-]+\.(com|net|org|xyz|info|biz|ru)|010-\d{3,4}-\d{4}|\+82/i;
+
+                const combinedText = (title + ' ' + content).toLowerCase();
+                const hasBadWord = BAD_WORDS.some(w => combinedText.includes(w));
+                const hasSpamLink = SPAM_PATTERN.test(combinedText);
+
+                if (hasBadWord || hasSpamLink) {
+                    console.warn(`[Moderation] Blocked content from User ${req.user.id}. Title: ${title}`);
+                    return res.status(400).json({ error: 'Post rejected: Contains prohibited words, links, or contact info.' });
+                }
+            }
 
             if (!title || !content) return res.status(400).json({ error: 'Title and content are required' });
 
