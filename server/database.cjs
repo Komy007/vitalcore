@@ -11,9 +11,19 @@ const fs = require('fs');
 let dbPath;
 // Check for Cloud Run environment variables or Production mode
 if (process.env.NODE_ENV === 'production' || process.env.K_SERVICE || process.env.PORT) {
-  // Cloud Run / Production -> Use /tmp (Writable)
-  dbPath = path.join('/tmp', 'vitalcore.db');
-  console.log('[Database] Running in Production/Cloud Run mode. Using /tmp');
+  // Cloud Run Strategy:
+  // 1. Check if GCS Volume is mounted at /mnt/gcs (Persistent)
+  // 2. Fallback to /tmp (Ephemeral) if mount fails
+  const mountPath = '/mnt/gcs';
+  const dbFile = 'vitalcore.db';
+
+  if (fs.existsSync(mountPath)) {
+    dbPath = path.join(mountPath, dbFile);
+    console.log('[Database] GCS Volume Detected. Using Persistent Storage:', dbPath);
+  } else {
+    dbPath = path.join('/tmp', dbFile);
+    console.log('[Database] WARNING: No Persistence Volume found. Using Ephemeral /tmp:', dbPath);
+  }
 } else {
   // Local Development -> Use ./data
   const dbDir = path.join(__dirname, 'data');
