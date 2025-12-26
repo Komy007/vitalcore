@@ -161,6 +161,15 @@ export const api = {
             if (!res.ok) throw await res.json();
             return res.json();
         },
+        update: async (id: number, data: any) => {
+            const res = await fetch(`${API_URL}/notices/${id}`, {
+                method: 'PUT',
+                headers: getHeaders(),
+                body: JSON.stringify(data),
+            });
+            if (!res.ok) throw await res.json();
+            return res.json();
+        },
         delete: async (id: number) => {
             const res = await fetch(`${API_URL}/notices/${id}`, {
                 method: 'DELETE',

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Menu, X, Activity, HelpCircle, Shield, Brain, Heart, Droplet,
-  ArrowRight, User, Edit, ChevronLeft, Sparkles, Bot, Search, ExternalLink, Globe, Lock, Eye, EyeOff, MessageCircle, Flame, Clock, Thermometer, ChevronDown, Info, FlaskConical, Zap, BookOpen, GraduationCap, Award, CheckCircle2, Coffee, Layers, Quote, ShoppingBag, Star, ShieldCheck, Mail, Send, FileText, Trash2, Plus, Loader2, Languages
+  ArrowRight, User, Edit, ChevronLeft, Sparkles, Bot, Search, ExternalLink, Globe, Lock, Eye, EyeOff, MessageCircle, Flame, Clock, Thermometer, ChevronDown, Info, FlaskConical, Zap, BookOpen, GraduationCap, Award, CheckCircle2, Coffee, Layers, Quote, ShoppingBag, Star, ShieldCheck, Mail, Send, FileText, Trash2, Plus, Loader2, Languages, Megaphone, LayoutTemplate
 } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
@@ -1352,9 +1352,16 @@ const App: React.FC = () => {
                     const nTitle = notice[`title_${lang}`] || notice.title;
                     const nContent = notice[`content_${lang}`] || notice.content;
                     return (
-                      <div key={notice.id} className="bg-amber-900/20 border border-amber-500/30 p-6 rounded-2xl">
-                        <h4 className="text-lg font-bold text-white mb-2">{nTitle}</h4>
-                        <p className="text-stone-400 text-sm whitespace-pre-wrap">{nContent}</p>
+                      <div key={notice.id} onClick={() => setActivePopup(notice)} className="bg-amber-900/20 border border-amber-500/30 p-6 rounded-2xl cursor-pointer hover:bg-amber-900/30 transition-all group">
+                        <div className="flex justify-between items-start mb-2">
+                          <h4 className="text-lg font-bold text-white group-hover:text-amber-500 transition-colors flex items-center gap-2">
+                            {notice.type === 'popup' && <LayoutTemplate size={14} className="text-amber-500" />}
+                            {notice.type === 'banner' && <Megaphone size={14} className="text-amber-500" />}
+                            {nTitle}
+                          </h4>
+                          <span className="text-[10px] bg-amber-500/10 text-amber-500 px-2 py-1 rounded-full uppercase font-bold tracking-widest hidden md:block">Click to Expand</span>
+                        </div>
+                        <p className="text-stone-400 text-sm whitespace-pre-wrap line-clamp-2">{nContent}</p>
                         <p className="text-xs text-amber-700 font-mono mt-4">{new Date(notice.created_at).toLocaleDateString()}</p>
                       </div>
                     );

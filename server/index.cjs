@@ -432,6 +432,36 @@ if (db) {
         } catch (e) { res.status(500).json({ error: e.message }); }
     });
 
+    app.put('/api/notices/:id', authenticateToken, isAdmin, (req, res) => {
+        try {
+            const { id } = req.params;
+            const {
+                title, content, type, is_active,
+                title_en, content_en,
+                title_zh, content_zh,
+                title_ja, content_ja
+            } = req.body;
+
+            const stmt = db.prepare(`
+                UPDATE notices SET
+                    title = ?, content = ?, type = ?, is_active = ?,
+                    title_en = ?, content_en = ?,
+                    title_zh = ?, content_zh = ?,
+                    title_ja = ?, content_ja = ?
+                WHERE id = ?
+            `);
+
+            stmt.run(
+                title, content, type || 'normal', is_active !== undefined ? is_active : 1,
+                title_en || '', content_en || '',
+                title_zh || '', content_zh || '',
+                title_ja || '', content_ja || '',
+                id
+            );
+            res.json({ message: 'Notice updated' });
+        } catch (e) { res.status(500).json({ error: e.message }); }
+    });
+
     app.put('/api/questions/:id', authenticateToken, (req, res) => {
         try {
             const { id } = req.params;
