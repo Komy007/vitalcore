@@ -661,7 +661,7 @@ const App: React.FC = () => {
           <section id="about" className="py-24 md:py-32 relative overflow-hidden bg-fixed bg-center bg-cover" style={{ backgroundImage: `url(${IMAGES.about_bg})` }}>
             <div className="absolute inset-0 bg-stone-950/35 backdrop-blur-sm"></div>
             <div className="max-w-[1500px] mx-auto px-8 relative z-10 text-center">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-medium text-stone-100 mb-8 uppercase tracking-tight">{t.about.title}</h2>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-medium text-amber-500 mb-8 uppercase tracking-tight">{t.about.title}</h2>
               <div className="flex flex-wrap justify-center gap-3 mb-12 px-4">
                 {Object.entries(t.about.tabs).map(([key, label]) => (
                   <button key={key} onClick={() => handleAboutTabClick(key)} className={`px-6 py-3 rounded-full border text-xs font-bold uppercase tracking-widest transition-all ${aboutActiveTab === key ? 'bg-amber-700 border-amber-600 text-white shadow-xl scale-105' : 'bg-stone-900/50 border-white/5 text-stone-500 hover:text-stone-300 hover:border-white/10'}`}>
@@ -677,7 +677,7 @@ const App: React.FC = () => {
                       <ShoppingBag className="text-amber-500" size={32} />
                       <h3 className="text-2xl md:text-3xl font-serif font-bold text-white">
                         Good Products
-                        {t.about.linteus_note && <span className="ml-4 text-sm font-light text-amber-500/80 tracking-wide font-sans">{t.about.linteus_note}</span>}
+                        {t.about.linteus_note && <span className="ml-4 text-sm font-medium text-amber-500 tracking-wide font-sans">{t.about.linteus_note}</span>}
                       </h3>
                     </div>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -1979,6 +1979,35 @@ const App: React.FC = () => {
       <div className="fixed bottom-6 left-0 w-full text-center z-40 pointer-events-none md:hidden">
         <p className="text-[10px] text-white/40 font-bold uppercase tracking-[0.2em] drop-shadow-md">Web Developer: KwangYoon Bae</p>
       </div>
+
+      {/* Product Image Lightbox */}
+      {selectedProduct && (
+        <div
+          className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 animate-in fade-in duration-300"
+          onClick={() => setSelectedProduct(null)}
+        >
+          <button
+            onClick={() => setSelectedProduct(null)}
+            className="absolute top-6 right-6 p-4 text-stone-500 hover:text-white bg-white/10 hover:bg-white/20 rounded-full transition-all z-50 cursor-pointer"
+          >
+            <X size={32} />
+          </button>
+
+          <div className="relative max-w-[95vw] max-h-[90vh] w-full h-full flex items-center justify-center pointer-events-none md:pointer-events-auto">
+            <img
+              src={selectedProduct.img}
+              alt={selectedProduct.name}
+              className="max-w-full max-h-full object-contain rounded-lg shadow-2xl pointer-events-auto cursor-zoom-out"
+              onClick={() => setSelectedProduct(null)}
+            />
+            {selectedProduct.name && (
+              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-md px-6 py-3 rounded-full border border-white/10">
+                <p className="text-white font-serif font-bold text-lg">{selectedProduct.name}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
     </div>
   );
