@@ -343,7 +343,7 @@ const App: React.FC = () => {
 
     setIsTranslating(true);
     try {
-      const targets = ['ko', 'en', 'zh', 'ja'].filter(t => t !== noticeLang);
+      const targets = ['ko', 'en', 'zh-CN', 'ja'].filter(t => t !== noticeLang);
       const fields = ['title', 'content'];
 
       // Parallel translation
@@ -359,7 +359,10 @@ const App: React.FC = () => {
       const updated = { ...newNotice };
 
       results.forEach(({ field, target, text }) => {
-        const key = target === 'ko' ? field : `${field}_${target}`;
+        let langKey = target;
+        if (target === 'zh-CN') langKey = 'zh';
+
+        const key = langKey === 'ko' ? field : `${field}_${langKey}`;
         updated[key] = text;
       });
 
