@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Menu, X, Activity, HelpCircle, Shield, Brain, Heart, Droplet,
-  ArrowRight, User, Edit, ChevronLeft, Sparkles, Bot, Search, ExternalLink, Globe, Lock, Eye, EyeOff, MessageCircle, Flame, Clock, Thermometer, ChevronDown, Info, FlaskConical, Zap, BookOpen, GraduationCap, Award, CheckCircle2, Coffee, Layers, Quote, ShoppingBag, Star, ShieldCheck, Mail, Send, FileText, Trash2, Plus
+  ArrowRight, User, Edit, ChevronLeft, Sparkles, Bot, Search, ExternalLink, Globe, Lock, Eye, EyeOff, MessageCircle, Flame, Clock, Thermometer, ChevronDown, Info, FlaskConical, Zap, BookOpen, GraduationCap, Award, CheckCircle2, Coffee, Layers, Quote, ShoppingBag, Star, ShieldCheck, Mail, Send, FileText, Trash2, Plus, Loader2, Languages
 } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
@@ -333,6 +333,45 @@ const App: React.FC = () => {
   };
 
 
+
+  const handleTranslateNotice = async () => {
+    const currentTitle = newNotice[noticeLang === 'ko' ? 'title' : `title_${noticeLang}`];
+    const currentContent = newNotice[noticeLang === 'ko' ? 'content' : `content_${noticeLang}`];
+
+    if (!currentTitle || !currentContent) return alert(`Please enter Title and Content in ${noticeLang} first.`);
+    if (!confirm('Auto-translate to all other languages? This will overwrite existing translations.')) return;
+
+    setIsTranslating(true);
+    try {
+      const targets = ['ko', 'en', 'zh', 'ja'].filter(t => t !== noticeLang);
+      const fields = ['title', 'content'];
+
+      // Parallel translation
+      const promises = [];
+      for (const target of targets) {
+        // Title
+        promises.push(api.translate(currentTitle, target).then(res => ({ field: 'title', target, text: res.translatedText })));
+        // Content
+        promises.push(api.translate(currentContent, target).then(res => ({ field: 'content', target, text: res.translatedText })));
+      }
+
+      const results = await Promise.all(promises);
+      const updated = { ...newNotice };
+
+      results.forEach(({ field, target, text }) => {
+        const key = target === 'ko' ? field : `${field}_${target}`;
+        updated[key] = text;
+      });
+
+      setNewNotice(updated);
+      alert('✨ Notice Translated Successfully!');
+    } catch (e) {
+      console.error(e);
+      alert('Translation failed.');
+    } finally {
+      setIsTranslating(false);
+    }
+  };
 
   const handleDeleteNotice = async (id: number) => {
     if (!confirm('Delete this notice?')) return;
@@ -1975,212 +2014,222 @@ const App: React.FC = () => {
                 </div>
 
               </div>
-              <div className="flex justify-end pt-4">
+              <div className="flex justify-end pt-4 gap-4">
+                <button
+                  onClick={handleTranslateNotice}
+                  disabled={isTranslating}
+                  className="px-6 py-3 bg-stone-800 border border-amber-500/30 text-amber-500 hover:bg-amber-900/30 hover:text-white font-bold rounded-lg uppercase shadow-lg flex items-center gap-2 transition-all"
+                >
+                  {isTranslating ? <Loader2 size={18} className="animate-spin" /> : <Languages size={18} />}
+                  {isTranslating ? 'Translating...' : 'AI Translate'}
+                </button>
                 <button onClick={handleCreateNotice} className="px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase shadow-lg">Post Notice</button>
               </div>
             </div>
           </div>
-
-          )
+        </div>
+      )
       }
 
-          {/* Global Report Reader Modal */}
-          {
-            selectedReport && (
-              <div className="fixed inset-0 z-[75] bg-stone-950/95 backdrop-blur-3xl animate-in fade-in flex flex-col">
-                {/* Sticky Header */}
-                <div className="flex-none p-4 flex justify-between items-center bg-stone-900/80 border-b border-white/5 backdrop-blur-md sticky top-0 z-50">
-                  <span className="text-amber-500 text-xs font-bold uppercase tracking-widest pl-2">Medical Report</span>
-                  <button
-                    onClick={() => setSelectedReport(null)}
-                    className="p-3 bg-stone-800 rounded-full text-stone-300 hover:text-white hover:bg-stone-700 transition-all flex items-center gap-2 pr-4"
-                  >
-                    <X size={20} /> <span className="text-xs font-bold uppercase">Close</span>
-                  </button>
-                </div>
-
-                {/* Scrollable Content Area */}
-                <div className="flex-grow overflow-y-auto custom-scrollbar p-6 md:p-0">
-                  <div className="max-w-4xl mx-auto bg-stone-900/50 md:my-10 rounded-[2rem] overflow-hidden border border-white/5 shadow-2xl min-h-[50vh]">
-                    {selectedReport.image_url && (
-                      <div className="w-full h-64 md:h-96 relative">
-                        <img src={selectedReport.image_url} className="w-full h-full object-cover" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-stone-900 via-transparent to-transparent"></div>
-                      </div>
-                    )}
-
-                    <div className="p-8 md:p-14">
-                      {!selectedReport.image_url && <div className="h-12"></div>}
-
-                      {(() => {
-                        const displayTitle = selectedReport[`title_${lang}`] || selectedReport.title;
-                        const displayContent = selectedReport[`content_${lang}`] || selectedReport.content;
-                        const displayKeyPoint = selectedReport[`key_point_${lang}`] || selectedReport.key_point;
-
-                        return (
-                          <>
-                            <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-8 leading-tight tracking-tight">{displayTitle}</h2>
-
-                            {displayKeyPoint && (
-                              <div className="mb-10 pl-6 border-l-2 border-amber-500 py-2">
-                                <p className="text-xl md:text-2xl font-serif text-amber-500 italic leading-relaxed">"{displayKeyPoint}"</p>
-                              </div>
-                            )}
-
-                            {/* Content - Explicitly styled for visibility */}
-                            <div className="text-stone-200 text-lg md:text-xl leading-8 font-light whitespace-pre-wrap min-h-[100px] font-sans max-w-3xl">
-                              {displayContent}
-                            </div>
-                          </>
-                        );
-                      })()}
-
-                      <div className="mt-16 pt-10 border-t border-white/5 text-center flex flex-col items-center gap-4">
-                        <p className="text-stone-500 text-sm">Vital Core Premium Lab</p>
-                        <button onClick={() => setSelectedReport(null)} className="px-10 py-4 bg-stone-800 hover:bg-stone-700 text-white font-bold rounded-full uppercase tracking-widest text-xs transition-all">Close Article</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )
-          }
-
-          {/* Mobile Developer Credit */}
-          <div className="fixed bottom-6 left-0 w-full text-center z-40 pointer-events-none md:hidden">
-            <p className="text-[10px] text-white/40 font-bold uppercase tracking-[0.2em] drop-shadow-md">Web Developer: KwangYoon Bae</p>
-          </div>
-
-          {/* Product Image Lightbox */}
-          {
-            selectedProduct && (
-              <div
-                className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 animate-in fade-in duration-300"
-                onClick={() => setSelectedProduct(null)}
-              >
-                <button
-                  onClick={() => setSelectedProduct(null)}
-                  className="absolute top-6 right-6 p-4 text-stone-500 hover:text-white bg-white/10 hover:bg-white/20 rounded-full transition-all z-50 cursor-pointer"
-                >
-                  <X size={32} />
-                </button>
-
-                <div className="relative max-w-[95vw] max-h-[90vh] w-full h-full flex items-center justify-center pointer-events-none md:pointer-events-auto">
-                  <img
-                    src={selectedProduct.img}
-                    alt={selectedProduct.name}
-                    className="max-w-full max-h-full object-contain rounded-lg shadow-2xl pointer-events-auto cursor-zoom-out"
-                    onClick={() => setSelectedProduct(null)}
-                  />
-                  {selectedProduct.name && (
-                    <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-md px-6 py-3 rounded-full border border-white/10">
-                      <p className="text-white font-serif font-bold text-lg">{selectedProduct.name}</p>
-                    </div>
-                  )}
-                </div>
-                {/* Popup Notice Modal */}
-                {activePopup && (
-                  <div className="fixed inset-0 z-[150] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm animate-in fade-in zoom-in duration-300">
-                    <div className="bg-stone-900 border border-amber-500/30 rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden relative flex flex-col">
-                      <div className="bg-amber-600 px-6 py-4 flex justify-between items-center">
-                        <h3 className="text-white font-bold uppercase tracking-widest text-sm flex items-center gap-2">
-                          <Info size={18} /> Important Notice
-                        </h3>
-                        <button onClick={() => handleClosePopup(false)} className="text-white/70 hover:text-white"><X size={20} /></button>
-                      </div>
-                      <div className="p-8">
-                        <h2 className="text-xl md:text-2xl font-serif font-bold text-white mb-4">
-                          {activePopup[`title_${lang}`] || activePopup.title}
-                        </h2>
-                        <p className="text-stone-300 leading-relaxed font-light whitespace-pre-wrap">
-                          {activePopup[`content_${lang}`] || activePopup.content}
-                        </p>
-                      </div>
-                      <div className="bg-stone-950 p-4 border-t border-white/5 flex items-center justify-between">
-                        <button
-                          onClick={() => handleClosePopup(true)}
-                          className="text-xs text-stone-500 hover:text-white flex items-center gap-2 transition-colors"
-                        >
-                          <CheckCircle2 size={14} /> Don't show again today
-                        </button>
-                        <button onClick={() => handleClosePopup(false)} className="px-6 py-2 bg-stone-800 hover:bg-stone-700 text-white text-xs font-bold uppercase rounded-lg">Close</button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-              </div>
-            );
-};
-
-          export const HealthReportModal: React.FC<{ report: any; onClose: () => void }> = ({report, onClose}) => {
-  if (!report) return null;
-
-          return (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-0 md:p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-300">
-            <div className="w-full h-full md:max-w-4xl md:h-[90vh] bg-stone-900 md:rounded-3xl border border-white/10 shadow-2xl overflow-hidden flex flex-col relative">
-
-              {/* Sticky Header */}
-              <div className="sticky top-0 bg-stone-900/95 backdrop-blur z-20 px-6 py-4 border-b border-white/5 flex justify-between items-center shrink-0">
-                <div className="flex items-center gap-3">
-                  <span className="px-2 py-1 bg-amber-600/20 text-amber-500 text-[10px] font-bold uppercase tracking-wider rounded border border-amber-500/20">
-                    Health Report
-                  </span>
-                  <span className="text-stone-500 text-xs font-mono">{new Date(report.created_at).toLocaleDateString()}</span>
-                </div>
-                <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full transition-colors text-stone-400 hover:text-white">
-                  <X size={24} />
-                </button>
-              </div>
-
-              {/* Scrollable Content */}
-              <div className="flex-1 overflow-y-auto p-6 md:p-10">
-                <h2 className="text-2xl md:text-4xl font-serif font-bold text-white mb-8 leading-tight">{report.title}</h2>
-                {report.image_url && (
-                  <div className="mb-8 rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-                    <img src={report.image_url} alt={report.title} className="w-full h-auto max-h-[500px] object-cover" />
-                  </div>
-                )}
-                <div className="prose prose-invert prose-amber max-w-none">
-                  <div className="text-stone-300 leading-loose text-base md:text-lg whitespace-pre-wrap font-light">
-                    {report.content}
-                  </div>
-                </div>
-
-                <div className="mt-12 pt-8 border-t border-white/5 flex items-center gap-4 text-stone-500 text-sm">
-                  <div className="w-10 h-10 rounded-full bg-stone-800 flex items-center justify-center">
-                    <User size={16} />
-                  </div>
-                  <div>
-                    <p className="text-white font-bold">Vital Core Research Team</p>
-                    <p className="text-xs">Medical Evidence Based Analysis</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          );
-};
-
-          const MobileModal: React.FC<{ isOpen: boolean; onClose: () => void; title: string; children: React.ReactNode }> = ({isOpen, onClose, title, children}) => {
-  if (!isOpen) return null;
-
-          return (
-          <div className="fixed inset-0 z-[60] bg-stone-950 flex flex-col animate-in slide-in-from-bottom duration-300 md:hidden">
+      {/* Global Report Reader Modal */}
+      {
+        selectedReport && (
+          <div className="fixed inset-0 z-[75] bg-stone-950/95 backdrop-blur-3xl animate-in fade-in flex flex-col">
             {/* Sticky Header */}
-            <div className="px-6 py-4 bg-stone-900/95 backdrop-blur border-b border-white/5 flex justify-between items-center shrink-0 safe-top">
-              <h3 className="text-lg font-bold text-white truncate max-w-[80%]">{title}</h3>
-              <button onClick={onClose} className="p-2 -mr-2 text-stone-400 hover:text-white">
-                <X size={24} />
+            <div className="flex-none p-4 flex justify-between items-center bg-stone-900/80 border-b border-white/5 backdrop-blur-md sticky top-0 z-50">
+              <span className="text-amber-500 text-xs font-bold uppercase tracking-widest pl-2">Medical Report</span>
+              <button
+                onClick={() => setSelectedReport(null)}
+                className="p-3 bg-stone-800 rounded-full text-stone-300 hover:text-white hover:bg-stone-700 transition-all flex items-center gap-2 pr-4"
+              >
+                <X size={20} /> <span className="text-xs font-bold uppercase">Close</span>
               </button>
             </div>
 
-            {/* Content */}
-            <div className="flex-1 overflow-y-auto p-6 safe-bottom">
-              {children}
+            {/* Scrollable Content Area */}
+            <div className="flex-grow overflow-y-auto custom-scrollbar p-6 md:p-0">
+              <div className="max-w-4xl mx-auto bg-stone-900/50 md:my-10 rounded-[2rem] overflow-hidden border border-white/5 shadow-2xl min-h-[50vh]">
+                {selectedReport.image_url && (
+                  <div className="w-full h-64 md:h-96 relative">
+                    <img src={selectedReport.image_url} className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-stone-900 via-transparent to-transparent"></div>
+                  </div>
+                )}
+
+                <div className="p-8 md:p-14">
+                  {!selectedReport.image_url && <div className="h-12"></div>}
+
+                  {(() => {
+                    const displayTitle = selectedReport[`title_${lang}`] || selectedReport.title;
+                    const displayContent = selectedReport[`content_${lang}`] || selectedReport.content;
+                    const displayKeyPoint = selectedReport[`key_point_${lang}`] || selectedReport.key_point;
+
+                    return (
+                      <>
+                        <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-8 leading-tight tracking-tight">{displayTitle}</h2>
+
+                        {displayKeyPoint && (
+                          <div className="mb-10 pl-6 border-l-2 border-amber-500 py-2">
+                            <p className="text-xl md:text-2xl font-serif text-amber-500 italic leading-relaxed">"{displayKeyPoint}"</p>
+                          </div>
+                        )}
+
+                        {/* Content - Explicitly styled for visibility */}
+                        <div className="text-stone-200 text-lg md:text-xl leading-8 font-light whitespace-pre-wrap min-h-[100px] font-sans max-w-3xl">
+                          {displayContent}
+                        </div>
+                      </>
+                    );
+                  })()}
+
+                  <div className="mt-16 pt-10 border-t border-white/5 text-center flex flex-col items-center gap-4">
+                    <p className="text-stone-500 text-sm">Vital Core Premium Lab</p>
+                    <button onClick={() => setSelectedReport(null)} className="px-10 py-4 bg-stone-800 hover:bg-stone-700 text-white font-bold rounded-full uppercase tracking-widest text-xs transition-all">Close Article</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          );
+        )
+      }
+
+      {/* Mobile Developer Credit */}
+      <div className="fixed bottom-6 left-0 w-full text-center z-40 pointer-events-none md:hidden">
+        <p className="text-[10px] text-white/40 font-bold uppercase tracking-[0.2em] drop-shadow-md">Web Developer: KwangYoon Bae</p>
+      </div>
+
+      {/* Product Image Lightbox */}
+      {selectedProduct && (
+        <div
+          className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 animate-in fade-in duration-300"
+          onClick={() => setSelectedProduct(null)}
+        >
+          <button
+            onClick={() => setSelectedProduct(null)}
+            className="absolute top-6 right-6 p-4 text-stone-500 hover:text-white bg-white/10 hover:bg-white/20 rounded-full transition-all z-50 cursor-pointer"
+          >
+            <X size={32} />
+          </button>
+
+          <div className="relative max-w-[95vw] max-h-[90vh] w-full h-full flex items-center justify-center pointer-events-none md:pointer-events-auto">
+            <img
+              src={selectedProduct.img}
+              alt={selectedProduct.name}
+              className="max-w-full max-h-full object-contain rounded-lg shadow-2xl pointer-events-auto cursor-zoom-out"
+              onClick={() => setSelectedProduct(null)}
+            />
+            {selectedProduct.name && (
+              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-md px-6 py-3 rounded-full border border-white/10">
+                <p className="text-white font-serif font-bold text-lg">{selectedProduct.name}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Popup Notice Modal */}
+      {activePopup && (
+        <div className="fixed inset-0 z-[150] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm animate-in fade-in zoom-in duration-300">
+          <div className="bg-stone-900 border border-amber-500/30 rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden relative flex flex-col">
+            <div className="bg-amber-600 px-6 py-4 flex justify-between items-center">
+              <h3 className="text-white font-bold uppercase tracking-widest text-sm flex items-center gap-2">
+                <Info size={18} /> Important Notice
+              </h3>
+              <button onClick={() => handleClosePopup(false)} className="text-white/70 hover:text-white"><X size={20} /></button>
+            </div>
+            <div className="p-8">
+              <h2 className="text-xl md:text-2xl font-serif font-bold text-white mb-4">
+                {activePopup[`title_${lang}`] || activePopup.title}
+              </h2>
+              <p className="text-stone-300 leading-relaxed font-light whitespace-pre-wrap">
+                {activePopup[`content_${lang}`] || activePopup.content}
+              </p>
+            </div>
+            <div className="bg-stone-950 p-4 border-t border-white/5 flex items-center justify-between">
+              <button
+                onClick={() => handleClosePopup(true)}
+                className="text-xs text-stone-500 hover:text-white flex items-center gap-2 transition-colors"
+              >
+                <CheckCircle2 size={14} /> Don't show again today
+              </button>
+              <button onClick={() => handleClosePopup(false)} className="px-6 py-2 bg-stone-800 hover:bg-stone-700 text-white text-xs font-bold uppercase rounded-lg">Close</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+    </div>
+  );
 };
 
-          export default App;
+export const HealthReportModal: React.FC<{ report: any; onClose: () => void }> = ({ report, onClose }) => {
+  if (!report) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-0 md:p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-300">
+      <div className="w-full h-full md:max-w-4xl md:h-[90vh] bg-stone-900 md:rounded-3xl border border-white/10 shadow-2xl overflow-hidden flex flex-col relative">
+
+        {/* Sticky Header */}
+        <div className="sticky top-0 bg-stone-900/95 backdrop-blur z-20 px-6 py-4 border-b border-white/5 flex justify-between items-center shrink-0">
+          <div className="flex items-center gap-3">
+            <span className="px-2 py-1 bg-amber-600/20 text-amber-500 text-[10px] font-bold uppercase tracking-wider rounded border border-amber-500/20">
+              Health Report
+            </span>
+            <span className="text-stone-500 text-xs font-mono">{new Date(report.created_at).toLocaleDateString()}</span>
+          </div>
+          <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full transition-colors text-stone-400 hover:text-white">
+            <X size={24} />
+          </button>
+        </div>
+
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto p-6 md:p-10">
+          <h2 className="text-2xl md:text-4xl font-serif font-bold text-white mb-8 leading-tight">{report.title}</h2>
+          {report.image_url && (
+            <div className="mb-8 rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+              <img src={report.image_url} alt={report.title} className="w-full h-auto max-h-[500px] object-cover" />
+            </div>
+          )}
+          <div className="prose prose-invert prose-amber max-w-none">
+            <div className="text-stone-300 leading-loose text-base md:text-lg whitespace-pre-wrap font-light">
+              {report.content}
+            </div>
+          </div>
+
+          <div className="mt-12 pt-8 border-t border-white/5 flex items-center gap-4 text-stone-500 text-sm">
+            <div className="w-10 h-10 rounded-full bg-stone-800 flex items-center justify-center">
+              <User size={16} />
+            </div>
+            <div>
+              <p className="text-white font-bold">Vital Core Research Team</p>
+              <p className="text-xs">Medical Evidence Based Analysis</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const MobileModal: React.FC<{ isOpen: boolean; onClose: () => void; title: string; children: React.ReactNode }> = ({ isOpen, onClose, title, children }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[60] bg-stone-950 flex flex-col animate-in slide-in-from-bottom duration-300 md:hidden">
+      {/* Sticky Header */}
+      <div className="px-6 py-4 bg-stone-900/95 backdrop-blur border-b border-white/5 flex justify-between items-center shrink-0 safe-top">
+        <h3 className="text-lg font-bold text-white truncate max-w-[80%]">{title}</h3>
+        <button onClick={onClose} className="p-2 -mr-2 text-stone-400 hover:text-white">
+          <X size={24} />
+        </button>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto p-6 safe-bottom">
+        {children}
+      </div>
+    </div>
+  );
+};
+
+export default App;
