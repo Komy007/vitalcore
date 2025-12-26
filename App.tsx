@@ -67,6 +67,7 @@ const App: React.FC = () => {
   const [activeBanner, setActiveBanner] = useState<any | null>(null);
   const [activePopup, setActivePopup] = useState<any | null>(null);
   const [isNoticeModalOpen, setIsNoticeModalOpen] = useState(false);
+  const [editingNoticeId, setEditingNoticeId] = useState<number | null>(null);
   const [noticeLang, setNoticeLang] = useState<Language>('ko');
   const [newNotice, setNewNotice] = useState<any>({ title: '', content: '', type: 'normal' });
 
@@ -152,15 +153,7 @@ const App: React.FC = () => {
   const [isTranslating, setIsTranslating] = useState(false);
 
   // Notice System Handlers
-  const handleCreateNotice = async () => {
-    try {
-      await api.notices.create(newNotice);
-      setIsNoticeModalOpen(false);
-      setNewNotice({ title: '', content: '', type: 'normal' });
-      fetchNotices();
-      alert('Notice posted successfully!');
-    } catch (e) { alert('Failed to post notice'); }
-  };
+
 
   const handleClosePopup = (forever: boolean) => {
     if (activePopup) {
@@ -257,7 +250,7 @@ const App: React.FC = () => {
     } catch (err) { alert('Failed to delete user'); }
   };
 
-  const handleCreateReport = async () => {
+  const handlePostReport = async () => {
     if (!newReport.title) return alert('Please enter a title.');
     if (!newReport.content) return alert('Please enter the full content.');
 
@@ -298,8 +291,7 @@ const App: React.FC = () => {
   const handleAskQuestion = async () => {
     try {
       if (!newQuestion.title.trim() || !newQuestion.content.trim()) {
-        alert("Please enter both title and content.");
-        return;
+        return alert("Please enter both title and content.");
       }
 
       // Verify user still exists (handle ephemeral DB restart)
@@ -404,17 +396,22 @@ const App: React.FC = () => {
     } catch (e) { console.error(e); }
   }
 
-  const handlePostReport = async () => {
-    if (!newReport.title || !newReport.content) return alert('Title and content are required.');
+  const handleCreateNotice = async () => {
+    if (!newNotice.title || !newNotice.content) return alert('Enter title and content');
     try {
-      await api.health.create(newReport);
-      setIsReportModalOpen(false);
-      setNewReport({ title: '', key_point: '', image_url: '', content: '', summary: '' });
-      loadAdminData();
-    } catch (e: any) { alert(`Failed to post report: ${e.error || e.message}`); }
-  }
-
-
+      if (editingNoticeId) {
+        await api.notices.update(editingNoticeId, newNotice);
+        alert('Notice updated');
+      } else {
+        await api.notices.create(newNotice);
+        alert('Notice created');
+      }
+      setIsNoticeModalOpen(false);
+      setNewNotice({ title: '', content: '', type: 'normal' });
+      setEditingNoticeId(null);
+      fetchNotices();
+    } catch (e: any) { alert(`Failed: ${e.error || e.message}`); }
+  };
 
   const handleAutoTranslate = async () => {
     if (!newReport.title || !newReport.content) return alert('Please enter at least Title and Content in Korean first.');
@@ -1727,7 +1724,7 @@ const App: React.FC = () => {
               </div>
               <div className="p-6 border-t border-white/5 bg-stone-900 rounded-b-3xl flex justify-end gap-4">
                 <button onClick={() => setIsReportModalOpen(false)} className="px-8 py-3 bg-stone-800 hover:bg-stone-700 text-stone-400 font-bold rounded-lg uppercase">Cancel</button>
-                <button onClick={handleCreateReport} className="px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase shadow-lg">{editingReportId ? 'Update Report' : 'Publish Report'}</button>
+                <button onClick={handlePostReport} className="px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase shadow-lg">{editingReportId ? 'Update Report' : 'Publish Report'}</button>
               </div>
             </div>
           </div>
@@ -1819,7 +1816,10 @@ const App: React.FC = () => {
                             <Eye size={10} /> {report.views} views
                           </div>
                         </div>
-                        <button onClick={() => handleDeleteReport(report.id)} className="absolute top-2 right-2 p-1.5 bg-black/50 hover:bg-red-600 rounded text-white opacity-0 group-hover:opacity-100 transition-all"><Trash2 size={12} /></button>
+                        <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-all">
+                          <button onClick={() => { setEditingReportId(report.id); setNewReport(report); setIsReportModalOpen(true); }} className="p-1.5 bg-black/50 hover:bg-amber-600 rounded text-white"><Edit size={12} /></button>
+                          <button onClick={() => handleDeleteReport(report.id)} className="p-1.5 bg-black/50 hover:bg-red-600 rounded text-white"><Trash2 size={12} /></button>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -1854,7 +1854,10 @@ const App: React.FC = () => {
                             <span className="text-[10px] text-stone-600 block uppercase tracking-widest">Date</span>
                             <span className="text-stone-400 text-xs font-mono">{new Date(notice.created_at).toLocaleDateString()}</span>
                           </div>
-                          <button onClick={() => handleDeleteNotice(notice.id)} className="p-3 bg-stone-800 hover:bg-red-600 text-stone-400 hover:text-white rounded-lg transition-all"><Trash2 size={16} /></button>
+                          <div className="flex gap-2">
+                            <button onClick={() => { setEditingNoticeId(notice.id); setNewNotice(notice); setIsNoticeModalOpen(true); }} className="p-3 bg-stone-800 hover:bg-amber-600 text-stone-400 hover:text-white rounded-lg transition-all"><Edit size={16} /></button>
+                            <button onClick={() => handleDeleteNotice(notice.id)} className="p-3 bg-stone-800 hover:bg-red-600 text-stone-400 hover:text-white rounded-lg transition-all"><Trash2 size={16} /></button>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -2003,7 +2006,7 @@ const App: React.FC = () => {
               </div>
               <div className="p-6 border-t border-white/5 bg-stone-900 rounded-b-3xl flex justify-end gap-4">
                 <button onClick={() => setIsReportModalOpen(false)} className="px-8 py-3 bg-stone-800 hover:bg-stone-700 text-stone-400 font-bold rounded-lg uppercase">Cancel</button>
-                <button onClick={handleCreateReport} className="px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase shadow-lg">{editingReportId ? 'Update Report' : 'Publish Report'}</button>
+                <button onClick={handlePostReport} className="px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase shadow-lg">{editingReportId ? 'Update Report' : 'Publish Report'}</button>
               </div>
             </div>
           </div>
