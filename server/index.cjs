@@ -198,7 +198,7 @@ if (db) {
     // 2. Health Reports (Blog Style)
     app.get('/api/health-reports', (req, res) => {
         try {
-            const stmt = db.prepare('SELECT id, title, summary, key_point, image_url, created_at, views FROM health_reports ORDER BY created_at DESC');
+            const stmt = db.prepare('SELECT * FROM health_reports ORDER BY created_at DESC');
             res.json(stmt.all());
         } catch (e) { res.status(500).json({ error: e.message }); }
     });
