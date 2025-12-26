@@ -41,40 +41,46 @@ const TRANSLATE_API_KEY = process.env.GOOGLE_TRANSLATE_API_KEY;
 
 if (!TRANSLATE_API_KEY) {
     console.warn('[Server] WARNING: GOOGLE_TRANSLATE_API_KEY is not set in .env. Translation features will fail.');
+} else {
+    console.log('[Server] Google Translate API Key is configured.');
 }
+
+const axios = require('axios');
 
 app.post('/api/translate', async (req, res) => {
     try {
         const { text, targetLang } = req.body;
         if (!text) return res.json({ translatedText: '' });
 
-        // Dynamic import for node-fetch if needed, or use global fetch (Node 18+)
-        const fetch = global.fetch || (await import('node-fetch')).default;
+        if (!TRANSLATE_API_KEY) {
+            throw new Error('Server missing GOOGLE_TRANSLATE_API_KEY');
+        }
 
-        const response = await fetch(`https://translation.googleapis.com/language/translate/v2?key=${TRANSLATE_API_KEY}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
+        const response = await axios.post(
+            `https://translation.googleapis.com/language/translate/v2`,
+            {
                 q: text,
                 target: targetLang,
                 format: 'text'
-            })
-        });
+            },
+            {
+                params: { key: TRANSLATE_API_KEY },
+                headers: { 'Content-Type': 'application/json' }
+            }
+        );
 
-        const data = await response.json();
-        if (data.error) {
-            console.error('[Translation API Error]', data.error);
-            return res.status(500).json({ error: data.error.message });
+        if (response.data.error) {
+            console.error('[Translation API Error]', response.data.error);
+            return res.status(500).json({ error: response.data.error.message });
         }
 
-        const translatedText = data.data.translations[0].translatedText;
+        const translatedText = response.data.data.translations[0].translatedText;
         res.json({ translatedText });
     } catch (e) {
-        console.error('[Translation Server Error]', e);
-        // Debug info for the client (REMOVE IN PROD if sensitive, but helpful for user debugging now)
+        console.error('[Translation Server Error]', e.response ? e.response.data : e.message);
         res.status(500).json({
             error: e.message,
-            stack: e.stack,
+            details: e.response ? e.response.data : 'No details',
             keyConfigured: !!TRANSLATE_API_KEY
         });
     }
