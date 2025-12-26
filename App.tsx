@@ -2176,30 +2176,37 @@ const App: React.FC = () => {
 
       {/* Popup Notice Modal */}
       {activePopup && (
-        <div className="fixed inset-0 z-[150] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm animate-in fade-in zoom-in duration-300">
-          <div className="bg-stone-900 border border-amber-500/30 rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden relative flex flex-col">
-            <div className="bg-amber-600 px-6 py-4 flex justify-between items-center">
-              <h3 className="text-white font-bold uppercase tracking-widest text-sm flex items-center gap-2">
-                <Info size={18} /> Important Notice
+        <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 md:p-6 bg-black/80 backdrop-blur-sm animate-in fade-in zoom-in duration-300">
+          <div className="bg-stone-900 border border-amber-500/30 rounded-2xl shadow-2xl max-w-sm md:max-w-md w-full max-h-[80vh] flex flex-col relative overflow-hidden">
+            {/* Header - Fixed */}
+            <div className="bg-amber-600 px-4 py-3 md:px-6 md:py-4 flex justify-between items-center shrink-0">
+              <h3 className="text-white font-bold uppercase tracking-widest text-xs md:text-sm flex items-center gap-2">
+                <Info size={16} /> Important Notice
               </h3>
-              <button onClick={() => handleClosePopup(false)} className="text-white/70 hover:text-white"><X size={20} /></button>
+              <button onClick={() => handleClosePopup(false)} className="text-white/80 hover:text-white p-1 rounded-full hover:bg-white/10 transition-colors"><X size={20} /></button>
             </div>
-            <div className="p-8">
-              <h2 className="text-xl md:text-2xl font-serif font-bold text-white mb-4">
+
+            {/* Scrollable Content */}
+            <div className="p-5 md:p-8 overflow-y-auto custom-scrollbar">
+              <h2 className="text-lg md:text-xl font-serif font-bold text-white mb-3">
                 {activePopup[`title_${lang}`] || activePopup.title}
               </h2>
-              <p className="text-stone-300 leading-relaxed font-light whitespace-pre-wrap">
-                {activePopup[`content_${lang}`] || activePopup.content}
-              </p>
+              <div className="prose prose-invert prose-sm max-w-none">
+                <p className="text-stone-300 leading-relaxed font-light whitespace-pre-wrap text-sm md:text-base">
+                  {activePopup[`content_${lang}`] || activePopup.content}
+                </p>
+              </div>
             </div>
-            <div className="bg-stone-950 p-4 border-t border-white/5 flex items-center justify-between">
+
+            {/* Footer - Fixed */}
+            <div className="bg-stone-950 p-3 md:p-4 border-t border-white/5 flex items-center justify-between shrink-0">
               <button
                 onClick={() => handleClosePopup(true)}
-                className="text-xs text-stone-500 hover:text-white flex items-center gap-2 transition-colors"
+                className="text-[10px] md:text-xs text-stone-500 hover:text-white flex items-center gap-1.5 transition-colors py-2"
               >
-                <CheckCircle2 size={14} /> Don't show again today
+                <CheckCircle2 size={12} /> Don't show again today
               </button>
-              <button onClick={() => handleClosePopup(false)} className="px-6 py-2 bg-stone-800 hover:bg-stone-700 text-white text-xs font-bold uppercase rounded-lg">Close</button>
+              <button onClick={() => handleClosePopup(false)} className="px-4 py-2 bg-stone-800 hover:bg-stone-700 text-white text-[10px] md:text-xs font-bold uppercase rounded-lg transition-colors">Close Window</button>
             </div>
           </div>
         </div>
