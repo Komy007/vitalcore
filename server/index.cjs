@@ -71,7 +71,12 @@ app.post('/api/translate', async (req, res) => {
         res.json({ translatedText });
     } catch (e) {
         console.error('[Translation Server Error]', e);
-        res.status(500).json({ error: e.message });
+        // Debug info for the client (REMOVE IN PROD if sensitive, but helpful for user debugging now)
+        res.status(500).json({
+            error: e.message,
+            stack: e.stack,
+            keyConfigured: !!TRANSLATE_API_KEY
+        });
     }
 });
 
