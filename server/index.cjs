@@ -4,6 +4,8 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const path = require('path');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 
 console.log('[Server] Starting Full Monolithic Server (Safe Mode)...');
 
@@ -23,7 +25,53 @@ try {
 const app = express();
 const JWT_SECRET = process.env.JWT_SECRET || 'vitalcore-secret-key-change-this-production';
 
-app.use(cors());
+// --- Security Middleware ---
+app.use(helmet({
+    contentSecurityPolicy: false, // Allow inline scripts/images (Relaxed for now to prevent breaking UI)
+    crossOriginResourcePolicy: { policy: "cross-origin" } // Allow resources to be loaded
+}));
+
+// CORS Configuration
+const allowedOrigins = [
+    'https://linteus.com',
+    'https://www.linteus.com',
+    'http://localhost:5173', // Local Dev
+    'http://localhost:8080'  // Local Prod Test
+];
+
+// Add Cloud Run dynamically if needed, or allow all for now but prefer specific
+app.use(cors({
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.run.app')) {
+            callback(null, true);
+        } else {
+            console.warn('[CORS] External Access Blocked:', origin);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true
+}));
+
+// Rate Limiting
+const globalLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 300, // Limit each IP to 300 requests per windowMs
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    message: { error: 'Too many requests, please try again later.' }
+});
+
+const authLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 10, // Limit each IP to 10 login/register attempts per hour
+    message: { error: 'Too many login attempts, please try again in an hour.' }
+});
+
+app.use('/api/', globalLimiter);
+app.use('/api/auth/login', authLimiter);
+app.use('/api/auth/register', authLimiter);
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
