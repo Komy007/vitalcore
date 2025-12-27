@@ -85,7 +85,21 @@ try {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       title TEXT NOT NULL,
       content TEXT NOT NULL,
+      type TEXT DEFAULT 'normal', -- normal, banner, popup
+      is_active INTEGER DEFAULT 1,
+      title_en TEXT, content_en TEXT,
+      title_zh TEXT, content_zh TEXT,
+      title_ja TEXT, content_ja TEXT,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS password_resets (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
+      email TEXT NOT NULL,
+      status TEXT DEFAULT 'pending', -- pending, completed
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users (id)
     );
   `);
   console.log('[Database] Schema initialized.');

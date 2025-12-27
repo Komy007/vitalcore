@@ -35,8 +35,17 @@ const App: React.FC = () => {
   const [isBenefitModalOpen, setIsBenefitModalOpen] = useState(false);
 
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
+  const [authMode, setAuthMode] = useState<'login' | 'signup' | 'forgot'>('login');
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
+
+  // Password Management State
+  const [isChangePwModalOpen, setIsChangePwModalOpen] = useState(false);
+  const [pwFormData, setPwFormData] = useState({ current: '', new: '', confirm: '' });
+  const [resetRequests, setResetRequests] = useState<any[]>([]);
+
+  // Forgot Password Form Variables
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [forgotName, setForgotName] = useState('');
 
   // Auth Form State
   const [loginEmail, setLoginEmail] = useState('');
@@ -138,7 +147,7 @@ const App: React.FC = () => {
 
   // Admin Dashboard State
   const [isAdminDashboardOpen, setIsAdminDashboardOpen] = useState(false);
-  const [adminTab, setAdminTab] = useState<'users' | 'reports' | 'qna'>('users');
+  const [adminTab, setAdminTab] = useState<'users' | 'reports' | 'qna' | 'resets'>('users');
   const [userList, setUserList] = useState<any[]>([]);
   const [editingUser, setEditingUser] = useState<any>(null);
 
@@ -198,6 +207,45 @@ const App: React.FC = () => {
       const msg = err.details ? `${err.error}: ${err.details}` : (err.error || 'Registration failed');
       setAuthMessage(msg);
     }
+  };
+
+
+  const handleForgotSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthMessage(null);
+    try {
+      await api.auth.resetRequest({ email: forgotEmail, name: forgotName });
+      setAuthMessage('✅ Reset request submitted. Please contact admin for approval.');
+    } catch (err: any) {
+      setAuthMessage(err.error || 'Request failed');
+    }
+  };
+
+  const handleChangePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (pwFormData.new !== pwFormData.confirm) return alert('New passwords do not match');
+    try {
+      await api.auth.changePassword({ currentPassword: pwFormData.current, newPassword: pwFormData.new });
+      alert('Password changed successfully');
+      setIsChangePwModalOpen(false);
+      setPwFormData({ current: '', new: '', confirm: '' });
+    } catch (err: any) { alert(err.error || 'Failed to change password'); }
+  };
+
+  const fetchResetRequests = async () => {
+    try {
+      const data = await api.auth.getResetRequests();
+      setResetRequests(data);
+    } catch (e) { console.error(e); }
+  };
+
+  const handleApproveReset = async (id: number) => {
+    if (!confirm('Reset this user\'s password to "vital1234"?')) return;
+    try {
+      await api.auth.approveResetRequest(id);
+      alert('Password reset to "vital1234"');
+      fetchResetRequests();
+    } catch (e: any) { alert(e.error || 'Failed'); }
   };
 
   useEffect(() => {
@@ -283,8 +331,9 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    if (isAdmin && isAdminDashboardOpen && adminTab === 'users') {
-      fetchUsers();
+    if (isAdmin && isAdminDashboardOpen) {
+      if (adminTab === 'users') fetchUsers();
+      if (adminTab === 'resets') fetchResetRequests();
     }
   }, [isAdmin, isAdminDashboardOpen, adminTab]);
 
@@ -551,6 +600,7 @@ const App: React.FC = () => {
               <div className="flex justify-center gap-8 mb-8 border-b border-white/5 pb-4">
                 <button onClick={() => setAuthMode('login')} className={`text-2xl font-bold font-serif transition-all ${authMode === 'login' ? 'text-amber-500 scale-105' : 'text-stone-600'}`}>Login</button>
                 <button onClick={() => setAuthMode('signup')} className={`text-2xl font-bold font-serif transition-all ${authMode === 'signup' ? 'text-amber-500 scale-105' : 'text-stone-600'}`}>Sign Up</button>
+                <button onClick={() => setAuthMode('forgot')} className={`text-2xl font-bold font-serif transition-all ${authMode === 'forgot' ? 'text-amber-500 scale-105' : 'text-stone-600'}`}>Reset</button>
               </div>
               {/* ... (rest of form) */}
               {authMode === 'login' ? (
@@ -562,7 +612,7 @@ const App: React.FC = () => {
                     <button type="submit" className="flex-1 py-5 bg-amber-600 text-white font-black rounded-3xl uppercase tracking-widest shadow-xl">Login</button>
                   </div>
                 </form>
-              ) : (
+              ) : authMode === 'signup' ? (
                 <form onSubmit={handleRegister} className="space-y-4">
                   <input type="text" value={regName} onChange={e => setRegName(e.target.value)} className="w-full p-6 bg-stone-800 border border-white/5 rounded-2xl text-lg text-white" placeholder="Full Name" required />
                   <input type="email" value={regEmail} onChange={e => setRegEmail(e.target.value)} className="w-full p-6 bg-stone-800 border border-white/5 rounded-2xl text-lg text-white" placeholder="Email Address" required />
@@ -572,6 +622,16 @@ const App: React.FC = () => {
                     <input type="text" value={regPhone} onChange={e => setRegPhone(e.target.value)} className="w-full p-6 bg-stone-800 border border-white/5 rounded-2xl text-lg text-white" placeholder="Phone" />
                   </div>
                   <button type="submit" className="w-full py-5 bg-amber-600 text-white font-black rounded-3xl mt-4 uppercase tracking-widest hover:bg-amber-500">Create Account</button>
+                </form>
+              ) : (
+                <form onSubmit={handleForgotSubmit} className="space-y-6">
+                  <div className="text-stone-400 text-sm mb-4">
+                    Enter your <strong>Name</strong> and <strong>Email</strong> matching your account.
+                    We will send a reset request to the admin.
+                  </div>
+                  <input type="text" value={forgotName} onChange={e => setForgotName(e.target.value)} className="w-full p-6 bg-stone-800 border border-white/5 rounded-2xl outline-none text-white text-lg" placeholder="Full Name" required />
+                  <input type="email" value={forgotEmail} onChange={e => setForgotEmail(e.target.value)} className="w-full p-6 bg-stone-800 border border-white/5 rounded-2xl outline-none text-white text-lg" placeholder="Email Address" required />
+                  <button type="submit" className="w-full py-5 bg-amber-600 text-white font-black rounded-3xl uppercase tracking-widest shadow-xl">Request Reset</button>
                 </form>
               )}
             </div>
@@ -630,7 +690,7 @@ const App: React.FC = () => {
               )}
               {isAuthenticated ? (
                 <div className="flex items-center gap-4">
-                  <span className="text-stone-400 text-xs font-bold uppercase tracking-wider">{user?.name}</span>
+                  <span className="text-stone-400 text-xs font-bold uppercase tracking-wider cursor-pointer hover:text-white transition-colors" onClick={() => setIsChangePwModalOpen(true)}>{user?.name}</span>
                   <button onClick={logout} className="px-8 py-3 bg-stone-800 text-stone-300 font-black rounded-full text-xs uppercase tracking-widest hover:bg-stone-700 transition-all">Logout</button>
                 </div>
               ) : (
@@ -1734,32 +1794,24 @@ const App: React.FC = () => {
                 <button onClick={handlePostReport} className="px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase shadow-lg">{editingReportId ? 'Update Report' : 'Publish Report'}</button>
               </div>
             </div>
+            {/* Existing Footer Close Tag is Replaced Above */}
           </div>
-        )
-      }
+        )}
 
-      {/* Existing Footer Close Tag is Replaced Above */}
-      {/* Admin Dashboard Modal */}
-      {
-        isAdminDashboardOpen && (
-          <div className="fixed inset-0 z-[70] bg-stone-950 flex flex-col animate-in slide-in-from-bottom duration-300">
-            {/* Header */}
-            <div className="px-6 py-4 bg-stone-900 border-b border-white/5 flex justify-between items-center shrink-0">
-              <div className="flex items-center gap-4">
-                <h2 className="text-xl font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-                  Admin Dashboard
-                </h2>
-                <div className="flex bg-stone-800 p-1 rounded-lg overflow-x-auto no-scrollbar max-w-[50vw]">
-                  <button onClick={() => setAdminTab('users')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase whitespace-nowrap transition-all ${adminTab === 'users' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Users</button>
-                  <button onClick={() => setAdminTab('reports')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase whitespace-nowrap transition-all ${adminTab === 'reports' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Health Reports</button>
-                  <button onClick={() => setAdminTab('notices')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase whitespace-nowrap transition-all ${adminTab === 'notices' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Notices</button>
-                  <button onClick={() => setAdminTab('qna')} className={`px-4 py-2 rounded-md text-xs font-bold uppercase whitespace-nowrap transition-all ${adminTab === 'qna' ? 'bg-stone-700 text-white shadow' : 'text-stone-500 hover:text-white'}`}>Q&A Board</button>
-                </div>
-              </div>
-              <button onClick={() => setIsAdminDashboardOpen(false)} className="p-2 -mr-2 text-stone-500 hover:text-white hover:bg-white/5 rounded-full transition-all">
-                <X size={24} />
-              </button>
+      {/* Admin Dashboard */}
+      {isAdminDashboardOpen && (
+        <div className="fixed inset-0 z-[60] bg-stone-950 overflow-y-auto animate-in slide-in-from-bottom duration-500">
+          <div className="max-w-7xl mx-auto px-6 py-12">
+            <div className="flex justify-between items-center mb-12">
+              <h1 className="text-4xl font-serif font-bold text-white">Admin Dashboard</h1>
+              <button onClick={() => setIsAdminDashboardOpen(false)} className="p-3 bg-stone-800 rounded-full text-white hover:bg-stone-700"><X size={24} /></button>
+            </div>
+
+            <div className="flex gap-4 mb-8 overflow-x-auto pb-2">
+              <button onClick={() => setAdminTab('users')} className={`px-6 py-3 rounded-full text-sm font-bold uppercase tracking-widest whitespace-nowrap transition-all ${adminTab === 'users' ? 'bg-amber-600 text-white' : 'bg-stone-900 text-stone-500'}`}>User Management</button>
+              <button onClick={() => setAdminTab('reports')} className={`px-6 py-3 rounded-full text-sm font-bold uppercase tracking-widest whitespace-nowrap transition-all ${adminTab === 'reports' ? 'bg-amber-600 text-white' : 'bg-stone-900 text-stone-500'}`}>Health Reports</button>
+              <button onClick={() => setAdminTab('qna')} className={`px-6 py-3 rounded-full text-sm font-bold uppercase tracking-widest whitespace-nowrap transition-all ${adminTab === 'qna' ? 'bg-amber-600 text-white' : 'bg-stone-900 text-stone-500'}`}>Q&A & Notices</button>
+              <button onClick={() => setAdminTab('resets')} className={`px-6 py-3 rounded-full text-sm font-bold uppercase tracking-widest whitespace-nowrap transition-all ${adminTab === 'resets' ? 'bg-red-600 text-white animate-pulse' : 'bg-stone-900 text-stone-500'}`}>Password Resets</button>
             </div>
 
             {/* Content */}
@@ -1921,8 +1973,8 @@ const App: React.FC = () => {
               </div>
             )}
           </div>
-        )
-      }
+        </div>
+      )}
 
       {/* Create Report Modal */}
       {
@@ -2021,77 +2073,78 @@ const App: React.FC = () => {
       }
 
       {/* Create Notice Modal */}
-      {isNoticeModalOpen && (
-        <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-in fade-in duration-300">
-          <div className="bg-stone-900 rounded-3xl w-full max-w-2xl flex flex-col border border-white/10 shadow-2xl relative">
-            <div className="px-8 py-6 border-b border-white/5 flex justify-between items-center bg-stone-900 rounded-t-3xl">
-              <div>
-                <h3 className="text-2xl font-serif font-bold text-white">New Notice</h3>
-                <div className="flex gap-2 mt-4">
-                  {['ko', 'en', 'zh', 'ja'].map((l) => (
-                    <button key={l} onClick={() => setNoticeLang(l as any)} className={`px-3 py-1 text-xs font-bold uppercase rounded-full transition-all ${noticeLang === l ? 'bg-amber-600 text-white' : 'bg-stone-800 text-stone-500 hover:text-stone-300'}`}>
-                      {l === 'ko' ? '🇰🇷 Korean' : l === 'en' ? '🇺🇸 English' : l === 'zh' ? '🇨🇳 Chinese' : 'Ja'}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <button onClick={() => setIsNoticeModalOpen(false)} className="p-2 -mr-2 text-stone-500 hover:text-white"><X size={24} /></button>
-            </div>
-            <div className="p-8 space-y-6">
-              <div>
-                <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Title ({noticeLang})</label>
-                <input
-                  className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5"
-                  placeholder="Notice Title"
-                  value={newNotice[noticeLang === 'ko' ? 'title' : `title_${noticeLang}`] || ''}
-                  onChange={e => setNewNotice({ ...newNotice, [noticeLang === 'ko' ? 'title' : `title_${noticeLang}`]: e.target.value })}
-                />
-              </div>
-              <div>
-                <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Content ({noticeLang})</label>
-                <textarea
-                  className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 h-40"
-                  placeholder="Content..."
-                  value={newNotice[noticeLang === 'ko' ? 'content' : `content_${noticeLang}`] || ''}
-                  onChange={e => setNewNotice({ ...newNotice, [noticeLang === 'ko' ? 'content' : `content_${noticeLang}`]: e.target.value })}
-                />
-
-
-                {/* Notice Type Selector */}
+      {
+        isNoticeModalOpen && (
+          <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-in fade-in duration-300">
+            <div className="bg-stone-900 rounded-3xl w-full max-w-2xl flex flex-col border border-white/10 shadow-2xl relative">
+              <div className="px-8 py-6 border-b border-white/5 flex justify-between items-center bg-stone-900 rounded-t-3xl">
                 <div>
-                  <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Notice Type</label>
-                  <div className="flex gap-4">
-                    {['normal', 'banner', 'popup'].map(type => (
-                      <button
-                        key={type}
-                        onClick={() => setNewNotice({ ...newNotice, type })}
-                        className={`flex-1 py-3 px-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${newNotice.type === type ? 'bg-amber-600 border-amber-500 text-white' : 'bg-stone-900 border-white/10 text-stone-500 hover:border-white/30'}`}
-                      >
-                        {type === 'normal' && <MessageCircle size={20} />}
-                        {type === 'banner' && <Activity size={20} />}
-                        {type === 'popup' && <Zap size={20} />}
-                        <span className="text-xs font-bold uppercase">{type.toUpperCase()}</span>
+                  <h3 className="text-2xl font-serif font-bold text-white">New Notice</h3>
+                  <div className="flex gap-2 mt-4">
+                    {['ko', 'en', 'zh', 'ja'].map((l) => (
+                      <button key={l} onClick={() => setNoticeLang(l as any)} className={`px-3 py-1 text-xs font-bold uppercase rounded-full transition-all ${noticeLang === l ? 'bg-amber-600 text-white' : 'bg-stone-800 text-stone-500 hover:text-stone-300'}`}>
+                        {l === 'ko' ? '🇰🇷 Korean' : l === 'en' ? '🇺🇸 English' : l === 'zh' ? '🇨🇳 Chinese' : 'Ja'}
                       </button>
                     ))}
                   </div>
                 </div>
-
+                <button onClick={() => setIsNoticeModalOpen(false)} className="p-2 -mr-2 text-stone-500 hover:text-white"><X size={24} /></button>
               </div>
-              <div className="flex justify-end pt-4 gap-4">
-                <button
-                  onClick={handleTranslateNotice}
-                  disabled={isTranslating}
-                  className="px-6 py-3 bg-stone-800 border border-amber-500/30 text-amber-500 hover:bg-amber-900/30 hover:text-white font-bold rounded-lg uppercase shadow-lg flex items-center gap-2 transition-all"
-                >
-                  {isTranslating ? <Loader2 size={18} className="animate-spin" /> : <Languages size={18} />}
-                  {isTranslating ? 'Translating...' : 'AI Translate'}
-                </button>
-                <button onClick={handleCreateNotice} className="px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase shadow-lg">Post Notice</button>
+              <div className="p-8 space-y-6">
+                <div>
+                  <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Title ({noticeLang})</label>
+                  <input
+                    className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5"
+                    placeholder="Notice Title"
+                    value={newNotice[noticeLang === 'ko' ? 'title' : `title_${noticeLang}`] || ''}
+                    onChange={e => setNewNotice({ ...newNotice, [noticeLang === 'ko' ? 'title' : `title_${noticeLang}`]: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Content ({noticeLang})</label>
+                  <textarea
+                    className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 h-40"
+                    placeholder="Content..."
+                    value={newNotice[noticeLang === 'ko' ? 'content' : `content_${noticeLang}`] || ''}
+                    onChange={e => setNewNotice({ ...newNotice, [noticeLang === 'ko' ? 'content' : `content_${noticeLang}`]: e.target.value })}
+                  />
+
+
+                  {/* Notice Type Selector */}
+                  <div>
+                    <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Notice Type</label>
+                    <div className="flex gap-4">
+                      {['normal', 'banner', 'popup'].map(type => (
+                        <button
+                          key={type}
+                          onClick={() => setNewNotice({ ...newNotice, type })}
+                          className={`flex-1 py-3 px-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${newNotice.type === type ? 'bg-amber-600 border-amber-500 text-white' : 'bg-stone-900 border-white/10 text-stone-500 hover:border-white/30'}`}
+                        >
+                          {type === 'normal' && <MessageCircle size={20} />}
+                          {type === 'banner' && <Activity size={20} />}
+                          {type === 'popup' && <Zap size={20} />}
+                          <span className="text-xs font-bold uppercase">{type.toUpperCase()}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                </div>
+                <div className="flex justify-end pt-4 gap-4">
+                  <button
+                    onClick={handleTranslateNotice}
+                    disabled={isTranslating}
+                    className="px-6 py-3 bg-stone-800 border border-amber-500/30 text-amber-500 hover:bg-amber-900/30 hover:text-white font-bold rounded-lg uppercase shadow-lg flex items-center gap-2 transition-all"
+                  >
+                    {isTranslating ? <Loader2 size={18} className="animate-spin" /> : <Languages size={18} />}
+                    {isTranslating ? 'Translating...' : 'AI Translate'}
+                  </button>
+                  <button onClick={handleCreateNotice} className="px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase shadow-lg">Post Notice</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )
+        )
       }
 
       {/* Global Report Reader Modal */}
@@ -2162,73 +2215,77 @@ const App: React.FC = () => {
       </div>
 
       {/* Product Image Lightbox */}
-      {selectedProduct && (
-        <div
-          className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 animate-in fade-in duration-300"
-          onClick={() => setSelectedProduct(null)}
-        >
-          <button
+      {
+        selectedProduct && (
+          <div
+            className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 animate-in fade-in duration-300"
             onClick={() => setSelectedProduct(null)}
-            className="absolute top-6 right-6 p-4 text-stone-500 hover:text-white bg-white/10 hover:bg-white/20 rounded-full transition-all z-50 cursor-pointer"
           >
-            <X size={32} />
-          </button>
-
-          <div className="relative max-w-[95vw] max-h-[90vh] w-full h-full flex items-center justify-center pointer-events-none md:pointer-events-auto">
-            <img
-              src={selectedProduct.img}
-              alt={selectedProduct.name}
-              className="max-w-full max-h-full object-contain rounded-lg shadow-2xl pointer-events-auto cursor-zoom-out"
+            <button
               onClick={() => setSelectedProduct(null)}
-            />
-            {selectedProduct.name && (
-              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-md px-6 py-3 rounded-full border border-white/10">
-                <p className="text-white font-serif font-bold text-lg">{selectedProduct.name}</p>
-              </div>
-            )}
+              className="absolute top-6 right-6 p-4 text-stone-500 hover:text-white bg-white/10 hover:bg-white/20 rounded-full transition-all z-50 cursor-pointer"
+            >
+              <X size={32} />
+            </button>
+
+            <div className="relative max-w-[95vw] max-h-[90vh] w-full h-full flex items-center justify-center pointer-events-none md:pointer-events-auto">
+              <img
+                src={selectedProduct.img}
+                alt={selectedProduct.name}
+                className="max-w-full max-h-full object-contain rounded-lg shadow-2xl pointer-events-auto cursor-zoom-out"
+                onClick={() => setSelectedProduct(null)}
+              />
+              {selectedProduct.name && (
+                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-md px-6 py-3 rounded-full border border-white/10">
+                  <p className="text-white font-serif font-bold text-lg">{selectedProduct.name}</p>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {/* Popup Notice Modal */}
-      {activePopup && (
-        <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 md:p-6 bg-black/80 backdrop-blur-sm animate-in fade-in zoom-in duration-300">
-          <div className="bg-stone-900 border border-amber-500/30 rounded-2xl shadow-2xl max-w-sm md:max-w-md w-full max-h-[80vh] flex flex-col relative overflow-hidden">
-            {/* Header - Fixed */}
-            <div className="bg-amber-600 px-4 py-3 md:px-6 md:py-4 flex justify-between items-center shrink-0">
-              <h3 className="text-white font-bold uppercase tracking-widest text-xs md:text-sm flex items-center gap-2">
-                <Info size={16} /> Important Notice
-              </h3>
-              <button onClick={() => handleClosePopup(false)} className="text-white/80 hover:text-white p-1 rounded-full hover:bg-white/10 transition-colors"><X size={20} /></button>
-            </div>
+      {
+        activePopup && (
+          <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 md:p-6 bg-black/80 backdrop-blur-sm animate-in fade-in zoom-in duration-300">
+            <div className="bg-stone-900 border border-amber-500/30 rounded-2xl shadow-2xl max-w-sm md:max-w-md w-full max-h-[80vh] flex flex-col relative overflow-hidden">
+              {/* Header - Fixed */}
+              <div className="bg-amber-600 px-4 py-3 md:px-6 md:py-4 flex justify-between items-center shrink-0">
+                <h3 className="text-white font-bold uppercase tracking-widest text-xs md:text-sm flex items-center gap-2">
+                  <Info size={16} /> Important Notice
+                </h3>
+                <button onClick={() => handleClosePopup(false)} className="text-white/80 hover:text-white p-1 rounded-full hover:bg-white/10 transition-colors"><X size={20} /></button>
+              </div>
 
-            {/* Scrollable Content */}
-            <div className="p-5 md:p-8 overflow-y-auto custom-scrollbar">
-              <h2 className="text-lg md:text-xl font-serif font-bold text-white mb-3">
-                {activePopup[`title_${lang}`] || activePopup.title}
-              </h2>
-              <div className="prose prose-invert prose-sm max-w-none">
-                <p className="text-stone-300 leading-relaxed font-light whitespace-pre-wrap text-sm md:text-base">
-                  {activePopup[`content_${lang}`] || activePopup.content}
-                </p>
+              {/* Scrollable Content */}
+              <div className="p-5 md:p-8 overflow-y-auto custom-scrollbar">
+                <h2 className="text-lg md:text-xl font-serif font-bold text-white mb-3">
+                  {activePopup[`title_${lang}`] || activePopup.title}
+                </h2>
+                <div className="prose prose-invert prose-sm max-w-none">
+                  <p className="text-stone-300 leading-relaxed font-light whitespace-pre-wrap text-sm md:text-base">
+                    {activePopup[`content_${lang}`] || activePopup.content}
+                  </p>
+                </div>
+              </div>
+
+              {/* Footer - Fixed */}
+              <div className="bg-stone-950 p-3 md:p-4 border-t border-white/5 flex items-center justify-between shrink-0">
+                <button
+                  onClick={() => handleClosePopup(true)}
+                  className="text-[10px] md:text-xs text-stone-500 hover:text-white flex items-center gap-1.5 transition-colors py-2"
+                >
+                  <CheckCircle2 size={12} /> Don't show again today
+                </button>
+                <button onClick={() => handleClosePopup(false)} className="px-4 py-2 bg-stone-800 hover:bg-stone-700 text-white text-[10px] md:text-xs font-bold uppercase rounded-lg transition-colors">Close Window</button>
               </div>
             </div>
-
-            {/* Footer - Fixed */}
-            <div className="bg-stone-950 p-3 md:p-4 border-t border-white/5 flex items-center justify-between shrink-0">
-              <button
-                onClick={() => handleClosePopup(true)}
-                className="text-[10px] md:text-xs text-stone-500 hover:text-white flex items-center gap-1.5 transition-colors py-2"
-              >
-                <CheckCircle2 size={12} /> Don't show again today
-              </button>
-              <button onClick={() => handleClosePopup(false)} className="px-4 py-2 bg-stone-800 hover:bg-stone-700 text-white text-[10px] md:text-xs font-bold uppercase rounded-lg transition-colors">Close Window</button>
-            </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
-    </div>
+    </div >
   );
 };
 

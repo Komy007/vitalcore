@@ -65,8 +65,8 @@ const globalLimiter = rateLimit({
 
 const authLimiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 hour
-    max: 10, // Limit each IP to 10 login/register attempts per hour
-    message: { error: 'Too many login attempts, please try again in an hour.' }
+    max: 7, // Limit each IP to 7 login/register attempts per hour
+    message: { error: '비밀번호를 7회 이상 틀리셨습니다. 보안을 위해 잠금 처리되었으니 관리자에게 문의해주세요.' }
 });
 
 app.use('/api/', globalLimiter);
@@ -197,6 +197,44 @@ if (db) {
         }
     });
 
+    app.post('/api/auth/change-password', authenticateToken, (req, res) => {
+        try {
+            const { currentPassword, newPassword } = req.body;
+            const stmt = db.prepare('SELECT password FROM users WHERE id = ?');
+            const user = stmt.get(req.user.id);
+
+            if (!bcrypt.compareSync(currentPassword, user.password)) {
+                return res.status(401).json({ error: 'Current password is incorrect' });
+            }
+
+            const hashedPassword = bcrypt.hashSync(newPassword, 10);
+            db.prepare('UPDATE users SET password = ? WHERE id = ?').run(hashedPassword, req.user.id);
+            res.json({ message: 'Password changed successfully' });
+        } catch (e) { res.status(500).json({ error: e.message }); }
+    });
+
+    app.post('/api/auth/reset-request', (req, res) => {
+        try {
+            const { email, name } = req.body;
+            // Verify user exists and name matches (simple verification)
+            const user = db.prepare('SELECT id FROM users WHERE email = ? AND name = ?').get(email, name);
+
+            if (!user) {
+                // Return success even if failed to prevent enumeration, or specific error if internal app
+                return res.status(404).json({ error: 'User not found with matching name and email.' });
+            }
+
+            // Check if pending request exists
+            const existing = db.prepare("SELECT id FROM password_resets WHERE user_id = ? AND status = 'pending'").get(user.id);
+            if (existing) {
+                return res.status(400).json({ error: 'A reset request is already pending.' });
+            }
+
+            db.prepare('INSERT INTO password_resets (user_id, email) VALUES (?, ?)').run(user.id, email);
+            res.json({ message: 'Reset request submitted. Please contact admin for approval.' });
+        } catch (e) { res.status(500).json({ error: e.message }); }
+    });
+
     app.get('/api/auth/me', authenticateToken, (req, res) => {
         try {
             const stmt = db.prepare('SELECT id, email, name, role, country, phone FROM users WHERE id = ?');
@@ -207,10 +245,43 @@ if (db) {
     });
 
     // --- Admin User Management ---
-    app.get('/api/users', authenticateToken, isAdmin, (req, res) => {
+    app.get('/api/admin/users', authenticateToken, isAdmin, (req, res) => {
         try {
             const stmt = db.prepare('SELECT id, email, name, role, country, phone, created_at FROM users ORDER BY created_at DESC');
             res.json(stmt.all());
+        } catch (e) { res.status(500).json({ error: e.message }); }
+    });
+
+    // --- Admin Password Resets ---
+    app.get('/api/admin/resets', authenticateToken, isAdmin, (req, res) => {
+        try {
+            const stmt = db.prepare(`
+                SELECT pr.*, u.name as user_name 
+                FROM password_resets pr 
+                JOIN users u ON pr.user_id = u.id 
+                WHERE pr.status = 'pending' 
+                ORDER BY pr.created_at DESC
+            `);
+            res.json(stmt.all());
+        } catch (e) { res.status(500).json({ error: e.message }); }
+    });
+
+    app.post('/api/admin/resets/:id/approve', authenticateToken, isAdmin, (req, res) => {
+        try {
+            const { id } = req.params;
+            const resetRequest = db.prepare('SELECT user_id FROM password_resets WHERE id = ?').get(id);
+
+            if (!resetRequest) return res.status(404).json({ error: 'Request not found' });
+
+            // Set temporary password "vital1234"
+            const tempPassword = bcrypt.hashSync('vital1234', 10);
+
+            db.transaction(() => {
+                db.prepare('UPDATE users SET password = ? WHERE id = ?').run(tempPassword, resetRequest.user_id);
+                db.prepare("UPDATE password_resets SET status = 'completed' WHERE id = ?").run(id);
+            })();
+
+            res.json({ message: 'Password reset to default (vital1234)' });
         } catch (e) { res.status(500).json({ error: e.message }); }
     });
 
