@@ -1,5 +1,6 @@
 # Safe Single-Stage Build for Cloud Run
-FROM node:18-bullseye
+FROM node:20-bullseye
+ENV FORCE_REBUILD=v3
 
 WORKDIR /app
 

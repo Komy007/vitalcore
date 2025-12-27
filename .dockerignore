@@ -3,7 +3,7 @@ dist
 .git
 .gitignore
 .env
-Dockerfile
+
 .dockerignore
 docs
 coverage

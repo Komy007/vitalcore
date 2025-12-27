@@ -259,10 +259,12 @@ const App: React.FC = () => {
     } catch (err) { console.error(err); }
   };
 
-  const fetchNotices = async () => {
+  const fetchNotices = async (isForAdmin = false) => {
     try {
       const data = await api.notices.list();
       setNotices(data);
+
+      if (isForAdmin) return; // Skip UI side effects for admin dashboard
 
       // Filter for active Banner & Popup
       const banner = data.find((n: any) => n.type === 'banner' && n.is_active);
@@ -334,6 +336,10 @@ const App: React.FC = () => {
     if (isAdmin && isAdminDashboardOpen) {
       if (adminTab === 'users') fetchUsers();
       if (adminTab === 'resets') fetchResetRequests();
+      if (adminTab === 'qna') {
+        fetchQuestions();
+        fetchNotices(true);
+      }
     }
   }, [isAdmin, isAdminDashboardOpen, adminTab]);
 
@@ -1559,9 +1565,9 @@ const App: React.FC = () => {
         </div>
       </footer>
 
-      {/* Admin Dashboard Modal */}
+      {/* Legacy Admin Dashboard Modal - DISABLED */}
       {
-        isAdminDashboardOpen && (
+        false && isAdminDashboardOpen && (
           <div className="fixed inset-0 z-[70] bg-stone-950 flex flex-col animate-in slide-in-from-bottom duration-300">
             {/* Header */}
             <div className="px-6 py-4 bg-stone-900 border-b border-white/5 flex justify-between items-center shrink-0">
@@ -1803,7 +1809,7 @@ const App: React.FC = () => {
         <div className="fixed inset-0 z-[60] bg-stone-950 overflow-y-auto animate-in slide-in-from-bottom duration-500">
           <div className="max-w-7xl mx-auto px-6 py-12">
             <div className="flex justify-between items-center mb-12">
-              <h1 className="text-4xl font-serif font-bold text-white">Admin Dashboard</h1>
+              <h1 className="text-4xl font-serif font-bold text-white">Admin Dashboard V6 FINAL</h1>
               <button onClick={() => setIsAdminDashboardOpen(false)} className="p-3 bg-stone-800 rounded-full text-white hover:bg-stone-700"><X size={24} /></button>
             </div>
 
@@ -1885,55 +1891,87 @@ const App: React.FC = () => {
                 </div>
               )}
 
-              {adminTab === 'notices' && (
-                <div className="max-w-5xl mx-auto space-y-6">
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-xl md:text-2xl font-bold text-white">Notice Management</h3>
-                    <button onClick={() => setIsNoticeModalOpen(true)} className="px-4 py-2 md:px-6 md:py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase tracking-wider shadow-lg flex items-center gap-2 text-xs md:text-sm">
-                      <Plus size={16} /> New Notice
-                    </button>
-                  </div>
-                  <div className="space-y-4">
-                    {notices.map(notice => (
-                      <div key={notice.id} className="bg-stone-900 rounded-xl p-6 border border-white/5 flex justify-between items-center group hover:border-amber-500/30 transition-colors">
-                        <div className="flex items-center gap-4">
-                          <div className={`w-10 h-10 rounded-full flex items-center justify-center ${notice.type === 'popup' ? 'bg-amber-600 text-white' : notice.type === 'banner' ? 'bg-amber-900/40 text-amber-500' : 'bg-stone-800 text-stone-400'}`}>
-                            {notice.type === 'popup' ? <Zap size={18} /> : notice.type === 'banner' ? <Activity size={18} /> : <MessageCircle size={18} />}
-                          </div>
-                          <div>
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${notice.type === 'popup' ? 'bg-red-900/30 text-red-500 border border-red-500/20' : notice.type === 'banner' ? 'bg-amber-900/30 text-amber-500 border border-amber-500/20' : 'bg-stone-800 text-stone-500'}`}>{notice.type}</span>
-                              <h4 className="text-white font-bold">{notice.title}</h4>
-                            </div>
-                            <p className="text-stone-500 text-sm line-clamp-1">{notice.content}</p>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-4">
-                          <div className="text-right hidden md:block">
-                            <span className="text-[10px] text-stone-600 block uppercase tracking-widest">Date</span>
-                            <span className="text-stone-400 text-xs font-mono">{new Date(notice.created_at).toLocaleDateString()}</span>
-                          </div>
-                          <div className="flex gap-2">
-                            <button onClick={() => { setEditingNoticeId(notice.id); setNewNotice(notice); setIsNoticeModalOpen(true); }} className="p-3 bg-stone-800 hover:bg-amber-600 text-stone-400 hover:text-white rounded-lg transition-all"><Edit size={16} /></button>
-                            <button onClick={() => handleDeleteNotice(notice.id)} className="p-3 bg-stone-800 hover:bg-red-600 text-stone-400 hover:text-white rounded-lg transition-all"><Trash2 size={16} /></button>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                    {notices.length === 0 && (
-                      <div className="text-center py-20 bg-stone-900/50 rounded-2xl border border-white/5 border-dashed">
-                        <MessageCircle size={48} className="mx-auto text-stone-700 mb-4" />
-                        <p className="text-stone-500 font-medium">No notices found.</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-
               {adminTab === 'qna' && (
-                <div className="max-w-4xl mx-auto">
-                  <div className="bg-amber-900/20 text-amber-500 p-4 rounded-xl border border-amber-500/20 text-center mb-8">
-                    Please use the main Q&A Board interface for replying to questions. This tab is a placeholder for future bulk management tools.
+                <div className="max-w-7xl mx-auto space-y-12">
+
+                  {/* Questions Section */}
+                  <div className="space-y-6">
+                    <h3 className="text-xl md:text-2xl font-bold text-white">Questions Management</h3>
+                    <div className="bg-stone-900 rounded-2xl border border-white/5 overflow-hidden">
+                      <table className="w-full text-left text-sm text-stone-400">
+                        <thead className="bg-stone-800 text-stone-300 uppercase text-xs font-bold">
+                          <tr>
+                            <th className="px-6 py-4">Title</th>
+                            <th className="px-6 py-4">User</th>
+                            <th className="px-6 py-4">Date</th>
+                            <th className="px-6 py-4">Status</th>
+                            <th className="px-6 py-4 text-right">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-white/5">
+                          {questions.map((q: any) => (
+                            <tr key={q.id} className="hover:bg-white/5">
+                              <td className="px-6 py-4 font-bold text-white">{q.title} {q.is_secret === 1 && <Lock size={12} className="inline text-amber-500" />}</td>
+                              <td className="px-6 py-4">{q.user_name}</td>
+                              <td className="px-6 py-4 font-mono text-xs">{new Date(q.created_at).toLocaleDateString()}</td>
+                              <td className="px-6 py-4"><span className={`text-[10px] uppercase font-bold px-2 py-1 rounded ${q.answer ? 'bg-green-900/30 text-green-500' : 'bg-stone-800'}`}>{q.answer ? 'Answered' : 'Pending'}</span></td>
+                              <td className="px-6 py-4 text-right">
+                                <button onClick={() => handleDeleteQuestion(q.id)} className="p-2 bg-stone-800 hover:bg-red-600 hover:text-white rounded"><Trash2 size={14} /></button>
+                              </td>
+                            </tr>
+                          ))}
+                          {questions.length === 0 && (
+                            <tr>
+                              <td colSpan={5} className="text-center py-8 text-stone-600">No questions found.</td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  {/* Notices Section */}
+                  <div className="space-y-6">
+                    <div className="flex justify-between items-center">
+                      <h3 className="text-xl md:text-2xl font-bold text-white">Notice Management</h3>
+                      <button onClick={() => setIsNoticeModalOpen(true)} className="px-4 py-2 md:px-6 md:py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase tracking-wider shadow-lg flex items-center gap-2 text-xs md:text-sm">
+                        <Plus size={16} /> New Notice
+                      </button>
+                    </div>
+                    <div className="space-y-4">
+                      {notices.map(notice => (
+                        <div key={notice.id} className="bg-stone-900 rounded-xl p-6 border border-white/5 flex justify-between items-center group hover:border-amber-500/30 transition-colors">
+                          <div className="flex items-center gap-4">
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${notice.type === 'popup' ? 'bg-amber-600 text-white' : notice.type === 'banner' ? 'bg-amber-900/40 text-amber-500' : 'bg-stone-800 text-stone-400'}`}>
+                              {notice.type === 'popup' ? <Zap size={18} /> : notice.type === 'banner' ? <Activity size={18} /> : <MessageCircle size={18} />}
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${notice.type === 'popup' ? 'bg-red-900/30 text-red-500 border border-red-500/20' : notice.type === 'banner' ? 'bg-amber-900/30 text-amber-500 border border-amber-500/20' : 'bg-stone-800 text-stone-500'}`}>{notice.type}</span>
+                                <h4 className="text-white font-bold">{notice.title}</h4>
+                              </div>
+                              <p className="text-stone-500 text-sm line-clamp-1">{notice.content}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-4">
+                            <div className="text-right hidden md:block">
+                              <span className="text-[10px] text-stone-600 block uppercase tracking-widest">Date</span>
+                              <span className="text-stone-400 text-xs font-mono">{new Date(notice.created_at).toLocaleDateString()}</span>
+                            </div>
+                            <div className="flex gap-2">
+                              <button onClick={() => { setEditingNoticeId(notice.id); setNewNotice(notice); setIsNoticeModalOpen(true); }} className="p-3 bg-stone-800 hover:bg-amber-600 text-stone-400 hover:text-white rounded-lg transition-all"><Edit size={16} /></button>
+                              <button onClick={() => handleDeleteNotice(notice.id)} className="p-3 bg-stone-800 hover:bg-red-600 text-stone-400 hover:text-white rounded-lg transition-all"><Trash2 size={16} /></button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      {notices.length === 0 && (
+                        <div className="text-center py-20 bg-stone-900/50 rounded-2xl border border-white/5 border-dashed">
+                          <MessageCircle size={48} className="mx-auto text-stone-700 mb-4" />
+                          <p className="text-stone-500 font-medium">No notices found.</p>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               )}

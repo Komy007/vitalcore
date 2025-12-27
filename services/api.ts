@@ -44,7 +44,7 @@ export const api = {
             return res.json();
         },
         getUsers: async () => {
-            const res = await fetch(`${API_URL}/users`, { headers: getHeaders() });
+            const res = await fetch(`${API_URL}/admin/users`, { headers: getHeaders() });
             if (!res.ok) throw await res.json();
             return res.json();
         },
