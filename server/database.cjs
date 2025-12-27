@@ -20,6 +20,17 @@ if (process.env.NODE_ENV === 'production' || process.env.K_SERVICE || process.en
   if (fs.existsSync(mountPath)) {
     dbPath = path.join(mountPath, dbFile);
     console.log('[Database] GCS Volume Detected. Using Persistent Storage:', dbPath);
+    // DEBUG: List contents of mount path
+    try {
+      const files = fs.readdirSync(mountPath);
+      console.log('[Database] Files in /mnt/gcs:', files);
+      if (fs.existsSync(dbPath)) {
+        const stats = fs.statSync(dbPath);
+        console.log(`[Database] vitalcore.db size: ${stats.size} bytes`);
+      } else {
+        console.log('[Database] vitalcore.db does NOT exist yet (First run on persistent storage?)');
+      }
+    } catch (e) { console.error('[Database] Failed to inspect /mnt/gcs:', e); }
   } else {
     dbPath = path.join('/tmp', dbFile);
     console.log('[Database] WARNING: No Persistence Volume found. Using Ephemeral /tmp:', dbPath);
