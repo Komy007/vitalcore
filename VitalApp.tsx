@@ -61,6 +61,9 @@ const App: React.FC = () => {
   const [selectedReport, setSelectedReport] = useState<any | null>(null);
   const [viewedReportCount, setViewedReportCount] = useState(parseInt(localStorage.getItem('health_views') || '0'));
 
+  // Tab State for FAQ
+  const [faqTab, setFaqTab] = useState<'notices' | 'questions'>('questions');
+
   const [questions, setQuestions] = useState<any[]>([]);
   const [healthReports, setReports] = useState<any[]>([]);
   const [adminAnswer, setAdminAnswer] = useState<{ [key: number]: string }>({});
@@ -251,6 +254,13 @@ const App: React.FC = () => {
   useEffect(() => {
     fetchNotices();
   }, []);
+
+  useEffect(() => {
+    if (isAdminDashboardOpen && adminTab === 'resets') {
+      fetchResetRequests();
+    }
+  }, [isAdminDashboardOpen, adminTab]);
+
 
   const fetchUsers = async () => {
     try {
@@ -566,6 +576,8 @@ const App: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+
 
   return (
     <div className={`min-h-screen bg-stone-950 font-sans selection:bg-amber-500/30 ${isScrolled ? 'scrolled' : ''}`}>
@@ -1821,217 +1833,258 @@ const App: React.FC = () => {
             </div>
             {/* Existing Footer Close Tag is Replaced Above */}
           </div>
-        )}
+        )
+      }
 
       {/* Admin Dashboard */}
-      {isAdminDashboardOpen && (
-        <div className="fixed inset-0 z-[60] bg-stone-950 overflow-y-auto animate-in slide-in-from-bottom duration-500">
-          <div className="max-w-7xl mx-auto px-6 py-12">
-            <div className="flex justify-between items-center mb-12">
-              <h1 className="text-4xl font-serif font-bold text-white">Admin Dashboard V6 FINAL</h1>
-              <button onClick={() => setIsAdminDashboardOpen(false)} className="p-3 bg-stone-800 rounded-full text-white hover:bg-stone-700"><X size={24} /></button>
-            </div>
+      {
+        isAdminDashboardOpen && (
+          <div className="fixed inset-0 z-[60] bg-stone-950 overflow-y-auto animate-in slide-in-from-bottom duration-500">
+            <div className="max-w-7xl mx-auto px-6 py-12">
+              <div className="flex justify-between items-center mb-12">
+                <h1 className="text-4xl font-serif font-bold text-white">Admin Dashboard V6 FINAL</h1>
+                <button onClick={() => setIsAdminDashboardOpen(false)} className="p-3 bg-stone-800 rounded-full text-white hover:bg-stone-700"><X size={24} /></button>
+              </div>
 
-            <div className="flex gap-4 mb-8 overflow-x-auto pb-2">
-              <button onClick={() => setAdminTab('users')} className={`px-6 py-3 rounded-full text-sm font-bold uppercase tracking-widest whitespace-nowrap transition-all ${adminTab === 'users' ? 'bg-amber-600 text-white' : 'bg-stone-900 text-stone-500'}`}>User Management</button>
-              <button onClick={() => setAdminTab('reports')} className={`px-6 py-3 rounded-full text-sm font-bold uppercase tracking-widest whitespace-nowrap transition-all ${adminTab === 'reports' ? 'bg-amber-600 text-white' : 'bg-stone-900 text-stone-500'}`}>Health Reports</button>
-              <button onClick={() => setAdminTab('qna')} className={`px-6 py-3 rounded-full text-sm font-bold uppercase tracking-widest whitespace-nowrap transition-all ${adminTab === 'qna' ? 'bg-amber-600 text-white' : 'bg-stone-900 text-stone-500'}`}>Q&A & Notices</button>
-              <button onClick={() => setAdminTab('resets')} className={`px-6 py-3 rounded-full text-sm font-bold uppercase tracking-widest whitespace-nowrap transition-all ${adminTab === 'resets' ? 'bg-red-600 text-white animate-pulse' : 'bg-stone-900 text-stone-500'}`}>Password Resets</button>
-            </div>
+              <div className="flex gap-4 mb-8 overflow-x-auto pb-2">
+                <button onClick={() => setAdminTab('users')} className={`px-6 py-3 rounded-full text-sm font-bold uppercase tracking-widest whitespace-nowrap transition-all ${adminTab === 'users' ? 'bg-amber-600 text-white' : 'bg-stone-900 text-stone-500'}`}>User Management</button>
+                <button onClick={() => setAdminTab('reports')} className={`px-6 py-3 rounded-full text-sm font-bold uppercase tracking-widest whitespace-nowrap transition-all ${adminTab === 'reports' ? 'bg-amber-600 text-white' : 'bg-stone-900 text-stone-500'}`}>Health Reports</button>
+                <button onClick={() => setAdminTab('qna')} className={`px-6 py-3 rounded-full text-sm font-bold uppercase tracking-widest whitespace-nowrap transition-all ${adminTab === 'qna' ? 'bg-amber-600 text-white' : 'bg-stone-900 text-stone-500'}`}>Q&A & Notices</button>
+                <button onClick={() => setAdminTab('resets')} className={`px-6 py-3 rounded-full text-sm font-bold uppercase tracking-widest whitespace-nowrap transition-all ${adminTab === 'resets' ? 'bg-red-600 text-white animate-pulse' : 'bg-stone-900 text-stone-500'}`}>Password Resets</button>
+              </div>
 
-            {/* Content */}
-            <div className="flex-1 overflow-y-auto p-8 bg-stone-950">
-              {adminTab === 'users' && (
-                <div className="max-w-7xl mx-auto">
-                  <div className="bg-stone-900 rounded-2xl border border-white/5 overflow-hidden">
-                    <table className="w-full text-left text-sm text-stone-400">
-                      <thead className="bg-stone-800 text-stone-300 uppercase text-xs font-bold">
-                        <tr>
-                          <th className="px-6 py-4">ID</th>
-                          <th className="px-6 py-4">Name</th>
-                          <th className="px-6 py-4">Email</th>
-                          <th className="px-6 py-4">Role</th>
-                          <th className="px-6 py-4">Created At</th>
-                          <th className="px-6 py-4 text-right">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-white/5">
-                        {userList.map(u => (
-                          <tr key={u.id} className="hover:bg-white/5 transition-colors">
-                            <td className="px-6 py-4 font-mono text-xs">{u.id}</td>
-                            <td className="px-6 py-4 text-white font-bold">{u.name}</td>
-                            <td className="px-6 py-4">{u.email}</td>
-                            <td className="px-6 py-4">
-                              <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase ${u.role === 'admin' ? 'bg-red-900/30 text-red-500 border border-red-500/20' : 'bg-stone-800 text-stone-500'}`}>
-                                {u.role}
-                              </span>
-                            </td>
-                            <td className="px-6 py-4 font-mono text-xs">{new Date(u.created_at).toLocaleDateString()}</td>
-                            <td className="px-6 py-4 text-right flex justify-end gap-2">
-                              <button onClick={() => setEditingUser(u)} className="p-2 bg-stone-800 hover:bg-amber-600 hover:text-white rounded transition-colors"><Edit size={14} /></button>
-                              <button onClick={() => handleDeleteUser(u.id)} className="p-2 bg-stone-800 hover:bg-red-600 hover:text-white rounded transition-colors"><Trash2 size={14} /></button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
-
-              {adminTab === 'reports' && (
-                <div className="max-w-5xl mx-auto space-y-6">
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-xl md:text-2xl font-bold text-white">Health Reports Management</h3>
-                    <button onClick={() => setIsReportModalOpen(true)} className="px-4 py-2 md:px-6 md:py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase tracking-wider shadow-lg flex items-center gap-2 text-xs md:text-sm">
-                      <Plus size={16} /> New Report
-                    </button>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {healthReports.map(report => (
-                      <div key={report.id} className="bg-stone-900 rounded-xl p-4 border border-white/5 flex gap-4 relative group">
-                        <div className="w-20 h-20 bg-stone-800 rounded-lg overflow-hidden shrink-0">
-                          {report.image_url ? <img src={report.image_url} alt="" className="w-full h-full object-cover" /> : <FileText className="m-auto mt-6 text-stone-600" />}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="text-white font-bold truncate mb-1">{report.title}</h4>
-                          <p className="text-stone-500 text-xs line-clamp-2">{report.summary}</p>
-                          <div className="mt-2 text-xs text-stone-600 font-mono flex items-center gap-2">
-                            <Eye size={10} /> {report.views} views
-                          </div>
-                        </div>
-                        <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-all">
-                          <button onClick={() => { setEditingReportId(report.id); setNewReport(report); setIsReportModalOpen(true); }} className="p-1.5 bg-black/50 hover:bg-amber-600 rounded text-white"><Edit size={12} /></button>
-                          <button onClick={() => handleDeleteReport(report.id)} className="p-1.5 bg-black/50 hover:bg-red-600 rounded text-white"><Trash2 size={12} /></button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {adminTab === 'qna' && (
-                <div className="max-w-7xl mx-auto space-y-12">
-
-                  {/* Questions Section */}
-                  <div className="space-y-6">
-                    <h3 className="text-xl md:text-2xl font-bold text-white">Questions Management</h3>
+              {/* Content */}
+              <div className="flex-1 overflow-y-auto p-8 bg-stone-950">
+                {adminTab === 'users' && (
+                  <div className="max-w-7xl mx-auto">
                     <div className="bg-stone-900 rounded-2xl border border-white/5 overflow-hidden">
                       <table className="w-full text-left text-sm text-stone-400">
                         <thead className="bg-stone-800 text-stone-300 uppercase text-xs font-bold">
                           <tr>
-                            <th className="px-6 py-4">Title</th>
-                            <th className="px-6 py-4">User</th>
-                            <th className="px-6 py-4">Date</th>
-                            <th className="px-6 py-4">Status</th>
+                            <th className="px-6 py-4">ID</th>
+                            <th className="px-6 py-4">Name</th>
+                            <th className="px-6 py-4">Email</th>
+                            <th className="px-6 py-4">Role</th>
+                            <th className="px-6 py-4">Created At</th>
                             <th className="px-6 py-4 text-right">Actions</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
-                          {questions.map((q: any) => (
-                            <tr key={q.id} className="hover:bg-white/5">
-                              <td className="px-6 py-4 font-bold text-white">{q.title} {q.is_secret === 1 && <Lock size={12} className="inline text-amber-500" />}</td>
-                              <td className="px-6 py-4">{q.user_name}</td>
-                              <td className="px-6 py-4 font-mono text-xs">{new Date(q.created_at).toLocaleDateString()}</td>
-                              <td className="px-6 py-4"><span className={`text-[10px] uppercase font-bold px-2 py-1 rounded ${q.answer ? 'bg-green-900/30 text-green-500' : 'bg-stone-800'}`}>{q.answer ? 'Answered' : 'Pending'}</span></td>
-                              <td className="px-6 py-4 text-right">
-                                <button onClick={() => handleDeleteQuestion(q.id)} className="p-2 bg-stone-800 hover:bg-red-600 hover:text-white rounded"><Trash2 size={14} /></button>
+                          {userList.map(u => (
+                            <tr key={u.id} className="hover:bg-white/5 transition-colors">
+                              <td className="px-6 py-4 font-mono text-xs">{u.id}</td>
+                              <td className="px-6 py-4 text-white font-bold">{u.name}</td>
+                              <td className="px-6 py-4">{u.email}</td>
+                              <td className="px-6 py-4">
+                                <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase ${u.role === 'admin' ? 'bg-red-900/30 text-red-500 border border-red-500/20' : 'bg-stone-800 text-stone-500'}`}>
+                                  {u.role}
+                                </span>
+                              </td>
+                              <td className="px-6 py-4 font-mono text-xs">{new Date(u.created_at).toLocaleDateString()}</td>
+                              <td className="px-6 py-4 text-right flex justify-end gap-2">
+                                <button onClick={() => setEditingUser(u)} className="p-2 bg-stone-800 hover:bg-amber-600 hover:text-white rounded transition-colors"><Edit size={14} /></button>
+                                <button onClick={() => handleDeleteUser(u.id)} className="p-2 bg-stone-800 hover:bg-red-600 hover:text-white rounded transition-colors"><Trash2 size={14} /></button>
                               </td>
                             </tr>
                           ))}
-                          {questions.length === 0 && (
-                            <tr>
-                              <td colSpan={5} className="text-center py-8 text-stone-600">No questions found.</td>
-                            </tr>
-                          )}
                         </tbody>
                       </table>
                     </div>
                   </div>
+                )}
 
-                  {/* Notices Section */}
-                  <div className="space-y-6">
+                {adminTab === 'reports' && (
+                  <div className="max-w-5xl mx-auto space-y-6">
                     <div className="flex justify-between items-center">
-                      <h3 className="text-xl md:text-2xl font-bold text-white">Notice Management</h3>
-                      <button onClick={() => setIsNoticeModalOpen(true)} className="px-4 py-2 md:px-6 md:py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase tracking-wider shadow-lg flex items-center gap-2 text-xs md:text-sm">
-                        <Plus size={16} /> New Notice
+                      <h3 className="text-xl md:text-2xl font-bold text-white">Health Reports Management</h3>
+                      <button onClick={() => setIsReportModalOpen(true)} className="px-4 py-2 md:px-6 md:py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase tracking-wider shadow-lg flex items-center gap-2 text-xs md:text-sm">
+                        <Plus size={16} /> New Report
                       </button>
                     </div>
-                    <div className="space-y-4">
-                      {notices.map(notice => (
-                        <div key={notice.id} className="bg-stone-900 rounded-xl p-6 border border-white/5 flex justify-between items-center group hover:border-amber-500/30 transition-colors">
-                          <div className="flex items-center gap-4">
-                            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${notice.type === 'popup' ? 'bg-amber-600 text-white' : notice.type === 'banner' ? 'bg-amber-900/40 text-amber-500' : 'bg-stone-800 text-stone-400'}`}>
-                              {notice.type === 'popup' ? <Zap size={18} /> : notice.type === 'banner' ? <Activity size={18} /> : <MessageCircle size={18} />}
-                            </div>
-                            <div>
-                              <div className="flex items-center gap-2 mb-1">
-                                <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${notice.type === 'popup' ? 'bg-red-900/30 text-red-500 border border-red-500/20' : notice.type === 'banner' ? 'bg-amber-900/30 text-amber-500 border border-amber-500/20' : 'bg-stone-800 text-stone-500'}`}>{notice.type}</span>
-                                <h4 className="text-white font-bold">{notice.title}</h4>
-                              </div>
-                              <p className="text-stone-500 text-sm line-clamp-1">{notice.content}</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {healthReports.map(report => (
+                        <div key={report.id} className="bg-stone-900 rounded-xl p-4 border border-white/5 flex gap-4 relative group">
+                          <div className="w-20 h-20 bg-stone-800 rounded-lg overflow-hidden shrink-0">
+                            {report.image_url ? <img src={report.image_url} alt="" className="w-full h-full object-cover" /> : <FileText className="m-auto mt-6 text-stone-600" />}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="text-white font-bold truncate mb-1">{report.title}</h4>
+                            <p className="text-stone-500 text-xs line-clamp-2">{report.summary}</p>
+                            <div className="mt-2 text-xs text-stone-600 font-mono flex items-center gap-2">
+                              <Eye size={10} /> {report.views} views
                             </div>
                           </div>
-                          <div className="flex items-center gap-4">
-                            <div className="text-right hidden md:block">
-                              <span className="text-[10px] text-stone-600 block uppercase tracking-widest">Date</span>
-                              <span className="text-stone-400 text-xs font-mono">{new Date(notice.created_at).toLocaleDateString()}</span>
-                            </div>
-                            <div className="flex gap-2">
-                              <button onClick={() => { setEditingNoticeId(notice.id); setNewNotice(notice); setIsNoticeModalOpen(true); }} className="p-3 bg-stone-800 hover:bg-amber-600 text-stone-400 hover:text-white rounded-lg transition-all"><Edit size={16} /></button>
-                              <button onClick={() => handleDeleteNotice(notice.id)} className="p-3 bg-stone-800 hover:bg-red-600 text-stone-400 hover:text-white rounded-lg transition-all"><Trash2 size={16} /></button>
-                            </div>
+                          <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-all">
+                            <button onClick={() => { setEditingReportId(report.id); setNewReport(report); setIsReportModalOpen(true); }} className="p-1.5 bg-black/50 hover:bg-amber-600 rounded text-white"><Edit size={12} /></button>
+                            <button onClick={() => handleDeleteReport(report.id)} className="p-1.5 bg-black/50 hover:bg-red-600 rounded text-white"><Trash2 size={12} /></button>
                           </div>
                         </div>
                       ))}
-                      {notices.length === 0 && (
-                        <div className="text-center py-20 bg-stone-900/50 rounded-2xl border border-white/5 border-dashed">
-                          <MessageCircle size={48} className="mx-auto text-stone-700 mb-4" />
-                          <p className="text-stone-500 font-medium">No notices found.</p>
-                        </div>
-                      )}
+                    </div>
+                  </div>
+                )}
+
+                {adminTab === 'qna' && (
+                  <div className="max-w-7xl mx-auto space-y-12">
+
+                    {/* Questions Section */}
+                    <div className="space-y-6">
+                      <h3 className="text-xl md:text-2xl font-bold text-white">Questions Management</h3>
+                      <div className="bg-stone-900 rounded-2xl border border-white/5 overflow-hidden">
+                        <table className="w-full text-left text-sm text-stone-400">
+                          <thead className="bg-stone-800 text-stone-300 uppercase text-xs font-bold">
+                            <tr>
+                              <th className="px-6 py-4">Title</th>
+                              <th className="px-6 py-4">User</th>
+                              <th className="px-6 py-4">Date</th>
+                              <th className="px-6 py-4">Status</th>
+                              <th className="px-6 py-4 text-right">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-white/5">
+                            {questions.map((q: any) => (
+                              <tr key={q.id} className="hover:bg-white/5">
+                                <td className="px-6 py-4 font-bold text-white">{q.title} {q.is_secret === 1 && <Lock size={12} className="inline text-amber-500" />}</td>
+                                <td className="px-6 py-4">{q.user_name}</td>
+                                <td className="px-6 py-4 font-mono text-xs">{new Date(q.created_at).toLocaleDateString()}</td>
+                                <td className="px-6 py-4"><span className={`text-[10px] uppercase font-bold px-2 py-1 rounded ${q.answer ? 'bg-green-900/30 text-green-500' : 'bg-stone-800'}`}>{q.answer ? 'Answered' : 'Pending'}</span></td>
+                                <td className="px-6 py-4 text-right">
+                                  <button onClick={() => handleDeleteQuestion(q.id)} className="p-2 bg-stone-800 hover:bg-red-600 hover:text-white rounded"><Trash2 size={14} /></button>
+                                </td>
+                              </tr>
+                            ))}
+                            {questions.length === 0 && (
+                              <tr>
+                                <td colSpan={5} className="text-center py-8 text-stone-600">No questions found.</td>
+                              </tr>
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    {/* Notices Section */}
+                    <div className="space-y-6">
+                      <div className="flex justify-between items-center">
+                        <h3 className="text-xl md:text-2xl font-bold text-white">Notice Management</h3>
+                        <button onClick={() => setIsNoticeModalOpen(true)} className="px-4 py-2 md:px-6 md:py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase tracking-wider shadow-lg flex items-center gap-2 text-xs md:text-sm">
+                          <Plus size={16} /> New Notice
+                        </button>
+                      </div>
+                      <div className="space-y-4">
+                        {notices.map(notice => (
+                          <div key={notice.id} className="bg-stone-900 rounded-xl p-6 border border-white/5 flex justify-between items-center group hover:border-amber-500/30 transition-colors">
+                            <div className="flex items-center gap-4">
+                              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${notice.type === 'popup' ? 'bg-amber-600 text-white' : notice.type === 'banner' ? 'bg-amber-900/40 text-amber-500' : 'bg-stone-800 text-stone-400'}`}>
+                                {notice.type === 'popup' ? <Zap size={18} /> : notice.type === 'banner' ? <Activity size={18} /> : <MessageCircle size={18} />}
+                              </div>
+                              <div>
+                                <div className="flex items-center gap-2 mb-1">
+                                  <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${notice.type === 'popup' ? 'bg-red-900/30 text-red-500 border border-red-500/20' : notice.type === 'banner' ? 'bg-amber-900/30 text-amber-500 border border-amber-500/20' : 'bg-stone-800 text-stone-500'}`}>{notice.type}</span>
+                                  <h4 className="text-white font-bold">{notice.title}</h4>
+                                </div>
+                                <p className="text-stone-500 text-sm line-clamp-1">{notice.content}</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                              <div className="text-right hidden md:block">
+                                <span className="text-[10px] text-stone-600 block uppercase tracking-widest">Date</span>
+                                <span className="text-stone-400 text-xs font-mono">{new Date(notice.created_at).toLocaleDateString()}</span>
+                              </div>
+                              <div className="flex gap-2">
+                                <button onClick={() => { setEditingNoticeId(notice.id); setNewNotice(notice); setIsNoticeModalOpen(true); }} className="p-3 bg-stone-800 hover:bg-amber-600 text-stone-400 hover:text-white rounded-lg transition-all"><Edit size={16} /></button>
+                                <button onClick={() => handleDeleteNotice(notice.id)} className="p-3 bg-stone-800 hover:bg-red-600 text-stone-400 hover:text-white rounded-lg transition-all"><Trash2 size={16} /></button>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                        {notices.length === 0 && (
+                          <div className="text-center py-20 bg-stone-900/50 rounded-2xl border border-white/5 border-dashed">
+                            <MessageCircle size={48} className="mx-auto text-stone-700 mb-4" />
+                            <p className="text-stone-500 font-medium">No notices found.</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {adminTab === 'resets' && (
+                  <div className="max-w-7xl mx-auto">
+                    <div className="bg-stone-900 rounded-2xl border border-white/5 overflow-hidden">
+                      <div className="p-6 border-b border-white/5 flex justify-between items-center">
+                        <h3 className="text-xl font-bold text-white">Password Reset Requests</h3>
+                        <button onClick={fetchResetRequests} className="p-2 bg-stone-800 rounded-full hover:bg-stone-700 text-stone-400 hover:text-white transition-all"><Activity size={16} /></button>
+                      </div>
+                      <table className="w-full text-left text-sm text-stone-400">
+                        <thead className="bg-stone-800 text-stone-300 uppercase text-xs font-bold">
+                          <tr>
+                            <th className="px-6 py-4">Request ID</th>
+                            <th className="px-6 py-4">User</th>
+                            <th className="px-6 py-4">Email</th>
+                            <th className="px-6 py-4">Status</th>
+                            <th className="px-6 py-4 text-right">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-white/5">
+                          {resetRequests.length === 0 && (
+                            <tr><td colSpan={5} className="px-6 py-12 text-center text-stone-600 font-mono text-xs uppercase tracking-widest">No pending requests</td></tr>
+                          )}
+                          {resetRequests.map(r => (
+                            <tr key={r.id}>
+                              <td className="px-6 py-4 font-mono text-xs text-stone-500">#{r.id}</td>
+                              <td className="px-6 py-4 text-white font-bold">{r.user_name}</td>
+                              <td className="px-6 py-4">{r.email}</td>
+                              <td className="px-6 py-4"><span className="bg-amber-900/30 text-amber-500 border border-amber-500/20 px-2 py-1 rounded text-[10px] uppercase font-bold tracking-wider">Pending</span></td>
+                              <td className="px-6 py-4 text-right">
+                                <button onClick={() => handleApproveReset(r.id)} className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg text-xs uppercase shadow-lg tracking-wide transition-all">Reset to "vital1234"</button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Edit User Modal */}
+              {editingUser && (
+                <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+                  <div className="bg-stone-900 p-8 rounded-2xl w-full max-w-md border border-white/10 shadow-2xl">
+                    <h3 className="text-xl font-bold text-white mb-6">Edit User</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="text-xs text-stone-500 font-bold uppercase block mb-1">Name</label>
+                        <input className="w-full bg-stone-800 text-white p-3 rounded-lg border border-white/5 outline-none focus:border-amber-500" value={editingUser.name} onChange={e => setEditingUser({ ...editingUser, name: e.target.value })} />
+                      </div>
+                      <div>
+                        <label className="text-xs text-stone-500 font-bold uppercase block mb-1">Email</label>
+                        <input className="w-full bg-stone-800 text-white p-3 rounded-lg border border-white/5 outline-none focus:border-amber-500" value={editingUser.email} onChange={e => setEditingUser({ ...editingUser, email: e.target.value })} />
+                      </div>
+                      <div>
+                        <label className="text-xs text-stone-500 font-bold uppercase block mb-1">Role</label>
+                        <select className="w-full bg-stone-800 text-white p-3 rounded-lg border border-white/5 outline-none focus:border-amber-500" value={editingUser.role} onChange={e => setEditingUser({ ...editingUser, role: e.target.value })}>
+                          <option value="user">User</option>
+                          <option value="admin">Admin</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-xs text-stone-500 font-bold uppercase block mb-1">New Password (Optional)</label>
+                        <input className="w-full bg-stone-800 text-white p-3 rounded-lg border border-white/5 outline-none focus:border-amber-500" type="password" placeholder="Leave blank to keep current" onChange={e => setEditingUser({ ...editingUser, password: e.target.value })} />
+                      </div>
+                      <div className="flex gap-4 pt-4">
+                        <button onClick={handleUpdateUser} className="flex-1 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase tracking-wide">Save Changes</button>
+                        <button onClick={() => setEditingUser(null)} className="flex-1 py-3 bg-stone-800 hover:bg-stone-700 text-stone-400 hover:text-white font-bold rounded-lg uppercase tracking-wide">Cancel</button>
+                      </div>
                     </div>
                   </div>
                 </div>
               )}
             </div>
-
-            {/* Edit User Modal */}
-            {editingUser && (
-              <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-                <div className="bg-stone-900 p-8 rounded-2xl w-full max-w-md border border-white/10 shadow-2xl">
-                  <h3 className="text-xl font-bold text-white mb-6">Edit User</h3>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="text-xs text-stone-500 font-bold uppercase block mb-1">Name</label>
-                      <input className="w-full bg-stone-800 text-white p-3 rounded-lg border border-white/5 outline-none focus:border-amber-500" value={editingUser.name} onChange={e => setEditingUser({ ...editingUser, name: e.target.value })} />
-                    </div>
-                    <div>
-                      <label className="text-xs text-stone-500 font-bold uppercase block mb-1">Email</label>
-                      <input className="w-full bg-stone-800 text-white p-3 rounded-lg border border-white/5 outline-none focus:border-amber-500" value={editingUser.email} onChange={e => setEditingUser({ ...editingUser, email: e.target.value })} />
-                    </div>
-                    <div>
-                      <label className="text-xs text-stone-500 font-bold uppercase block mb-1">Role</label>
-                      <select className="w-full bg-stone-800 text-white p-3 rounded-lg border border-white/5 outline-none focus:border-amber-500" value={editingUser.role} onChange={e => setEditingUser({ ...editingUser, role: e.target.value })}>
-                        <option value="user">User</option>
-                        <option value="admin">Admin</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="text-xs text-stone-500 font-bold uppercase block mb-1">New Password (Optional)</label>
-                      <input className="w-full bg-stone-800 text-white p-3 rounded-lg border border-white/5 outline-none focus:border-amber-500" type="password" placeholder="Leave blank to keep current" onChange={e => setEditingUser({ ...editingUser, password: e.target.value })} />
-                    </div>
-                    <div className="flex gap-4 pt-4">
-                      <button onClick={handleUpdateUser} className="flex-1 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase tracking-wide">Save Changes</button>
-                      <button onClick={() => setEditingUser(null)} className="flex-1 py-3 bg-stone-800 hover:bg-stone-700 text-stone-400 hover:text-white font-bold rounded-lg uppercase tracking-wide">Cancel</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
-        </div>
-      )}
+        )
+      }
 
       {/* Create Report Modal */}
       {

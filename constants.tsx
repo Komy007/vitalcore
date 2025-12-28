@@ -252,7 +252,9 @@ export const TRANSLATIONS: Record<string, any> = {
       submit_btn: "질문 등록",
       update_btn: "수정 완료",
       edit_btn: "수정",
-      delete_btn: "삭제"
+      delete_btn: "삭제",
+      tab_notice: "📢 공지사항",
+      tab_qna: "❓ 질문목록"
     }
   },
   en: {
@@ -430,7 +432,9 @@ export const TRANSLATIONS: Record<string, any> = {
       submit_btn: "Submit Question",
       update_btn: "Update Question",
       edit_btn: "Edit",
-      delete_btn: "Delete"
+      delete_btn: "Delete",
+      tab_notice: "📢 Notices",
+      tab_qna: "❓ Q&A"
     }
   },
   zh: {
@@ -608,7 +612,9 @@ export const TRANSLATIONS: Record<string, any> = {
       submit_btn: "提交提问",
       update_btn: "完成修改",
       edit_btn: "编辑",
-      delete_btn: "删除"
+      delete_btn: "删除",
+      tab_notice: "📢 公告",
+      tab_qna: "❓ 问答"
     }
   },
   ja: {
@@ -786,7 +792,9 @@ export const TRANSLATIONS: Record<string, any> = {
       submit_btn: "質問登録",
       update_btn: "修正完了",
       edit_btn: "修正",
-      delete_btn: "削除"
+      delete_btn: "削除",
+      tab_notice: "📢 お知らせ",
+      tab_qna: "❓ Q&A"
     }
   }
 
