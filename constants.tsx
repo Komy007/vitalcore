@@ -255,6 +255,21 @@ export const TRANSLATIONS: Record<string, any> = {
       delete_btn: "삭제",
       tab_notice: "📢 공지사항",
       tab_qna: "❓ 질문목록"
+    },
+    admin: {
+      tab_resets: "비밀번호 초기화",
+      pw_reset_title: "비밀번호 초기화 요청",
+      col_id: "요청 ID",
+      col_user: "사용자",
+      col_email: "이메일",
+      col_status: "상태",
+      col_action: "작업",
+      status_pending: "대기중",
+      btn_reset: "초기화 (vital1234)",
+      empty_requests: "대기중인 요청이 없습니다",
+      reset_confirm: "사용자의 비밀번호를 'vital1234'로 초기화하시겠습니까?",
+      reset_success: "비밀번호가 'vital1234'로 초기화되었습니다.",
+      reset_fail: "초기화 실패: "
     }
   },
   en: {
@@ -435,6 +450,21 @@ export const TRANSLATIONS: Record<string, any> = {
       delete_btn: "Delete",
       tab_notice: "📢 Notices",
       tab_qna: "❓ Q&A"
+    },
+    admin: {
+      tab_resets: "Password Resets",
+      pw_reset_title: "Password Reset Requests",
+      col_id: "Request ID",
+      col_user: "User",
+      col_email: "Email",
+      col_status: "Status",
+      col_action: "Action",
+      status_pending: "Pending",
+      btn_reset: "Reset to 'vital1234'",
+      empty_requests: "No pending requests",
+      reset_confirm: "This will reset the user's password to 'vital1234'. Continue?",
+      reset_success: "Password reset successful. Temporary password is 'vital1234'.",
+      reset_fail: "Failed to approve reset: "
     }
   },
   zh: {
@@ -615,6 +645,21 @@ export const TRANSLATIONS: Record<string, any> = {
       delete_btn: "删除",
       tab_notice: "📢 公告",
       tab_qna: "❓ 问答"
+    },
+    admin: {
+      tab_resets: "密码重置",
+      pw_reset_title: "密码重置请求",
+      col_id: "请求 ID",
+      col_user: "用户",
+      col_email: "电子邮箱",
+      col_status: "状态",
+      col_action: "操作",
+      status_pending: "待处理",
+      btn_reset: "重置为 'vital1234'",
+      empty_requests: "暂无待处理请求",
+      reset_confirm: "确定将用户密码重置为 'vital1234' 吗？",
+      reset_success: "密码已重置为 'vital1234'。",
+      reset_fail: "重置失败: "
     }
   },
   ja: {
@@ -795,6 +840,21 @@ export const TRANSLATIONS: Record<string, any> = {
       delete_btn: "削除",
       tab_notice: "📢 お知らせ",
       tab_qna: "❓ Q&A"
+    },
+    admin: {
+      tab_resets: "PWリセット",
+      pw_reset_title: "パスワードリセット要請",
+      col_id: "要請ID",
+      col_user: "ユーザー",
+      col_email: "メール",
+      col_status: "状態",
+      col_action: "操作",
+      status_pending: "待機中",
+      btn_reset: "初期化 (vital1234)",
+      empty_requests: "待機中の要請はありません",
+      reset_confirm: "ユーザーのパスワードを 'vital1234' に初期化しますか？",
+      reset_success: "パスワードが 'vital1234' に初期化されました。",
+      reset_fail: "初期化失敗: "
     }
   }
 

@@ -243,12 +243,12 @@ const App: React.FC = () => {
   };
 
   const handleApproveReset = async (id: number) => {
-    if (!confirm('Reset this user\'s password to "vital1234"?')) return;
+    if (!confirm(t.admin?.reset_confirm || 'Reset password?')) return;
     try {
       await api.auth.approveResetRequest(id);
-      alert('Password reset to "vital1234"');
+      alert(t.admin?.reset_success || 'Success');
       fetchResetRequests();
-    } catch (e: any) { alert(e.error || 'Failed'); }
+    } catch (e: any) { alert((t.admin?.reset_fail || 'Failed') + (e.error || e.message)); }
   };
 
   useEffect(() => {
@@ -1850,7 +1850,7 @@ const App: React.FC = () => {
                 <button onClick={() => setAdminTab('users')} className={`px-6 py-3 rounded-full text-sm font-bold uppercase tracking-widest whitespace-nowrap transition-all ${adminTab === 'users' ? 'bg-amber-600 text-white' : 'bg-stone-900 text-stone-500'}`}>User Management</button>
                 <button onClick={() => setAdminTab('reports')} className={`px-6 py-3 rounded-full text-sm font-bold uppercase tracking-widest whitespace-nowrap transition-all ${adminTab === 'reports' ? 'bg-amber-600 text-white' : 'bg-stone-900 text-stone-500'}`}>Health Reports</button>
                 <button onClick={() => setAdminTab('qna')} className={`px-6 py-3 rounded-full text-sm font-bold uppercase tracking-widest whitespace-nowrap transition-all ${adminTab === 'qna' ? 'bg-amber-600 text-white' : 'bg-stone-900 text-stone-500'}`}>Q&A & Notices</button>
-                <button onClick={() => setAdminTab('resets')} className={`px-6 py-3 rounded-full text-sm font-bold uppercase tracking-widest whitespace-nowrap transition-all ${adminTab === 'resets' ? 'bg-red-600 text-white animate-pulse' : 'bg-stone-900 text-stone-500'}`}>Password Resets</button>
+                <button onClick={() => setAdminTab('resets')} className={`px-6 py-3 rounded-full text-sm font-bold uppercase tracking-widest whitespace-nowrap transition-all ${adminTab === 'resets' ? 'bg-red-600 text-white animate-pulse' : 'bg-stone-900 text-stone-500'}`}>{t.admin?.tab_resets || "Password Resets"}</button>
               </div>
 
               {/* Content */}
