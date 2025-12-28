@@ -194,7 +194,7 @@ export const TRANSLATIONS: Record<string, any> = {
       title: "올바른 상황버섯 복용법",
       desc: "약성을 온전히 섭취하는 지혜",
       steps: [
-        { step: "01", text: "상황버섯 50g(사진 사이즈 10개 내외)을 흐르는 물에 가볍게 씻어냅니다.", image: usage_step_01 },
+        { step: "01", text: "상황버섯 약 50g(사진 사이즈 2-3개 내외)을 흐르는 물에 가볍게 씻어냅니다.", image: usage_step_01 },
         { step: "02", text: "생수 1L에서 1.5L 정도를 붓고 두번 정도 최대 끊이고 드시면 됩니다. 물론 4,5번 계속 물을 넣고 끊여드시면 됩니다.", image: usage_step_02 },
         { step: "03", text: "직접 끓인 린테우스 버섯의 색상입니다. 따뜻하게 하루 3회 이상 드시고, 수시로 더 섭취하셔도 좋습니다.", image: usage_step_03 },
         { step: "04", text: "내가 사용하는 버섯사진입니다. 위치에따라서 나무에 따라서 크기는 조금씩 다르지만 모두 펠리누스 린테우스입니다.", image: usage_step_04 }
@@ -372,7 +372,7 @@ export const TRANSLATIONS: Record<string, any> = {
       title: "Usage",
       desc: "Wisdom to consume the full medicinal benefits",
       steps: [
-        { step: "01", text: "Wash 50g (approx. 10 pieces of this size) lightly under running water.", image: usage_step_01 },
+        { step: "01", text: "Wash approx. 50g (about 2-3 pieces of this size) lightly under running water.", image: usage_step_01 },
         { step: "02", text: "Pour 1L~1.5L of water, boil fully twice, and drink. You can add water and re-boil 4~5 times.", image: usage_step_02 },
         { step: "03", text: "This is the golden color of authentic Phellinus tea. Drink it warm at least 3 times a day; enjoying more frequently is even better.", image: usage_step_03 },
         { step: "04", text: "This is a photo of the mushrooms I actually use. Sizes vary slightly by location and tree, but they are all authentic Phellinus linteus.", image: usage_step_04 }
@@ -550,7 +550,7 @@ export const TRANSLATIONS: Record<string, any> = {
       title: "服用方法",
       desc: "完整摄取药性的智慧",
       steps: [
-        { step: "01", text: "将50g桑黄（约10块图片大小）在流水下轻轻洗净。", image: usage_step_01 },
+        { step: "01", text: "将约50g桑黄（约2-3块图片大小）在流水下轻轻洗净。", image: usage_step_01 },
         { step: "02", text: "倒入1L~1.5L水，煮沸两次即可饮用。也可反复加水煮4~5次。", image: usage_step_02 },
         { step: "03", text: "这是正宗桑黄煮出的金黄色泽。建议每天温热饮用至少3次，随时增加饮用量效果更佳。", image: usage_step_03 },
         { step: "04", text: "这是我实际使用的桑黄照片。虽然大小因生长位置和树木而异，但全都是正宗的桑黄(Phellinus linteus)。", image: usage_step_04 }
@@ -728,7 +728,7 @@ export const TRANSLATIONS: Record<string, any> = {
       title: "服用方法",
       desc: "薬効を完全に摂取する知恵",
       steps: [
-        { step: "01", text: "メシマコブ50g（写真のサイズで約10個）を流水で軽く洗います。", image: usage_step_01 },
+        { step: "01", text: "メシマコブ約50g（写真のサイズで2〜3個程度）を流水で軽く洗います。", image: usage_step_01 },
         { step: "02", text: "水1L〜1.5Lを注ぎ、2回ほど沸騰させて飲みます。水を足して4〜5回再沸騰させても良いです。", image: usage_step_02 },
         { step: "03", text: "これは本物のメシマコブを煎じた黄金色です。温かい状態で1日3回以上飲み、合間にさらに飲んでも構いません。", image: usage_step_03 },
         { step: "04", text: "私が実際に使用しているキノコの写真です。場所や木によって大きさは少し異なりますが、すべて本物のメシマコブ（Phellinus linteus）です。", image: usage_step_04 }
