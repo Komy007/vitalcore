@@ -1410,9 +1410,26 @@ const App: React.FC = () => {
                 {isAuthenticated && <button onClick={() => setIsQnaModalOpen(true)} className="px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-full text-xs uppercase tracking-widest shadow-lg flex items-center gap-2"><Edit size={14} /> {t.board?.ask_btn}</button>}
               </div>
 
+              <div className="flex justify-center gap-4 mb-8">
+                <button
+                  onClick={() => setFaqTab('notices')}
+                  className={`px-8 py-3 rounded-full font-bold uppercase tracking-widest transition-all text-xs md:text-sm flex items-center gap-2 ${faqTab === 'notices' ? 'bg-amber-600 text-white shadow-lg scale-105' : 'bg-stone-800 text-stone-500 hover:text-white'}`}
+                >
+                  <Megaphone size={16} />
+                  {t.board?.tab_notice || "Notices"}
+                </button>
+                <button
+                  onClick={() => setFaqTab('questions')}
+                  className={`px-8 py-3 rounded-full font-bold uppercase tracking-widest transition-all text-xs md:text-sm flex items-center gap-2 ${faqTab === 'questions' ? 'bg-amber-600 text-white shadow-lg scale-105' : 'bg-stone-800 text-stone-500 hover:text-white'}`}
+                >
+                  <MessageCircle size={16} />
+                  {t.board?.tab_qna || "Q&A"}
+                </button>
+              </div>
+
               {/* Admin Notices */}
-              {notices.length > 0 && (
-                <div className="mb-12 space-y-4">
+              {faqTab === 'notices' && notices.length > 0 && (
+                <div className="mb-12 space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
                   <h3 className="text-amber-500 text-xs font-bold uppercase tracking-widest mb-4">📢 Admin Notices</h3>
                   {notices.map(notice => {
                     const nTitle = notice[`title_${lang}`] || notice.title;
@@ -1435,48 +1452,50 @@ const App: React.FC = () => {
                 </div>
               )}
 
-              <div className="grid gap-4">
-                {(!Array.isArray(questions) || questions.length === 0) && <p className="text-center text-stone-600 py-10">{t.board?.no_questions}</p>}
-                {Array.isArray(questions) && questions.map((q: any) => (
-                  <div key={q.id} className="bg-stone-900/50 p-6 md:p-8 rounded-[2rem] border border-white/5 hover:border-amber-500/30 transition-all">
-                    <div className="flex justify-between items-start mb-4">
-                      <h4 className="text-lg font-bold text-white flex items-center gap-3">
-                        {q.is_secret === 1 && <Lock size={14} className="text-amber-500" />}
-                        {q.title}
-                      </h4>
-                      <div className="flex items-center gap-3">
-                        <span className="text-xs text-stone-600 font-mono">{new Date(q.created_at).toLocaleDateString()}</span>
-                        {user && user.id === q.user_id && (
-                          <button onClick={() => handleEditClick(q)} className="text-xs text-amber-500 hover:text-white font-bold flex items-center gap-1 border border-amber-500/30 px-2 py-1 rounded bg-amber-900/10"><Edit size={10} /> {t.board?.edit_btn}</button>
-                        )}
-                        {(isAdmin || (user && user.id === q.user_id)) && (
-                          <button onClick={() => handleDeleteQuestion(q.id)} className="text-xs text-red-500 hover:text-white font-bold flex items-center gap-1 border border-red-500/30 px-2 py-1 rounded bg-red-900/10 ml-2"><Trash2 size={10} /> {t.board?.delete_btn}</button>
-                        )}
-                      </div>
-                    </div>
-                    <p className="text-stone-400 font-light mb-6 leading-relaxed">{q.content}</p>
-                    {q.answer && (
-                      <div className="ml-4 md:ml-8 p-6 bg-amber-900/10 rounded-2xl border-l-2 border-amber-600">
-                        <span className="text-[10px] font-black uppercase text-amber-600 mb-2 block">{t.board?.admin_answer}</span>
-                        <p className="text-stone-300 text-sm">{q.answer}</p>
-                      </div>
-                    )}
-                    {!q.answer && isAdmin && (
-                      <div className="mt-4 pt-4 border-t border-white/5">
-                        <div className="flex gap-2">
-                          <input
-                            className="flex-grow bg-black/30 p-3 rounded-lg text-white text-sm border border-white/5 outline-none focus:border-amber-500 transition-colors"
-                            placeholder={t.board?.admin_reply_placeholder}
-                            value={adminAnswer[q.id] || ''}
-                            onChange={(e) => setAdminAnswer({ ...adminAnswer, [q.id]: e.target.value })}
-                          />
-                          <button onClick={() => handleAdminAnswer(q.id)} className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg text-xs uppercase">{t.board?.reply_btn}</button>
+              {faqTab === 'questions' && (
+                <div className="grid gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                  {(!Array.isArray(questions) || questions.length === 0) && <p className="text-center text-stone-600 py-10">{t.board?.no_questions}</p>}
+                  {Array.isArray(questions) && questions.map((q: any) => (
+                    <div key={q.id} className="bg-stone-900/50 p-6 md:p-8 rounded-[2rem] border border-white/5 hover:border-amber-500/30 transition-all">
+                      <div className="flex justify-between items-start mb-4">
+                        <h4 className="text-lg font-bold text-white flex items-center gap-3">
+                          {q.is_secret === 1 && <Lock size={14} className="text-amber-500" />}
+                          {q.title}
+                        </h4>
+                        <div className="flex items-center gap-3">
+                          <span className="text-xs text-stone-600 font-mono">{new Date(q.created_at).toLocaleDateString()}</span>
+                          {user && user.id === q.user_id && (
+                            <button onClick={() => handleEditClick(q)} className="text-xs text-amber-500 hover:text-white font-bold flex items-center gap-1 border border-amber-500/30 px-2 py-1 rounded bg-amber-900/10"><Edit size={10} /> {t.board?.edit_btn}</button>
+                          )}
+                          {(isAdmin || (user && user.id === q.user_id)) && (
+                            <button onClick={() => handleDeleteQuestion(q.id)} className="text-xs text-red-500 hover:text-white font-bold flex items-center gap-1 border border-red-500/30 px-2 py-1 rounded bg-red-900/10 ml-2"><Trash2 size={10} /> {t.board?.delete_btn}</button>
+                          )}
                         </div>
                       </div>
-                    )}
-                  </div>
-                ))}
-              </div>
+                      <p className="text-stone-400 font-light mb-6 leading-relaxed">{q.content}</p>
+                      {q.answer && (
+                        <div className="ml-4 md:ml-8 p-6 bg-amber-900/10 rounded-2xl border-l-2 border-amber-600">
+                          <span className="text-[10px] font-black uppercase text-amber-600 mb-2 block">{t.board?.admin_answer}</span>
+                          <p className="text-stone-300 text-sm">{q.answer}</p>
+                        </div>
+                      )}
+                      {!q.answer && isAdmin && (
+                        <div className="mt-4 pt-4 border-t border-white/5">
+                          <div className="flex gap-2">
+                            <input
+                              className="flex-grow bg-black/30 p-3 rounded-lg text-white text-sm border border-white/5 outline-none focus:border-amber-500 transition-colors"
+                              placeholder={t.board?.admin_reply_placeholder}
+                              value={adminAnswer[q.id] || ''}
+                              onChange={(e) => setAdminAnswer({ ...adminAnswer, [q.id]: e.target.value })}
+                            />
+                            <button onClick={() => handleAdminAnswer(q.id)} className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg text-xs uppercase">{t.board?.reply_btn}</button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             </section>
           </div>
         )
