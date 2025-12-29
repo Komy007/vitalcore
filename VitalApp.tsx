@@ -645,9 +645,9 @@ const App: React.FC = () => {
               )}
 
               <div className="flex justify-center gap-8 mb-8 border-b border-white/5 pb-4">
-                <button onClick={() => setAuthMode('login')} className={`text-2xl font-bold font-serif transition-all ${authMode === 'login' ? 'text-amber-500 scale-105' : 'text-stone-600'}`}>Login</button>
-                <button onClick={() => setAuthMode('signup')} className={`text-2xl font-bold font-serif transition-all ${authMode === 'signup' ? 'text-amber-500 scale-105' : 'text-stone-600'}`}>Sign Up</button>
-                <button onClick={() => setAuthMode('forgot')} className={`text-2xl font-bold font-serif transition-all ${authMode === 'forgot' ? 'text-amber-500 scale-105' : 'text-stone-600'}`}>비번 찾기(설정)</button>
+                <button onClick={() => setAuthMode('login')} className={`text-2xl font-bold font-serif transition-all ${authMode === 'login' ? 'text-amber-500 scale-105' : 'text-stone-600'}`}>{t.auth?.tab_login}</button>
+                <button onClick={() => setAuthMode('signup')} className={`text-2xl font-bold font-serif transition-all ${authMode === 'signup' ? 'text-amber-500 scale-105' : 'text-stone-600'}`}>{t.auth?.tab_signup}</button>
+                <button onClick={() => setAuthMode('forgot')} className={`text-2xl font-bold font-serif transition-all ${authMode === 'forgot' ? 'text-amber-500 scale-105' : 'text-stone-600'}`}>{t.auth?.tab_reset}</button>
               </div>
               {/* ... (rest of form) */}
               {authMode === 'login' ? (
@@ -655,8 +655,8 @@ const App: React.FC = () => {
                   <input type="email" value={loginEmail} onChange={e => setLoginEmail(e.target.value)} className="w-full p-6 bg-stone-800 border border-white/5 rounded-2xl outline-none text-white text-lg" placeholder="Email Address" required />
                   <input type="password" value={loginPw} onChange={e => setLoginPw(e.target.value)} className="w-full p-6 bg-stone-800 border border-white/5 rounded-2xl outline-none text-white text-lg" placeholder="Password" required />
                   <div className="flex gap-4 pt-4">
-                    <button type="button" onClick={() => setIsAuthModalOpen(false)} className="flex-1 py-5 text-stone-500 font-bold uppercase tracking-widest">Cancel</button>
-                    <button type="submit" className="flex-1 py-5 bg-amber-600 text-white font-black rounded-3xl uppercase tracking-widest shadow-xl">Login</button>
+                    <button type="button" onClick={() => setIsAuthModalOpen(false)} className="flex-1 py-5 text-stone-500 font-bold uppercase tracking-widest">{t.auth?.btn_cancel}</button>
+                    <button type="submit" className="flex-1 py-5 bg-amber-600 text-white font-black rounded-3xl uppercase tracking-widest shadow-xl">{t.auth?.btn_login}</button>
                   </div>
                 </form>
               ) : authMode === 'signup' ? (
@@ -668,7 +668,7 @@ const App: React.FC = () => {
                     <input type="text" value={regCountry} onChange={e => setRegCountry(e.target.value)} className="w-full p-6 bg-stone-800 border border-white/5 rounded-2xl text-lg text-white" placeholder="Country" />
                     <input type="text" value={regPhone} onChange={e => setRegPhone(e.target.value)} className="w-full p-6 bg-stone-800 border border-white/5 rounded-2xl text-lg text-white" placeholder="Phone" />
                   </div>
-                  <button type="submit" className="w-full py-5 bg-amber-600 text-white font-black rounded-3xl mt-4 uppercase tracking-widest hover:bg-amber-500">Create Account</button>
+                  <button type="submit" className="w-full py-5 bg-amber-600 text-white font-black rounded-3xl mt-4 uppercase tracking-widest hover:bg-amber-500">{t.auth?.btn_signup}</button>
                 </form>
               ) : (
                 <form onSubmit={handleForgotSubmit} className="space-y-6">

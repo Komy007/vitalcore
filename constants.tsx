@@ -281,7 +281,13 @@ export const TRANSLATIONS: Record<string, any> = {
       confirm_pw: "비밀번호 확인",
       reset_btn: "비밀번호 변경하기",
       link_sent: "이메일로 재설정 링크가 발송되었습니다.",
-      reset_complete: "비밀번호가 변경되었습니다. 새 비밀번호로 로그인해주세요."
+      reset_complete: "비밀번호가 변경되었습니다. 새 비밀번호로 로그인해주세요.",
+      tab_login: "로그인",
+      tab_signup: "회원가입",
+      tab_reset: "비번 찾기(설정)",
+      btn_login: "로그인",
+      btn_signup: "계정 생성",
+      btn_cancel: "취소"
     }
   },
   en: {
@@ -488,7 +494,13 @@ export const TRANSLATIONS: Record<string, any> = {
       confirm_pw: "Confirm Password",
       reset_btn: "Reset Password",
       link_sent: "Reset link sent to your email.",
-      reset_complete: "Password reset successful. Please login with new password."
+      reset_complete: "Password reset successful. Please login with new password.",
+      tab_login: "Login",
+      tab_signup: "Sign Up",
+      tab_reset: "Reset Password",
+      btn_login: "Login",
+      btn_signup: "Create Account",
+      btn_cancel: "Cancel"
     }
   },
   zh: {
@@ -695,7 +707,13 @@ export const TRANSLATIONS: Record<string, any> = {
       confirm_pw: "确认密码",
       reset_btn: "重置密码",
       link_sent: "重置链接已发送至您的邮箱。",
-      reset_complete: "密码重置成功。请使用新密码登录。"
+      reset_complete: "密码重置成功。请使用新密码登录。",
+      tab_login: "登录",
+      tab_signup: "注册",
+      tab_reset: "找回/设置密码",
+      btn_login: "登录",
+      btn_signup: "创建账户",
+      btn_cancel: "取消"
     }
   },
   ja: {
@@ -902,7 +920,13 @@ export const TRANSLATIONS: Record<string, any> = {
       confirm_pw: "パスワード確認",
       reset_btn: "パスワード変更",
       link_sent: "リセットリンクがメールで送信されました。",
-      reset_complete: "パスワードが変更されました。新しいパスワードでログインしてください。"
+      reset_complete: "パスワードが変更されました。新しいパスワードでログインしてください。",
+      tab_login: "ログイン",
+      tab_signup: "登録",
+      tab_reset: "パスワード再設定",
+      btn_login: "ログイン",
+      btn_signup: "アカウント作成",
+      btn_cancel: "キャンセル"
     }
   }
 
