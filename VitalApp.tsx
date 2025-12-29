@@ -647,7 +647,7 @@ const App: React.FC = () => {
               <div className="flex justify-center gap-8 mb-8 border-b border-white/5 pb-4">
                 <button onClick={() => setAuthMode('login')} className={`text-2xl font-bold font-serif transition-all ${authMode === 'login' ? 'text-amber-500 scale-105' : 'text-stone-600'}`}>Login</button>
                 <button onClick={() => setAuthMode('signup')} className={`text-2xl font-bold font-serif transition-all ${authMode === 'signup' ? 'text-amber-500 scale-105' : 'text-stone-600'}`}>Sign Up</button>
-                <button onClick={() => setAuthMode('forgot')} className={`text-2xl font-bold font-serif transition-all ${authMode === 'forgot' ? 'text-amber-500 scale-105' : 'text-stone-600'}`}>Reset</button>
+                <button onClick={() => setAuthMode('forgot')} className={`text-2xl font-bold font-serif transition-all ${authMode === 'forgot' ? 'text-amber-500 scale-105' : 'text-stone-600'}`}>비번 찾기(설정)</button>
               </div>
               {/* ... (rest of form) */}
               {authMode === 'login' ? (
