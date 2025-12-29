@@ -101,6 +101,11 @@ try {
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (user_id) REFERENCES users (id)
     );
+    );
+    
+    -- Migration to add token support if missing
+    try { db.exec("ALTER TABLE password_resets ADD COLUMN token TEXT;"); } catch (e) {}
+    try { db.exec("ALTER TABLE password_resets ADD COLUMN expires_at DATETIME;"); } catch (e) {}
   `);
   console.log('[Database] Schema initialized.');
 

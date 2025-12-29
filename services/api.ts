@@ -95,6 +95,24 @@ export const api = {
             });
             if (!res.ok) throw await res.json();
             return res.json();
+        },
+        async forgotPasswordEmail(email: string) {
+            const res = await fetch(`${API_URL}/auth/forgot-password-email`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email }),
+            });
+            if (!res.ok) throw await res.json();
+            return res.json();
+        },
+        async resetPasswordEmail(token: string, newPassword: string) {
+            const res = await fetch(`${API_URL}/auth/reset-password-email`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token, newPassword }),
+            });
+            if (!res.ok) throw await res.json();
+            return res.json();
         }
     },
     health: {

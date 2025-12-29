@@ -681,6 +681,74 @@ if (db) {
     });
 }
 
+// --- Email Service (Nodemailer) ---
+const nodemailer = require('nodemailer');
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS
+    }
+});
+
+// Email Pw Reset 1: Request Link
+app.post('/api/auth/forgot-password-email', async (req, res) => {
+    const { email } = req.body;
+    try {
+        if (!db) return res.status(503).json({ error: 'Database unavailable' });
+        const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email);
+        if (!user) return res.status(404).json({ error: 'User not found' });
+
+        const crypto = require('crypto');
+        const token = crypto.randomBytes(32).toString('hex');
+        const expiresAt = new Date(Date.now() + 3600000).toISOString(); // 1 hr
+
+        const stmt = db.prepare('INSERT INTO password_resets (user_id, email, status, token, expires_at) VALUES (?, ?, ?, ?, ?)');
+        stmt.run(user.id, email, 'pending', token, expiresAt);
+
+        const origin = 'https://linteus.com';
+        const link = `${origin}?resetToken=${token}`;
+
+        const mailOptions = {
+            from: `"VitalCore" <${process.env.GMAIL_USER}>`,
+            to: email,
+            subject: 'Password Reset Request',
+            html: `
+        <h2>Password Reset</h2>
+        <p>Click below to reset your password:</p>
+        <a href="${link}" style="display:inline-block;padding:12px 24px;background:#d97706;color:white;text-decoration:none;border-radius:4px;font-weight:bold;">Reset Password</a>
+        <p>Expires in 1 hour.</p>
+      `
+        };
+        await transporter.sendMail(mailOptions);
+        res.json({ message: 'Reset link sent' });
+    } catch (err) {
+        console.error('Email Error:', err);
+        res.status(500).json({ error: 'Failed to send email' });
+    }
+});
+
+// Email Pw Reset 2: Reset
+app.post('/api/auth/reset-password-email', async (req, res) => {
+    const { token, newPassword } = req.body;
+    try {
+        if (!db) return res.status(503).json({ error: 'Database unavailable' });
+        const request = db.prepare('SELECT * FROM password_resets WHERE token = ? AND status = "pending"').get(token);
+
+        if (!request) return res.status(400).json({ error: 'Invalid or expired token' });
+        if (new Date(request.expires_at) < new Date()) return res.status(400).json({ error: 'Token expired' });
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        db.prepare('UPDATE users SET password = ? WHERE id = ?').run(hashedPassword, request.user_id);
+        db.prepare('UPDATE password_resets SET status = "completed" WHERE id = ?').run(request.id);
+
+        res.json({ message: 'Password reset successful' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 // --- Serve Frontend ---
 if (process.env.NODE_ENV === 'production') {
     const distPath = path.join(__dirname, '../dist');

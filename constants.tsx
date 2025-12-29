@@ -270,6 +270,18 @@ export const TRANSLATIONS: Record<string, any> = {
       reset_confirm: "사용자의 비밀번호를 'vital1234'로 초기화하시겠습니까?",
       reset_success: "비밀번호가 'vital1234'로 초기화되었습니다.",
       reset_fail: "초기화 실패: "
+    },
+    auth: {
+      forgot_pw: "비밀번호를 잊으셨나요?",
+      email_reset_guide: "가입하신 이메일 주소를 입력해주세요. 해당 이메일로 비밀번호 재설정 링크를 발송해 드립니다.",
+      send_link: "재설정 링크 발송",
+      back_login: "로그인으로 돌아가기",
+      reset_pw_title: "새 비밀번호 설정",
+      new_pw: "새 비밀번호",
+      confirm_pw: "비밀번호 확인",
+      reset_btn: "비밀번호 변경하기",
+      link_sent: "이메일로 재설정 링크가 발송되었습니다.",
+      reset_complete: "비밀번호가 변경되었습니다. 새 비밀번호로 로그인해주세요."
     }
   },
   en: {
@@ -465,6 +477,18 @@ export const TRANSLATIONS: Record<string, any> = {
       reset_confirm: "This will reset the user's password to 'vital1234'. Continue?",
       reset_success: "Password reset successful. Temporary password is 'vital1234'.",
       reset_fail: "Failed to approve reset: "
+    },
+    auth: {
+      forgot_pw: "Forgot Password?",
+      email_reset_guide: "Enter your email to receive a reset link.",
+      send_link: "Send Reset Link",
+      back_login: "Back to Login",
+      reset_pw_title: "Set New Password",
+      new_pw: "New Password",
+      confirm_pw: "Confirm Password",
+      reset_btn: "Reset Password",
+      link_sent: "Reset link sent to your email.",
+      reset_complete: "Password reset successful. Please login with new password."
     }
   },
   zh: {
@@ -660,6 +684,18 @@ export const TRANSLATIONS: Record<string, any> = {
       reset_confirm: "确定将用户密码重置为 'vital1234' 吗？",
       reset_success: "密码已重置为 'vital1234'。",
       reset_fail: "重置失败: "
+    },
+    auth: {
+      forgot_pw: "忘记密码?",
+      email_reset_guide: "请输入您的注册邮箱，我们将发送重置链接。",
+      send_link: "发送重置链接",
+      back_login: "返回登录",
+      reset_pw_title: "设置新密码",
+      new_pw: "新密码",
+      confirm_pw: "确认密码",
+      reset_btn: "重置密码",
+      link_sent: "重置链接已发送至您的邮箱。",
+      reset_complete: "密码重置成功。请使用新密码登录。"
     }
   },
   ja: {
@@ -855,6 +891,18 @@ export const TRANSLATIONS: Record<string, any> = {
       reset_confirm: "ユーザーのパスワードを 'vital1234' に初期化しますか？",
       reset_success: "パスワードが 'vital1234' に初期化されました。",
       reset_fail: "初期化失敗: "
+    },
+    auth: {
+      forgot_pw: "パスワードをお忘れですか？",
+      email_reset_guide: "登録したメールアドレスを入力してください。リセットリンクを送信します。",
+      send_link: "リセットリンクを送信",
+      back_login: "ログインに戻る",
+      reset_pw_title: "新しいパスワードの設定",
+      new_pw: "新しいパスワード",
+      confirm_pw: "パスワード確認",
+      reset_btn: "パスワード変更",
+      link_sent: "リセットリンクがメールで送信されました。",
+      reset_complete: "パスワードが変更されました。新しいパスワードでログインしてください。"
     }
   }
 

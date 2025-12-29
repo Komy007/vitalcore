@@ -82,6 +82,44 @@ const App: React.FC = () => {
   const [editingNoticeId, setEditingNoticeId] = useState<number | null>(null);
   const [noticeLang, setNoticeLang] = useState<Language>('ko');
   const [newNotice, setNewNotice] = useState<any>({ title: '', content: '', type: 'normal' });
+  const [resetToken, setResetToken] = useState<string | null>(null);
+  const [isResetPwModalOpen, setIsResetPwModalOpen] = useState(false);
+  const [newPasswordReset, setNewPasswordReset] = useState('');
+  const [confirmPasswordReset, setConfirmPasswordReset] = useState('');
+
+  useEffect(() => {
+    // Check for resetToken in URL
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('resetToken');
+    if (token) {
+      setResetToken(token);
+      setIsResetPwModalOpen(true);
+      // Clean URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, []);
+
+  const handleForgotSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      if (!forgotEmail) return alert('Enter email');
+      await api.auth.forgotPasswordEmail(forgotEmail);
+      setAuthMessage(t.auth?.link_sent);
+      // Optional: switch to login mod
+    } catch (e: any) { setAuthMessage(e.error || e.message); }
+  };
+
+  const handleResetSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newPasswordReset !== confirmPasswordReset) return alert('Passwords do not match');
+    try {
+      await api.auth.resetPasswordEmail(resetToken!, newPasswordReset);
+      alert(t.auth?.reset_complete);
+      setIsResetPwModalOpen(false);
+      setAuthMode('login');
+      setIsAuthModalOpen(true);
+    } catch (e: any) { alert(e.error || e.message); }
+  };
 
   useEffect(() => {
     console.log("VitalCore App v1.5.0 Loaded");
@@ -213,16 +251,7 @@ const App: React.FC = () => {
   };
 
 
-  const handleForgotSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setAuthMessage(null);
-    try {
-      await api.auth.resetRequest({ email: forgotEmail, name: forgotName });
-      setAuthMessage('✅ Reset request submitted. Please contact admin for approval.');
-    } catch (err: any) {
-      setAuthMessage(err.error || 'Request failed');
-    }
-  };
+
 
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -644,18 +673,32 @@ const App: React.FC = () => {
               ) : (
                 <form onSubmit={handleForgotSubmit} className="space-y-6">
                   <div className="text-stone-400 text-sm mb-4">
-                    Enter your <strong>Name</strong> and <strong>Email</strong> matching your account.
-                    We will send a reset request to the admin.
+                    {t.auth?.email_reset_guide}
                   </div>
-                  <input type="text" value={forgotName} onChange={e => setForgotName(e.target.value)} className="w-full p-6 bg-stone-800 border border-white/5 rounded-2xl outline-none text-white text-lg" placeholder="Full Name" required />
                   <input type="email" value={forgotEmail} onChange={e => setForgotEmail(e.target.value)} className="w-full p-6 bg-stone-800 border border-white/5 rounded-2xl outline-none text-white text-lg" placeholder="Email Address" required />
-                  <button type="submit" className="w-full py-5 bg-amber-600 text-white font-black rounded-3xl uppercase tracking-widest shadow-xl">Request Reset</button>
+                  <button type="submit" className="w-full py-5 bg-amber-600 text-white font-black rounded-3xl uppercase tracking-widest shadow-xl">{t.auth?.send_link}</button>
+                  <button onClick={() => setAuthMode('login')} type="button" className="w-full text-center text-stone-500 text-sm mt-4 hover:text-white">{t.auth?.back_login}</button>
                 </form>
               )}
             </div>
           </div>
         )
       }
+
+      {/* Reset Password Modal (Email Token) */}
+      {isResetPwModalOpen && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/95 backdrop-blur-2xl p-4 animate-in fade-in duration-500">
+          <div className="bg-stone-900 rounded-3xl p-8 w-full max-w-md shadow-2xl border border-white/5 relative">
+            <button onClick={() => setIsResetPwModalOpen(false)} className="absolute top-4 right-4 text-stone-500 hover:text-white"><X size={24} /></button>
+            <h3 className="text-xl font-bold text-white mb-6 text-center">{t.auth?.reset_pw_title}</h3>
+            <form onSubmit={handleResetSubmit} className="space-y-4">
+              <input type="password" value={newPasswordReset} onChange={e => setNewPasswordReset(e.target.value)} className="w-full p-4 bg-stone-800 border border-white/5 rounded-xl text-white outline-none" placeholder={t.auth?.new_pw} required />
+              <input type="password" value={confirmPasswordReset} onChange={e => setConfirmPasswordReset(e.target.value)} className="w-full p-4 bg-stone-800 border border-white/5 rounded-xl text-white outline-none" placeholder={t.auth?.confirm_pw} required />
+              <button type="submit" className="w-full py-4 bg-amber-600 text-white font-bold rounded-xl uppercase tracking-wide">{t.auth?.reset_btn}</button>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Navigation */}
       <nav className={`fixed w-full z-50 transition-all duration-700 ${isScrolled || isMenuOpen ? 'bg-stone-950/80 backdrop-blur-2xl py-4 border-b border-white/5' : 'bg-transparent py-8'}`}>
