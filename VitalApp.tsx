@@ -1501,7 +1501,7 @@ const App: React.FC = () => {
                           </h4>
                           <span className="text-[10px] bg-amber-500/10 text-amber-500 px-2 py-1 rounded-full uppercase font-bold tracking-widest hidden md:block">Click to Expand</span>
                         </div>
-                        <p className="text-stone-400 text-sm whitespace-pre-wrap line-clamp-2">{nContent}</p>
+                        <p className="text-stone-400 text-sm whitespace-pre-wrap line-clamp-2">{nContent.replace(/<[^>]*>?/gm, '')}</p>
                         <p className="text-xs text-amber-700 font-mono mt-4">{new Date(notice.created_at).toLocaleDateString()}</p>
                       </div>
                     );
@@ -2442,9 +2442,10 @@ const App: React.FC = () => {
                   {activePopup[`title_${lang}`] || activePopup.title}
                 </h2>
                 <div className="prose prose-invert prose-sm max-w-none">
-                  <p className="text-stone-300 leading-relaxed font-light whitespace-pre-wrap text-sm md:text-base">
-                    {activePopup[`content_${lang}`] || activePopup.content}
-                  </p>
+                  <div
+                    className="text-stone-300 leading-relaxed font-light whitespace-pre-wrap text-sm md:text-base quill-content"
+                    dangerouslySetInnerHTML={{ __html: activePopup[`content_${lang}`] || activePopup.content }}
+                  />
                 </div>
               </div>
 
