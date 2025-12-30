@@ -107,12 +107,21 @@ app.post('/api/translate', async (req, res) => {
             throw new Error('Server missing GOOGLE_TRANSLATE_API_KEY');
         }
 
+        // 1. Extract Images (Base64 strings are too large for Google Translate API)
+        const imgTags = [];
+        // Match <img ... > tags. capturing the full tag.
+        const cleanText = text.replace(/<img[^>]*>/g, (match) => {
+            imgTags.push(match);
+            return `__IMG_${imgTags.length - 1}__`; // Placeholder
+        });
+
+        // 2. Translate text content
         const response = await axios.post(
             `https://translation.googleapis.com/language/translate/v2`,
             {
-                q: text,
+                q: cleanText,
                 target: targetLang,
-                format: 'text'
+                format: 'html' // Treat input as HTML to preserve other tags (b, i, p, etc.)
             },
             {
                 params: { key: TRANSLATE_API_KEY },
@@ -125,7 +134,16 @@ app.post('/api/translate', async (req, res) => {
             return res.status(500).json({ error: response.data.error.message });
         }
 
-        const translatedText = response.data.data.translations[0].translatedText;
+        let translatedText = response.data.data.translations[0].translatedText;
+
+        // 3. Restore Images
+        // Google Translate might add spaces around the placeholder, e.g. "__ IMG_0 __"
+        // We use a regex to be flexible with spaces around the marker
+        translatedText = translatedText.replace(/__\s*IMG_(\d+)\s*__/g, (match, index) => {
+            const i = parseInt(index);
+            return imgTags[i] || ''; // Restore original <img ...> tag
+        });
+
         res.json({ translatedText });
     } catch (e) {
         console.error('[Translation Server Error]', e.response ? e.response.data : e.message);
