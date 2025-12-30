@@ -72,8 +72,11 @@ const authLimiter = rateLimit({
 app.use('/api/', globalLimiter);
 app.use('/api/auth/login', authLimiter);
 app.use('/api/auth/register', authLimiter);
+// Middleware
 app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.static('dist'));
+app.use('/img', express.static('img')); // Serve images
 
 // --- Health Check (Critical) ---
 app.get('/api/health', (req, res) => {

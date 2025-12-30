@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Menu, X, Activity, HelpCircle, Shield, Brain, Heart, Droplet,
-  ArrowRight, User, Edit, ChevronLeft, Sparkles, Bot, Search, ExternalLink, Globe, Lock, Eye, EyeOff, MessageCircle, Flame, Clock, Thermometer, ChevronDown, Info, FlaskConical, Zap, BookOpen, GraduationCap, Award, CheckCircle2, Coffee, Layers, Quote, ShoppingBag, Star, ShieldCheck, Mail, Send, FileText, Trash2, Plus, Loader2, Languages, Megaphone, LayoutTemplate
-} from 'lucide-react';
+import { LucideIcon, Menu, X, ChevronRight, Check, Play, Award, Microscope, Leaf, Shield, Heart, Zap, Brain, Activity, ArrowRight, ArrowLeft, Star, Quote, Search, Globe, User, LogOut, ChevronDown, Lock, Mail, Phone, MapPin, Send, LayoutTemplate, Megaphone, Plus, Edit, Trash2, Save, Image as ImageIcon, MessageCircle, Sparkles, AlertTriangle } from 'lucide-react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
@@ -2255,11 +2254,22 @@ const App: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Content ({noticeLang})</label>
-                  <textarea
-                    className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 h-40"
-                    placeholder="Content..."
+                  <ReactQuill
+                    theme="snow"
                     value={newNotice[noticeLang === 'ko' ? 'content' : `content_${noticeLang}`] || ''}
-                    onChange={e => setNewNotice({ ...newNotice, [noticeLang === 'ko' ? 'content' : `content_${noticeLang}`]: e.target.value })}
+                    onChange={(value) => setNewNotice({ ...newNotice, [noticeLang === 'ko' ? 'content' : `content_${noticeLang}`]: value })}
+                    modules={{
+                      toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                        ['link', 'image'],
+                        ['clean'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'align': [] }],
+                      ]
+                    }}
+                    className="bg-stone-800 rounded-xl text-white border border-white/5"
                   />
 
 
@@ -2343,10 +2353,11 @@ const App: React.FC = () => {
                           </div>
                         )}
 
-                        {/* Content - Explicitly styled for visibility */}
-                        <div className="text-stone-200 text-lg md:text-xl leading-8 font-light whitespace-pre-wrap min-h-[100px] font-sans max-w-3xl">
-                          {displayContent}
-                        </div>
+                        {/* Content - Rich Text Display (Safe for admins) */}
+                        <div
+                          className="text-stone-200 text-lg md:text-xl leading-8 font-light whitespace-pre-wrap min-h-[100px] font-sans max-w-3xl quill-content"
+                          dangerouslySetInnerHTML={{ __html: displayContent }}
+                        />
                       </>
                     );
                   })()}
