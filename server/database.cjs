@@ -101,7 +101,7 @@ try {
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (user_id) REFERENCES users (id)
     );
-    );
+
   `);
   console.log('[Database] Schema initialized.');
 
