@@ -2019,19 +2019,19 @@ const App: React.FC = () => {
                       <div className="space-y-4">
                         {notices.map(notice => (
                           <div key={notice.id} className="bg-stone-900 rounded-xl p-6 border border-white/5 flex justify-between items-center group hover:border-amber-500/30 transition-colors">
-                            <div className="flex items-center gap-4">
-                              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${notice.type === 'popup' ? 'bg-amber-600 text-white' : notice.type === 'banner' ? 'bg-amber-900/40 text-amber-500' : 'bg-stone-800 text-stone-400'}`}>
+                            <div className="flex items-center gap-4 flex-1 min-w-0 mr-4">
+                              <div className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${notice.type === 'popup' ? 'bg-amber-600 text-white' : notice.type === 'banner' ? 'bg-amber-900/40 text-amber-500' : 'bg-stone-800 text-stone-400'}`}>
                                 {notice.type === 'popup' ? <Zap size={18} /> : notice.type === 'banner' ? <Activity size={18} /> : <MessageCircle size={18} />}
                               </div>
-                              <div>
+                              <div className="min-w-0 flex-1">
                                 <div className="flex items-center gap-2 mb-1">
-                                  <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${notice.type === 'popup' ? 'bg-red-900/30 text-red-500 border border-red-500/20' : notice.type === 'banner' ? 'bg-amber-900/30 text-amber-500 border border-amber-500/20' : 'bg-stone-800 text-stone-500'}`}>{notice.type}</span>
-                                  <h4 className="text-white font-bold">{notice.title}</h4>
+                                  <span className={`shrink-0 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${notice.type === 'popup' ? 'bg-red-900/30 text-red-500 border border-red-500/20' : notice.type === 'banner' ? 'bg-amber-900/30 text-amber-500 border border-amber-500/20' : 'bg-stone-800 text-stone-500'}`}>{notice.type}</span>
+                                  <h4 className="text-white font-bold truncate">{notice.title}</h4>
                                 </div>
-                                <p className="text-stone-500 text-sm line-clamp-1">{notice.content}</p>
+                                <p className="text-stone-500 text-sm line-clamp-1 text-ellipsis overflow-hidden">{notice.content.replace(/<[^>]*>?/gm, '')}</p>
                               </div>
                             </div>
-                            <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-4 shrink-0">
                               <div className="text-right hidden md:block">
                                 <span className="text-[10px] text-stone-600 block uppercase tracking-widest">Date</span>
                                 <span className="text-stone-400 text-xs font-mono">{new Date(notice.created_at).toLocaleDateString()}</span>
