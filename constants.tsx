@@ -78,7 +78,7 @@ const researchPapersJa = {
 
 export const TRANSLATIONS: Record<string, any> = {
   ko: {
-    nav: { about: "상황버섯 정보", research: "임상 연구", benefits: "핵심 효능", usage: "복용법", health: "건강 리포트", faq: "질문답변/공지사항" },
+    nav: { about: "상황버섯 정보", research: "임상 연구", benefits: "핵심 효능", usage: "복용법", health: "웰니스 저널", faq: "질문답변/공지사항" },
     hero: {
       badge: "Vital Core Premium",
       title_top: "대자연이 선사한",
@@ -291,7 +291,7 @@ export const TRANSLATIONS: Record<string, any> = {
     }
   },
   en: {
-    nav: { about: "About Phellinus", research: "Research", benefits: "Benefits", usage: "Usage", health: "Health Report", faq: "Q&A / Notices" },
+    nav: { about: "About Phellinus", research: "Research", benefits: "Benefits", usage: "Usage", health: "Wellness Journal", faq: "Q&A / Notices" },
     hero: {
       badge: "Vital Core Premium",
       title_top: "Nature's",
@@ -504,7 +504,7 @@ export const TRANSLATIONS: Record<string, any> = {
     }
   },
   zh: {
-    nav: { about: "关于桑黄", research: "临床研究", benefits: "核心功效", usage: "服用方法", health: "健康报告", faq: "问答 / 公告" },
+    nav: { about: "关于桑黄", research: "临床研究", benefits: "核心功效", usage: "服用方法", health: "健康日志", faq: "问答 / 公告" },
     hero: {
       badge: "Vital Core Premium",
       title_top: "大自然赐予的",
@@ -717,7 +717,7 @@ export const TRANSLATIONS: Record<string, any> = {
     }
   },
   ja: {
-    nav: { about: "メシマコブについて", research: "臨床研究", benefits: "主な効能", usage: "服用方法", health: "健康レポート", faq: "Q&A / お知らせ" },
+    nav: { about: "メシマコブ情報", research: "臨床研究", benefits: "主な効能", usage: "服用方法", health: "ウェルネスジャーナル", faq: "Q&A / お知らせ" },
     hero: {
       badge: "Vital Core Premium",
       title_top: "大自然が贈る",
