@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { LucideIcon, Menu, X, ChevronRight, Check, Play, Award, Microscope, Leaf, Shield, Heart, Zap, Brain, Activity, ArrowRight, ArrowLeft, Star, Quote, Search, Globe, User, LogOut, ChevronDown, Lock, Mail, Phone, MapPin, Send, LayoutTemplate, Megaphone, Plus, Edit, Trash2, Save, Image as ImageIcon, MessageCircle, Sparkles, AlertTriangle, Droplet, ShoppingBag, Eye, BookOpen, ExternalLink, Info, FlaskConical, GraduationCap, Coffee, Flame, ShieldCheck, CheckCircle2, FileText, Loader2, Languages } from 'lucide-react';
-import ReactQuill from 'react-quill';
+import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import ImageResize from 'quill-image-resize-module-react';
+
+Quill.register('modules/imageResize', ImageResize);
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
@@ -2228,8 +2231,10 @@ const App: React.FC = () => {
       {
         isNoticeModalOpen && (
           <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-in fade-in duration-300">
-            <div className="bg-stone-900 rounded-3xl w-full max-w-2xl flex flex-col border border-white/10 shadow-2xl relative">
-              <div className="px-8 py-6 border-b border-white/5 flex justify-between items-center bg-stone-900 rounded-t-3xl">
+            <div className="bg-stone-900 rounded-3xl w-full max-w-4xl max-h-[90vh] flex flex-col border border-white/10 shadow-2xl relative">
+
+              {/* Header (Sticky) */}
+              <div className="px-8 py-6 border-b border-white/5 flex justify-between items-center bg-stone-900 rounded-t-3xl shrink-0">
                 <div>
                   <h3 className="text-2xl font-serif font-bold text-white">New Notice</h3>
                   <div className="flex gap-2 mt-4">
@@ -2242,7 +2247,9 @@ const App: React.FC = () => {
                 </div>
                 <button onClick={() => setIsNoticeModalOpen(false)} className="p-2 -mr-2 text-stone-500 hover:text-white"><X size={24} /></button>
               </div>
-              <div className="p-8 space-y-6">
+
+              {/* Body (Scrollable) */}
+              <div className="p-8 space-y-6 overflow-y-auto custom-scrollbar">
                 <div>
                   <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Title ({noticeLang})</label>
                   <input
@@ -2267,14 +2274,18 @@ const App: React.FC = () => {
                         ['clean'],
                         [{ 'color': [] }, { 'background': [] }],
                         [{ 'align': [] }],
-                      ]
+                      ],
+                      imageResize: {
+                        parchment: Quill.import('parchment'),
+                        modules: ['Resize', 'DisplaySize']
+                      }
                     }}
                     className="bg-stone-800 rounded-xl text-white border border-white/5"
                   />
 
 
                   {/* Notice Type Selector */}
-                  <div>
+                  <div className="mt-6">
                     <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Notice Type</label>
                     <div className="flex gap-4">
                       {['normal', 'banner', 'popup'].map(type => (
@@ -2293,18 +2304,21 @@ const App: React.FC = () => {
                   </div>
 
                 </div>
-                <div className="flex justify-end pt-4 gap-4">
-                  <button
-                    onClick={handleTranslateNotice}
-                    disabled={isTranslating}
-                    className="px-6 py-3 bg-stone-800 border border-amber-500/30 text-amber-500 hover:bg-amber-900/30 hover:text-white font-bold rounded-lg uppercase shadow-lg flex items-center gap-2 transition-all"
-                  >
-                    {isTranslating ? <Loader2 size={18} className="animate-spin" /> : <Languages size={18} />}
-                    {isTranslating ? 'Translating...' : 'AI Translate'}
-                  </button>
-                  <button onClick={handleCreateNotice} className="px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase shadow-lg">Post Notice</button>
-                </div>
               </div>
+
+              {/* Footer (Sticky) */}
+              <div className="px-8 py-6 border-t border-white/5 bg-stone-900 rounded-b-3xl shrink-0 flex justify-end gap-4">
+                <button
+                  onClick={handleTranslateNotice}
+                  disabled={isTranslating}
+                  className="px-6 py-3 bg-stone-800 border border-amber-500/30 text-amber-500 hover:bg-amber-900/30 hover:text-white font-bold rounded-lg uppercase shadow-lg flex items-center gap-2 transition-all"
+                >
+                  {isTranslating ? <Loader2 size={18} className="animate-spin" /> : <Languages size={18} />}
+                  {isTranslating ? 'Translating...' : 'AI Translate'}
+                </button>
+                <button onClick={handleCreateNotice} className="px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg uppercase shadow-lg">Post Notice</button>
+              </div>
+
             </div>
           </div>
         )
