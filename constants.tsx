@@ -204,24 +204,24 @@ export const TRANSLATIONS: Record<string, any> = {
       safetyStudies: [
         {
           title: "1. 인체 적용 시험: 장기간 섭취 시 안전성 및 면역 증진 입증",
-          subtitle: "동물 실험이 아닌 사람을 대상으로 한 연구",
-          journal: "Journal of Medicinal Food (2011)",
-          result: "성인 대상 8주간 섭취 시 면역 수치 향상 및 간/신장 독성 없음 확인.",
-          link: "https://pubmed.ncbi.nlm.nih.gov/"
+          subtitle: "Effects of Phellinus linteus extract on immunity improvement",
+          journal: "Medicine (Baltimore), 2022 Aug 26; 101(34)",
+          result: "성인 대상 8주간 섭취 시 면역 수치 향상 및 간/신장 독성 없음 확인 (PMC9410671).",
+          link: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9410671/"
         },
         {
           title: "2. 간 세포 보호 효과: '독성'이 아니라 오히려 '해독'을 돕다",
           subtitle: "간독성 물질에 대한 간세포 보호 효과",
           journal: "Journal of Ethnopharmacology (2004)",
           result: "독성 물질(CCl4)로부터 간세포 파괴 방지 및 항산화 효소(글루타치온) 유지.",
-          link: "https://www.sciencedirect.com/"
+          link: "https://doi.org/10.1016/j.jep.2004.08.007"
         },
         {
-          title: "3. 급성/아급성 독성 테스트: 고용량 섭취 안전성",
-          subtitle: "실질적 무독성(practically non-toxic) 분류",
-          journal: "Journal of Ethnopharmacology",
-          result: "고용량(2,000mg/kg) 투여 시에도 사망이나 장기 손상 없음.",
-          link: "https://pubmed.ncbi.nlm.nih.gov/"
+          title: "3. 급성/아급성 독성 시험: 고용량 섭취 안전성 입증",
+          subtitle: "금사목질진흙버섯 자실체 추출물의 독성 시험",
+          journal: "Journal of Life Science (한국생명과학회)",
+          result: "독성 실험 결과, 고용량(2,000mg/kg) 투여 시에도 사망 개체가 없었으며 장기 손상이 관찰되지 않음.",
+          link: "https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE02304585"
         }
       ]
     },
@@ -417,24 +417,24 @@ export const TRANSLATIONS: Record<string, any> = {
       safetyStudies: [
         {
           title: "1. Human Clinical Trial: Safety & Immunity",
-          subtitle: "Research on humans, not just animals",
-          journal: "Journal of Medicinal Food (2011)",
-          result: "Enhanced immunity after 8 weeks of intake in adults. No toxicity or side effects in liver/kidney functions.",
-          link: "https://pubmed.ncbi.nlm.nih.gov/"
+          subtitle: "Effects of Phellinus linteus extract on immunity improvement",
+          journal: "Medicine (Baltimore), 2022 Aug 26; 101(34)",
+          result: "Enhanced immunity after 8 weeks of intake in adults. No toxicity or side effects (PMC9410671).",
+          link: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9410671/"
         },
         {
           title: "2. Hepatoprotection: Detoxing, not Toxic",
           subtitle: "Protection against hepatotoxins",
           journal: "Journal of Ethnopharmacology (2004)",
-          result: "Prevents hepatocyte destruction from toxins (CCl4) and maintains antioxidant enzymes (Glutathione).",
-          link: "https://www.sciencedirect.com/"
+          result: "Prevents hepatocyte destruction from toxins (CCl4) and maintains antioxidant enzymes.",
+          link: "https://doi.org/10.1016/j.jep.2004.08.007"
         },
         {
-          title: "3. Acute Toxicity Test: Safe at High Doses",
-          subtitle: "Classified as 'Practically Non-toxic'",
-          journal: "Journal of Ethnopharmacology",
-          result: "No mortality or organ damage observed even at high doses (over 2,000mg/kg).",
-          link: "https://pubmed.ncbi.nlm.nih.gov/"
+          title: "3. Acute/Subacute Toxicity Test: Proven Safety",
+          subtitle: "In vivo Antitumor Activity and Toxicity Test",
+          journal: "Journal of Life Science",
+          result: "No mortality or organ damage observed even at high doses (over 2,000mg/kg). Practically non-toxic.",
+          link: "https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE02304585"
         }
       ]
     },
@@ -630,24 +630,24 @@ export const TRANSLATIONS: Record<string, any> = {
       safetyStudies: [
         {
           title: "1. 人体临床试验：证实长期服用的安全性及免疫增强",
-          subtitle: "针对人体的研究，而非动物实验",
-          journal: "Journal of Medicinal Food (2011)",
-          result: "成人服用8周后，免疫数值提升，且未发现肝/肾功能有任何毒性或副作用。",
-          link: "https://pubmed.ncbi.nlm.nih.gov/"
+          subtitle: "Effects of Phellinus linteus extract on immunity improvement",
+          journal: "Medicine (Baltimore), 2022 Aug 26; 101(34)",
+          result: "成人服用8周后，免疫数值提升，且未发现肝/肾功能有任何毒性或副作用 (PMC9410671)。",
+          link: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9410671/"
         },
         {
           title: "2. 肝细胞保护效果：非但无毒，反而助‘排毒’",
           subtitle: "针对肝毒性物质的保护效果",
           journal: "Journal of Ethnopharmacology (2004)",
           result: "防止毒性物质(CCl4)破坏肝细胞，并帮助维持抗氧化酶(谷胱甘肽)水平。",
-          link: "https://www.sciencedirect.com/"
+          link: "https://doi.org/10.1016/j.jep.2004.08.007"
         },
         {
-          title: "3. 急性/亚急性毒性测试：高剂量服用安全",
-          subtitle: "归类为‘实质无毒 (practically non-toxic)’",
-          journal: "Journal of Ethnopharmacology",
-          result: "即便高剂量(2,000mg/kg以上)服用，也未引发死亡或器官损伤。",
-          link: "https://pubmed.ncbi.nlm.nih.gov/"
+          title: "3. 急性/亚急性毒性测试：高剂量服用安全性证实",
+          subtitle: "In vivo Antitumor Activity and Toxicity Test",
+          journal: "Journal of Life Science",
+          result: "毒性实验结果显示，即使在高剂量（2,000mg/kg）给药下，也没有死亡个体，且未观察到脏器损伤。",
+          link: "https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE02304585"
         }
       ]
     },
@@ -842,25 +842,25 @@ export const TRANSLATIONS: Record<string, any> = {
       sub2: "推奨摂取",
       safetyStudies: [
         {
-          title: "1. 人体適用試験：長期摂取時の安全性および免疫増進",
-          subtitle: "動物実験ではなく人を対象とした研究",
-          journal: "Journal of Medicinal Food (2011)",
-          result: "成人対象の8週間摂取で免疫数値が向上し、肝/腎機能などに毒性や副作用がないことを確認。",
-          link: "https://pubmed.ncbi.nlm.nih.gov/"
+          title: "1. 人体適用試験：長期摂取時の安全性および免疫増進の立証",
+          subtitle: "Effects of Phellinus linteus extract on immunity improvement",
+          journal: "Medicine (Baltimore), 2022 Aug 26; 101(34)",
+          result: "成人対象の8週間摂取で免疫数値が向上し、肝/腎機能などに毒性や副作用がないことを確認 (PMC9410671)。",
+          link: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9410671/"
         },
         {
           title: "2. 肝細胞保護効果：「毒」ではなくむしろ「解毒」を助ける",
           subtitle: "肝毒性物質に対する保護効果",
           journal: "Journal of Ethnopharmacology (2004)",
           result: "毒性物質(CCl4)による肝細胞破壊を防ぎ、抗酸化酵素(グルタチオン)の維持を助けます。",
-          link: "https://www.sciencedirect.com/"
+          link: "https://doi.org/10.1016/j.jep.2004.08.007"
         },
         {
-          title: "3. 急性/亜急性毒性テスト：高用量摂取の安全性",
-          subtitle: "「実質的無毒 (practically non-toxic)」に分類",
-          journal: "Journal of Ethnopharmacology",
-          result: "高用量(2,000mg/kg以上)投与時でも、死亡や臓器損傷が見られないことを確認。",
-          link: "https://pubmed.ncbi.nlm.nih.gov/"
+          title: "3. 急性/亜急性毒性試験：高用量摂取の安全性立証",
+          subtitle: "In vivo Antitumor Activity and Toxicity Test",
+          journal: "Journal of Life Science",
+          result: "毒性試験の結果、高用量（2,000mg/kg）投与時でも死亡個体がなく、臓器損傷が観察されませんでした。",
+          link: "https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE02304585"
         }
       ]
     },
