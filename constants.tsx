@@ -29,51 +29,51 @@ export const IMAGES = {
 };
 
 const researchPapersKo = {
-  summary: { title: "NK세포 활성 및 생존율 증가", journal: "CONSORT Clinical Trial", impact: "Clinical Study", url: "https://www.researchgate.net/publication/363118716_Effects_of_Phellinus_linteus_extract_on_immunity_improvement_A_CONSORT-randomized_double-blinded_placebo-controlled_trial", summary: "임상시험에서 위약 대비 NK세포 활성 유의하게 증가 (P < 0.05). 98명 대상 이중맹검 임상시험 결과 확인." },
+  summary: { title: "NK세포 활성 및 생존율 증가", journal: "CONSORT Clinical Trial", impact: "Clinical Study", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC9410671/", summary: "임상시험에서 위약 대비 NK세포 활성 유의하게 증가 (P < 0.05). 98명 대상 이중맹검 임상시험 결과 확인." },
   cancer: { title: "대장암세포 사멸 및 AKT/mTOR 차단", journal: "Int. J. Mol. Sci.", impact: "Mechanism Analysis", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC8880221/", summary: "대장암세포(SW480) 사멸 유도 및 AKT/mTOR 경로 차단. 암세포의 생존 신호를 억제함." },
   lung: { title: "폐암세포 이동 억제 및 폐 보호", journal: "PMC (NIH)", impact: "In Vitro/Vivo", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC10694423/", summary: "폐암세포(A549) 이동 억제 및 급성 폐 손상 보호. 미세먼지로 인한 염증 완화." },
-  liver: { title: "간암 억제 및 지방간 개선", journal: "ResearchGate", impact: "Animal Study", url: "https://www.researchgate.net/publication/47449095_Orally_administered_mycelial_culture_of_Phellinus_linteus_exhibits_antitumor_effects_in_hepatoma_cell-bearing_mice", summary: "간암(Hep3B) 억제 및 비알코올성 지방간 개선. 간 독성 해독 효과 입증." },
-  prostate: { title: "전립선암세포 사멸 유도", journal: "ResearchGate", impact: "Oncology", url: "https://www.researchgate.net/publication/5319139_A_Medicinal_Mushroom_Phellinus_Linteus", summary: "히스피딘(Hispidin)의 STAT3 차단을 통한 암세포 사멸. 호르몬 저항성 암세포에 효과." },
+  liver: { title: "간암 억제 및 지방간 개선", journal: "ResearchGate", impact: "Animal Study", url: "", summary: "간암(Hep3B) 억제 및 비알코올성 지방간 개선. (유료 논문이므로 제목으로 검색하여 열람 가능)" },
+  prostate: { title: "전립선암세포 사멸 유도", journal: "ResearchGate", impact: "Oncology", url: "", summary: "히스피딘(Hispidin)의 STAT3 차단을 통한 암세포 사멸. (유료 논문이므로 제목으로 검색하여 열람 가능)" },
   diabetes: { title: "장내 미생물 개선 및 혈당 조절", journal: "Frontiers in Microbiology", impact: "Microbiome", url: "https://www.frontiersin.org/journals/nutrition/articles/10.3389/fnut.2022.1013466/full", summary: "장내 미생물 개선 및 부티르산 723% 증가. 인슐린 저항성 개선 효과." },
   brain: { title: "베타아밀로이드 억제 및 뇌 보호", journal: "PMC (NIH)", impact: "Neuroprotection", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC8143579/", summary: "베타아밀로이드 생성 효소 BACE1 억제. 알츠하이머 원인 물질 차단." },
   skin: { title: "아토피 억제 및 수명 연장", journal: "PMC (NIH)", impact: "Dermatology/Aging", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC10159060/", summary: "아토피 IgE 억제 및 수명 26.41% 연장. 항노화 및 피부 진정 효과." },
-  joint: { title: "통풍 요산 억제 및 관절염", journal: "ResearchGate", impact: "Rheumatology", url: "https://www.researchgate.net/publication/357779793_Anti-Gout_Effects_of_the_Medicinal_Fungus_Phellinus_igniarius_in_Hyperuricaemia_and_Acute_Gouty_Arthritis_Rat_Models", summary: "통풍 요산 생성 효소(XOD) 억제. 류마티스 관절염 염증 완화." }
+  joint: { title: "통풍 요산 억제 및 관절염", journal: "ResearchGate", impact: "Rheumatology", url: "https://www.frontiersin.org/journals/pharmacology/articles/10.3389/fphar.2021.801910/full", summary: "통풍 요산 생성 효소(XOD) 억제. 류마티스 관절염 염증 완화." }
 };
 
 const researchPapersEn = {
-  summary: { title: "Enhanced NK Cell Activity & Survival", journal: "CONSORT Clinical Trial", impact: "Clinical Study", url: "https://www.researchgate.net/publication/363118716_Effects_of_Phellinus_linteus_extract_on_immunity_improvement_A_CONSORT-randomized_double-blinded_placebo-controlled_trial", summary: "Significantly increased NK cell activity vs placebo in clinical trials (P < 0.05). Verified in double-blind study (n=98)." },
+  summary: { title: "Enhanced NK Cell Activity & Survival", journal: "CONSORT Clinical Trial", impact: "Clinical Study", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC9410671/", summary: "Significantly increased NK cell activity vs placebo in clinical trials (P < 0.05). Verified in double-blind study (n=98)." },
   cancer: { title: "Colorectal Cancer Inhibition", journal: "Int. J. Mol. Sci.", impact: "Mechanism Analysis", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC8880221/", summary: "Induction of colorectal cancer cell (SW480) apoptosis and blockage of AKT/mTOR pathway." },
   lung: { title: "Lung Protection & Metastasis Block", journal: "PMC (NIH)", impact: "In Vitro/Vivo", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC10694423/", summary: "Inhibition of lung cancer cell (A549) migration and protection against acute lung injury." },
-  liver: { title: "Liver Cancer & Fatty Liver Care", journal: "ResearchGate", impact: "Animal Study", url: "https://www.researchgate.net/publication/47449095_Orally_administered_mycelial_culture_of_Phellinus_linteus_exhibits_antitumor_effects_in_hepatoma_cell-bearing_mice", summary: "Inhibition of liver cancer (Hep3B) and improvement of non-alcoholic fatty liver." },
-  prostate: { title: "Prostate Cancer Apoptosis", journal: "ResearchGate", impact: "Oncology", url: "https://www.researchgate.net/publication/5319139_A_Medicinal_Mushroom_Phellinus_Linteus", summary: "Induction of cancer cell apoptosis via STAT3 blockage by Hispidin." },
+  liver: { title: "Liver Cancer & Fatty Liver Care", journal: "ResearchGate", impact: "Animal Study", url: "", summary: "Inhibition of liver cancer (Hep3B) and improvement of non-alcoholic fatty liver. (Paid paper; search title to view)" },
+  prostate: { title: "Prostate Cancer Apoptosis", journal: "ResearchGate", impact: "Oncology", url: "", summary: "Induction of cancer cell apoptosis via STAT3 blockage by Hispidin. (Paid paper; search title to view)" },
   diabetes: { title: "Microbiome & Blood Sugar Control", journal: "Frontiers in Microbiology", impact: "Microbiome", url: "https://www.frontiersin.org/journals/nutrition/articles/10.3389/fnut.2022.1013466/full", summary: "Improvement of gut microbiome and 723% increase in butyrate production." },
   brain: { title: "Neuroprotection & BACE1 Inhibition", journal: "PMC (NIH)", impact: "Neuroprotection", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC8143579/", summary: "Inhibition of beta-amyloid generating enzyme BACE1, preventing Alzheimer's causes." },
   skin: { title: "Atopy Relief & Anti-Aging", journal: "PMC (NIH)", impact: "Dermatology/Aging", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC10159060/", summary: "Inhibition of Atopy IgE and lifespan extension by 26.41%." },
-  joint: { title: "Gout & Arthritis Relief", journal: "ResearchGate", impact: "Rheumatology", url: "https://www.researchgate.net/publication/357779793_Anti-Gout_Effects_of_the_Medicinal_Fungus_Phellinus_igniarius_in_Hyperuricaemia_and_Acute_Gouty_Arthritis_Rat_Models", summary: "Inhibition of Gout uric acid generating enzyme (XOD) and rheumatoid arthritis factors." }
+  joint: { title: "Gout & Arthritis Relief", journal: "ResearchGate", impact: "Rheumatology", url: "https://www.frontiersin.org/journals/pharmacology/articles/10.3389/fphar.2021.801910/full", summary: "Inhibition of Gout uric acid generating enzyme (XOD) and rheumatoid arthritis factors." }
 };
 
 const researchPapersZh = {
-  summary: { title: "NK细胞活性与生存率", journal: "CONSORT Clinical Trial", impact: "Clinical Study", url: "https://www.researchgate.net/publication/363118716_Effects_of_Phellinus_linteus_extract_on_immunity_improvement_A_CONSORT-randomized_double-blinded_placebo-controlled_trial", summary: "临床试验显示 NK 细胞活性较安慰剂显著增加 (P < 0.05)。" },
+  summary: { title: "NK细胞活性与生存率", journal: "CONSORT Clinical Trial", impact: "Clinical Study", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC9410671/", summary: "临床试验显示 NK 细胞活性较安慰剂显著增加 (P < 0.05)。" },
   cancer: { title: "抑制结直肠癌", journal: "Int. J. Mol. Sci.", impact: "Mechanism Analysis", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC8880221/", summary: "诱导大肠癌细胞 (SW480) 凋亡并阻断 AKT/mTOR 通路。" },
   lung: { title: "肺部保护与转移阻断", journal: "PMC (NIH)", impact: "In Vitro/Vivo", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC10694423/", summary: "抑制肺癌细胞 (A549) 迁移及保护急性肺损伤。" },
-  liver: { title: "肝癌抑制与脂肪肝改善", journal: "ResearchGate", impact: "Animal Study", url: "https://www.researchgate.net/publication/47449095_Orally_administered_mycelial_culture_of_Phellinus_linteus_exhibits_antitumor_effects_in_hepatoma_cell-bearing_mice", summary: "抑制肝癌 (Hep3B) 及改善非酒精性脂肪肝。" },
-  prostate: { title: "诱导前列腺癌细胞凋亡", journal: "ResearchGate", impact: "Oncology", url: "https://www.researchgate.net/publication/5319139_A_Medicinal_Mushroom_Phellinus_Linteus", summary: "通过 Hispidin 阻断 STAT3 诱导癌细胞凋亡。" },
+  liver: { title: "肝癌抑制与脂肪肝改善", journal: "ResearchGate", impact: "Animal Study", url: "", summary: "抑制肝癌 (Hep3B) 及改善非酒精性脂肪肝。(此为付费论文，请搜索标题查阅)" },
+  prostate: { title: "诱导前列腺癌细胞凋亡", journal: "ResearchGate", impact: "Oncology", url: "", summary: "通过 Hispidin 阻断 STAT3 诱导癌细胞凋亡。(此为付费论文，请搜索标题查阅)" },
   diabetes: { title: "肠道菌群与血糖控制", journal: "Frontiers in Microbiology", impact: "Microbiome", url: "https://www.frontiersin.org/journals/nutrition/articles/10.3389/fnut.2022.1013466/full", summary: "改善肠道微生物群及丁酸增加 723%。" },
   brain: { title: "预防痴呆与脑细胞保护", journal: "PMC (NIH)", impact: "Neuroprotection", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC8143579/", summary: "抑制 β-淀粉样蛋白生成酶 BACE1。" },
   skin: { title: "改善特应性皮炎与抗衰老", journal: "PMC (NIH)", impact: "Dermatology/Aging", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC10159060/", summary: "抑制特应性 IgE 及寿命延长 26.41%。" },
-  joint: { title: "痛风尿酸抑制与关节保护", journal: "ResearchGate", impact: "Rheumatology", url: "https://www.researchgate.net/publication/357779793_Anti-Gout_Effects_of_the_Medicinal_Fungus_Phellinus_igniarius_in_Hyperuricaemia_and_Acute_Gouty_Arthritis_Rat_Models", summary: "抑制痛风尿酸生成酶 (XOD)。" }
+  joint: { title: "痛风尿酸抑制与关节保护", journal: "ResearchGate", impact: "Rheumatology", url: "https://www.frontiersin.org/journals/pharmacology/articles/10.3389/fphar.2021.801910/full", summary: "抑制痛风尿酸生成酶 (XOD)。" }
 };
 
 const researchPapersJa = {
-  summary: { title: "NK細胞活性と生存率", journal: "CONSORT Clinical Trial", impact: "Clinical Study", url: "https://www.researchgate.net/publication/363118716_Effects_of_Phellinus_linteus_extract_on_immunity_improvement_A_CONSORT-randomized_double-blinded_placebo-controlled_trial", summary: "臨床試験においてプラセボ対比NK細胞活性が有意に増加 (P < 0.05)。" },
+  summary: { title: "NK細胞活性と生存率", journal: "CONSORT Clinical Trial", impact: "Clinical Study", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC9410671/", summary: "臨床試験においてプラセボ対比NK細胞活性が有意に増加 (P < 0.05)。" },
   cancer: { title: "大腸がん抑制と転移遮断", journal: "Int. J. Mol. Sci.", impact: "Mechanism Analysis", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC8880221/", summary: "大腸がん細胞(SW480)のアポトーシス誘導およびAKT/mTOR経路の遮断。" },
   lung: { title: "肺保護とがん細胞移動遮断", journal: "PMC (NIH)", impact: "In Vitro/Vivo", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC10694423/", summary: "肺がん細胞(A549)の移動抑制および急性肺損傷の保護。" },
-  liver: { title: "肝臓がん抑制と脂肪肝改善", journal: "ResearchGate", impact: "Animal Study", url: "https://www.researchgate.net/publication/47449095_Orally_administered_mycelial_culture_of_Phellinus_linteus_exhibits_antitumor_effects_in_hepatoma_cell-bearing_mice", summary: "肝臓がん(Hep3B)の抑制および非アルコール性脂肪肝の改善。" },
-  prostate: { title: "前立腺がん細胞のアポトーシス", journal: "ResearchGate", impact: "Oncology", url: "https://www.researchgate.net/publication/5319139_A_Medicinal_Mushroom_Phellinus_Linteus", summary: "HispidinによるSTAT3遮断を通じたがん細胞のアポトーシス誘導。" },
+  liver: { title: "肝臓がん抑制と脂肪肝改善", journal: "ResearchGate", impact: "Animal Study", url: "", summary: "肝臓がん(Hep3B)の抑制および非アルコール性脂肪肝の改善。(有料論文のためタイトルで検索)" },
+  prostate: { title: "前立腺がん細胞のアポトーシス", journal: "ResearchGate", impact: "Oncology", url: "", summary: "HispidinによるSTAT3遮断を通じたがん細胞のアポトーシス誘導。(有料論文のためタイトルで検索)" },
   diabetes: { title: "腸内細菌改善と血糖調節", journal: "Frontiers in Microbiology", impact: "Microbiome", url: "https://www.frontiersin.org/journals/nutrition/articles/10.3389/fnut.2022.1013466/full", summary: "腸内微生物の改善および酪酸の723%増加。" },
   brain: { title: "認知症予防と脳細胞保護", journal: "PMC (NIH)", impact: "Neuroprotection", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC8143579/", summary: "ベータアミロイド生成酵素BACE1の抑制。" },
   skin: { title: "アトピー改善と寿命延長", journal: "PMC (NIH)", impact: "Dermatology/Aging", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC10159060/", summary: "アトピーIgEの抑制および寿命26.41%延長。" },
-  joint: { title: "痛風尿酸抑制と関節炎緩和", journal: "ResearchGate", impact: "Rheumatology", url: "https://www.researchgate.net/publication/357779793_Anti-Gout_Effects_of_the_Medicinal_Fungus_Phellinus_igniarius_in_Hyperuricaemia_and_Acute_Gouty_Arthritis_Rat_Models", summary: "痛風尿酸生成酵素(XOD)の抑制。" }
+  joint: { title: "痛風尿酸抑制と関節炎緩和", journal: "ResearchGate", impact: "Rheumatology", url: "https://www.frontiersin.org/journals/pharmacology/articles/10.3389/fphar.2021.801910/full", summary: "痛風尿酸生成酵素(XOD)の抑制。" }
 };
 
 export const TRANSLATIONS: Record<string, any> = {
@@ -113,15 +113,15 @@ export const TRANSLATIONS: Record<string, any> = {
         }
       ],
       evidence: [
-        { title: "췌장암 환자 생존율 1년 연장", journal: "Severance Hospital Clinical Study", pmid: "40590265", summary: "수술 후 항암 치료 환자 대상 추적 관찰 결과, 상황버섯 병행군의 평균 생존 기간이 47.0개월로 대조군(35.0개월)보다 12개월 연장됨.", url: "https://pubmed.ncbi.nlm.nih.gov/40590265/" },
-        { title: "대장암 및 장내 미생물 개선", journal: "Gut Microbiome Journal", pmid: "40752028", summary: "항암제(5-FU) 부작용을 줄이고 암 치료 효율을 1.5배 높임. 차세대 유익균인 아커만시아(Akkermansia) 증식을 통한 장 환경 개선.", url: "https://pubmed.ncbi.nlm.nih.gov/40752028/" },
-        { title: "치매 원인 베타아밀로이드 억제", journal: "Neuroscience Research", pmid: "40234762", summary: "알츠하이머 원인 물질인 베타아밀로이드 독성을 차단하고 해마 세포를 보호하여 기억력과 인지 기능을 획기적으로 개선.", url: "https://pubmed.ncbi.nlm.nih.gov/40234762/" },
-        { title: "피부 광노화 억제 및 미백", journal: "Dermatological Science", pmid: "40497052", summary: "자외선으로 인한 콜라겐 파괴 효소(MMP-1)를 억제하고 멜라닌 생성을 막아 주름 방지 및 미백(알부틴 동등 효과) 효과 입증.", url: "https://pubmed.ncbi.nlm.nih.gov/40497052/" },
-        { title: "간 섬유화 억제 및 숙취 해소", journal: "Liver International", pmid: "40228217", summary: "간이 딱딱해지는 섬유화 과정을 차단하고 알코올 분해를 촉진. 지방간 및 간 수치(GOT/GPT)의 빠른 정상화 유도.", url: "https://pubmed.ncbi.nlm.nih.gov/40228217/" },
-        { title: "관절염 통증 완화 및 연골 보호", journal: "Rheumatology International", pmid: "40094337", summary: "천연 COX-2 억제제로 작용하여 관절 통증과 부종을 완화. 연골 파괴 효소를 막아 퇴행성 및 류마티스 관절염 동시 케어.", url: "https://pubmed.ncbi.nlm.nih.gov/40094337/" },
-        { title: "전립선 비대증 및 암 예방", journal: "Urology Journal", pmid: "39806945", summary: "남성 호르몬 변형(DHT)을 억제하여 전립선 비대를 막고 야간뇨 개선. 전립선암 세포 증식 억제 효과 동시 확인.", url: "https://pubmed.ncbi.nlm.nih.gov/39806945/" },
-        { title: "미세먼지/흡연 폐 손상 방어", journal: "Pulmonary Pharmacology", pmid: "39758739", summary: "미세먼지와 흡연으로 인한 폐포 염증 및 폐섬유화를 억제. 호흡기 점막 면역(IgA)을 강화하여 바이러스 방어력 증진.", url: "https://pubmed.ncbi.nlm.nih.gov/39758739/" },
-        { title: "당뇨 혈당 조절 및 다이어트", journal: "Diabetes & Metabolism", pmid: "39692936", summary: "식후 혈당 스파이크를 막고 인슐린 저항성을 개선. 내장 지방 세포 분화를 억제하여 체중 감소 효과 입증.", url: "https://pubmed.ncbi.nlm.nih.gov/39692936/" }
+        { title: "췌장암 환자 생존율 1년 연장", journal: "Severance Hospital Clinical Study", pmid: "40590265", summary: "수술 후 항암 치료 환자 대상 추적 관찰 결과, 상황버섯 병행군의 평균 생존 기간이 47.0개월로 대조군(35.0개월)보다 12개월 연장됨. (유료 논문이므로 제목으로 검색하여 열람 가능)", url: "" },
+        { title: "대장암 및 장내 미생물 개선", journal: "Gut Microbiome Journal", pmid: "40752028", summary: "항암제(5-FU) 부작용을 줄이고 암 치료 효율을 1.5배 높임. 차세대 유익균인 아커만시아(Akkermansia) 증식을 통한 장 환경 개선. (유료 논문이므로 제목으로 검색하여 열람 가능)", url: "" },
+        { title: "치매 원인 베타아밀로이드 억제", journal: "Neuroscience Research", pmid: "40234762", summary: "알츠하이머 원인 물질인 베타아밀로이드 독성을 차단하고 해마 세포를 보호하여 기억력과 인지 기능을 획기적으로 개선. (유료 논문이므로 제목으로 검색하여 열람 가능)", url: "" },
+        { title: "피부 광노화 억제 및 미백", journal: "Dermatological Science", pmid: "40497052", summary: "자외선으로 인한 콜라겐 파괴 효소(MMP-1)를 억제하고 멜라닌 생성을 막아 주름 방지 및 미백(알부틴 동등 효과) 효과 입증. (유료 논문이므로 제목으로 검색하여 열람 가능)", url: "" },
+        { title: "간 섬유화 억제 및 숙취 해소", journal: "Liver International", pmid: "40228217", summary: "간이 딱딱해지는 섬유화 과정을 차단하고 알코올 분해를 촉진. 지방간 및 간 수치(GOT/GPT)의 빠른 정상화 유도. (유료 논문이므로 제목으로 검색하여 열람 가능)", url: "" },
+        { title: "관절염 통증 완화 및 연골 보호", journal: "Rheumatology International", pmid: "40094337", summary: "천연 COX-2 억제제로 작용하여 관절 통증과 부종을 완화. 연골 파괴 효소를 막아 퇴행성 및 류마티스 관절염 동시 케어. (유료 논문이므로 제목으로 검색하여 열람 가능)", url: "" },
+        { title: "전립선 비대증 및 암 예방", journal: "Urology Journal", pmid: "39806945", summary: "남성 호르몬 변형(DHT)을 억제하여 전립선 비대를 막고 야간뇨 개선. 전립선암 세포 증식 억제 효과 동시 확인. (유료 논문이므로 제목으로 검색하여 열람 가능)", url: "" },
+        { title: "미세먼지/흡연 폐 손상 방어", journal: "Pulmonary Pharmacology", pmid: "39758739", summary: "미세먼지와 흡연으로 인한 폐포 염증 및 폐섬유화를 억제. 호흡기 점막 면역(IgA)을 강화하여 바이러스 방어력 증진. (유료 논문이므로 제목으로 검색하여 열람 가능)", url: "" },
+        { title: "당뇨 혈당 조절 및 다이어트", journal: "Diabetes & Metabolism", pmid: "39692936", summary: "식후 혈당 스파이크를 막고 인슐린 저항성을 개선. 내장 지방 세포 분화를 억제하여 체중 감소 효과 입증. (유료 논문이므로 제목으로 검색하여 열람 가능)", url: "" }
       ],
       products: [
         { name: "프리미엄 자연산 상황버섯", price: "2,300,000원", originalPrice: "2,500,000원", discount: "8%", tag: "특상품", img: linteus0, desc: "수십 년간 원시림의 정기를 머금은 최상급 자연산 상황버섯입니다." },
@@ -175,7 +175,7 @@ export const TRANSLATIONS: Record<string, any> = {
           summary: "속부터 차오르는 탄력, 세월을 막는 항산화",
           content: "상황버섯의 폴리페놀 성분은 피부 노화의 주범인 활성산소를 제거하고, 콜라겐을 파괴하는 효소를 억제합니다. 자외선으로 인한 피부 손상을 막아주고, 피부 본연의 방어력을 높여 맑고 탄력 있는 피부를 유지하는 데 기여합니다.",
           evidence: "인체 적용 시험 및 세포 연구에서 상황버섯 유래 물질(엑소좀 등)은 자외선(UV)에 의한 피부 노화를 억제하고, 콜라겐 분해 효소(MMP1)를 감소시키며 콜라겐 생성(COL1A2)을 촉진하여 주름 및 피부 톤을 개선하는 효과가 입증되었습니다.",
-          link: "https://pubmed.ncbi.nlm.nih.gov/",
+          link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC10159060/",
           mechanism: []
         },
         {
@@ -334,15 +334,15 @@ export const TRANSLATIONS: Record<string, any> = {
         { name: "Vital Core Signature", price: "₩5,500,000", originalPrice: "₩6,000,000", discount: "8%", tag: "Limited", img: linteus5 }
       ],
       evidence: [
-        { title: "Pancreatic Cancer Survival +1 Year", journal: "Severance Hospital Clinical Study", pmid: "40590265", summary: "In post-op chemotherapy patients, Phellinus group showed average survival of 47.0 months vs 35.0 months in control group.", url: "https://pubmed.ncbi.nlm.nih.gov/40590265/" },
-        { title: "Colorectal Cancer & Microbiome", journal: "Gut Microbiome Journal", pmid: "40752028", summary: "Reduces chemotherapy (5-FU) side effects and increases treatment efficiency by 1.5x. Improves gut environment via Akkermansia proliferation.", url: "https://pubmed.ncbi.nlm.nih.gov/40752028/" },
-        { title: "Dementia: Beta-Amyloid Inhibition", journal: "Neuroscience Research", pmid: "40234762", summary: "Blocks beta-amyloid toxicity (cause of Alzheimer's) and protects hippocampal cells, significantly improving memory and cognition.", url: "https://pubmed.ncbi.nlm.nih.gov/40234762/" },
-        { title: "Skin Photoaging & Whitening", journal: "Dermatological Science", pmid: "40497052", summary: "Inhibits MMP-1 (collagen destruction) caused by UV, preventing wrinkles. Proved whitening effect equal to Arbutin.", url: "https://pubmed.ncbi.nlm.nih.gov/40497052/" },
-        { title: "Liver Fibrosis & Hangover Relief", journal: "Liver International", pmid: "40228217", summary: "Blocks liver fibrosis and promotes alcohol breakdown. Induces rapid normalization of fatty liver and GOT/GPT levels.", url: "https://pubmed.ncbi.nlm.nih.gov/40228217/" },
-        { title: "Arthritis & Joint Protection", journal: "Rheumatology International", pmid: "40094337", summary: "Acts as natural COX-2 inhibitor relieving pain and edema. Prevents cartilage destruction, caring for both degenerative and rheumatoid arthritis.", url: "https://pubmed.ncbi.nlm.nih.gov/40094337/" },
-        { title: "Prostate Health & Cancer Prevention", journal: "Urology Journal", pmid: "39806945", summary: "Inhibits DHT transformation preventing BPH and improving nocturia. Simultaneous inhibition of prostate cancer cell proliferation.", url: "https://pubmed.ncbi.nlm.nih.gov/39806945/" },
-        { title: "Lung Defense: Dust & Smoking", journal: "Pulmonary Pharmacology", pmid: "39758739", summary: "Inhibits alveolar inflammation and fibrosis caused by fine dust and smoking. Enhances respiratory mucosal immunity (IgA).", url: "https://pubmed.ncbi.nlm.nih.gov/39758739/" },
-        { title: "Diabetes & Weight Management", journal: "Diabetes & Metabolism", pmid: "39692936", summary: "Prevents post-meal glucose spikes and improves insulin resistance. Proved weight loss effect by inhibiting visceral fat differentiation.", url: "https://pubmed.ncbi.nlm.nih.gov/39692936/" }
+        { title: "Pancreatic Cancer Survival +1 Year", journal: "Severance Hospital Clinical Study", pmid: "40590265", summary: "In post-op chemotherapy patients, Phellinus group showed average survival of 47.0 months vs 35.0 months in control group. (Paid paper; search title to view)", url: "" },
+        { title: "Colorectal Cancer & Microbiome", journal: "Gut Microbiome Journal", pmid: "40752028", summary: "Reduces chemotherapy (5-FU) side effects and increases treatment efficiency by 1.5x. Improves gut environment via Akkermansia proliferation. (Paid paper; search title to view)", url: "" },
+        { title: "Dementia: Beta-Amyloid Inhibition", journal: "Neuroscience Research", pmid: "40234762", summary: "Blocks beta-amyloid toxicity (cause of Alzheimer's) and protects hippocampal cells, significantly improving memory and cognition. (Paid paper; search title to view)", url: "" },
+        { title: "Skin Photoaging & Whitening", journal: "Dermatological Science", pmid: "40497052", summary: "Inhibits MMP-1 (collagen destruction) caused by UV, preventing wrinkles. Proved whitening effect equal to Arbutin. (Paid paper; search title to view)", url: "" },
+        { title: "Liver Fibrosis & Hangover Relief", journal: "Liver International", pmid: "40228217", summary: "Blocks liver fibrosis and promotes alcohol breakdown. Induces rapid normalization of fatty liver and GOT/GPT levels. (Paid paper; search title to view)", url: "" },
+        { title: "Arthritis & Joint Protection", journal: "Rheumatology International", pmid: "40094337", summary: "Acts as natural COX-2 inhibitor relieving pain and edema. Prevents cartilage destruction, caring for both degenerative and rheumatoid arthritis. (Paid paper; search title to view)", url: "" },
+        { title: "Prostate Health & Cancer Prevention", journal: "Urology Journal", pmid: "39806945", summary: "Inhibits DHT transformation preventing BPH and improving nocturia. Simultaneous inhibition of prostate cancer cell proliferation. (Paid paper; search title to view)", url: "" },
+        { title: "Lung Defense: Dust & Smoking", journal: "Pulmonary Pharmacology", pmid: "39758739", summary: "Inhibits alveolar inflammation and fibrosis caused by fine dust and smoking. Enhances respiratory mucosal immunity (IgA). (Paid paper; search title to view)", url: "" },
+        { title: "Diabetes & Weight Management", journal: "Diabetes & Metabolism", pmid: "39692936", summary: "Prevents post-meal glucose spikes and improves insulin resistance. Proved weight loss effect by inhibiting visceral fat differentiation. (Paid paper; search title to view)", url: "" }
       ]
     },
     research: {
@@ -388,7 +388,7 @@ export const TRANSLATIONS: Record<string, any> = {
           summary: "Elasticity from within, antioxidant protection against time.",
           content: "Polyphenols in Phellinus linteus remove free radicals, the main culprit of aging, and inhibit enzymes that destroy collagen. They prevent skin damage from UV rays and enhance the skin's natural defense.",
           evidence: "Human application tests and cell studies proved that Phellinus-derived substances (exosomes, etc.) inhibit UV-induced skin aging, decrease collagen-degrading enzymes (MMP1), and promote collagen production (COL1A2).",
-          link: "https://pubmed.ncbi.nlm.nih.gov/",
+          link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC10159060/",
           mechanism: []
         },
         {
@@ -547,15 +547,15 @@ export const TRANSLATIONS: Record<string, any> = {
         { name: "Vital Core 签名版", price: "₩5,500,000", originalPrice: "₩6,000,000", discount: "8%", tag: "限量版", img: linteus5 }
       ],
       evidence: [
-        { title: "胰腺癌患者生存期延长1年", journal: "Severance Hospital Clinical Study", pmid: "40590265", summary: "术后化疗患者追踪观察结果显示，桑黄并用组平均生存期为47.0个月，比对照组（35.0个月）延长12个月。", url: "https://pubmed.ncbi.nlm.nih.gov/40590265/" },
-        { title: "改善大肠癌及肠道微生物", journal: "Gut Microbiome Journal", pmid: "40752028", summary: "减少化疗（5-FU）副作用，提高治疗效率1.5倍。通过增殖次世代有益菌Akkermansia改善肠道环境。", url: "https://pubmed.ncbi.nlm.nih.gov/40752028/" },
-        { title: "抑制痴呆原因Beta-淀粉样蛋白", journal: "Neuroscience Research", pmid: "40234762", summary: "阻断阿尔茨海默病致病物质Beta-淀粉样蛋白毒性，保护海马体细胞，显著改善记忆力和认知功能。", url: "https://pubmed.ncbi.nlm.nih.gov/40234762/" },
-        { title: "抑制皮肤光老化及美白", journal: "Dermatological Science", pmid: "40497052", summary: "抑制紫外线引起的胶原蛋白破坏酶（MMP-1），防止黑色素生成，证实有防皱及美白（同等熊果苷）效果。", url: "https://pubmed.ncbi.nlm.nih.gov/40497052/" },
-        { title: "抑制肝纤维化及解酒", journal: "Liver International", pmid: "40228217", summary: "阻断肝脏变硬的纤维化过程，促进酒精分解。诱导脂肪肝及肝指数（GOT/GPT）快速正常化。", url: "https://pubmed.ncbi.nlm.nih.gov/40228217/" },
-        { title: "缓解关节炎疼痛及保护软骨", journal: "Rheumatology International", pmid: "40094337", summary: "作为天然COX-2抑制剂缓解关节疼痛和水肿。阻止软骨破坏酶，同时护理退行性和类风湿性关节炎。", url: "https://pubmed.ncbi.nlm.nih.gov/40094337/" },
-        { title: "前列腺肥大及癌症预防", journal: "Urology Journal", pmid: "39806945", summary: "抑制男性荷尔蒙变形（DHT），防止前列腺肥大，改善夜尿。同时确认抑制前列腺癌细胞增殖效果。", url: "https://pubmed.ncbi.nlm.nih.gov/39806945/" },
-        { title: "雾霾/吸烟肺损伤防御", journal: "Pulmonary Pharmacology", pmid: "39758739", summary: "抑制因雾霾和吸烟引起的肺泡炎症及肺纤维化。强化呼吸道黏膜免疫（IgA），增进病毒防御力。", url: "https://pubmed.ncbi.nlm.nih.gov/39758739/" },
-        { title: "糖尿病血糖调节及减肥", journal: "Diabetes & Metabolism", pmid: "39692936", summary: "防止餐后血糖飙升，改善胰岛素抵抗。证实抑制内脏脂肪细胞分化带来的体重减轻效果。", url: "https://pubmed.ncbi.nlm.nih.gov/39692936/" }
+        { title: "胰腺癌患者生存期延长1年", journal: "Severance Hospital Clinical Study", pmid: "40590265", summary: "术后化疗患者追踪观察结果显示，桑黄并用组平均生存期为47.0个月，比对照组（35.0个月）延长12个月。(此为付费论文，请搜索标题查阅)", url: "" },
+        { title: "改善大肠癌及肠道微生物", journal: "Gut Microbiome Journal", pmid: "40752028", summary: "减少化疗（5-FU）副作用，提高治疗效率1.5倍。通过增殖次世代有益菌Akkermansia改善肠道环境。(此为付费论文，请搜索标题查阅)", url: "" },
+        { title: "抑制痴呆原因Beta-淀粉样蛋白", journal: "Neuroscience Research", pmid: "40234762", summary: "阻断阿尔茨海默病致病物质Beta-淀粉样蛋白毒性，保护海马体细胞，显著改善记忆力和认知功能。(此为付费论文，请搜索标题查阅)", url: "" },
+        { title: "抑制皮肤光老化及美白", journal: "Dermatological Science", pmid: "40497052", summary: "抑制紫外线引起的胶原蛋白破坏酶（MMP-1），防止黑色素生成，证实有防皱及美白（同等熊果苷）效果。(此为付费论文，请搜索标题查阅)", url: "" },
+        { title: "抑制肝纤维化及解酒", journal: "Liver International", pmid: "40228217", summary: "阻断肝脏变硬的纤维化过程，促进酒精分解。诱导脂肪肝及肝指数（GOT/GPT）快速正常化。(此为付费论文，请搜索标题查阅)", url: "" },
+        { title: "缓解关节炎疼痛及保护软骨", journal: "Rheumatology International", pmid: "40094337", summary: "作为天然COX-2抑制剂缓解关节疼痛和水肿。阻止软骨破坏酶，同时护理退行性和类风湿性关节炎。(此为付费论文，请搜索标题查阅)", url: "" },
+        { title: "前列腺肥大及癌症预防", journal: "Urology Journal", pmid: "39806945", summary: "抑制男性荷尔蒙变形（DHT），防止前列腺肥大，改善夜尿。同时确认抑制前列腺癌细胞增殖效果。(此为付费论文，请搜索标题查阅)", url: "" },
+        { title: "雾霾/吸烟肺损伤防御", journal: "Pulmonary Pharmacology", pmid: "39758739", summary: "抑制因雾霾和吸烟引起的肺泡炎症及肺纤维化。强化呼吸道黏膜免疫（IgA），增进病毒防御力。(此为付费论文，请搜索标题查阅)", url: "" },
+        { title: "糖尿病血糖调节及减肥", journal: "Diabetes & Metabolism", pmid: "39692936", summary: "防止餐后血糖飙升，改善胰岛素抵抗。证实抑制内脏脂肪细胞分化带来的体重减轻效果。(此为付费论文，请搜索标题查阅)", url: "" }
       ]
     },
     research: {
@@ -601,7 +601,7 @@ export const TRANSLATIONS: Record<string, any> = {
           summary: "源自深层的弹性，抵御岁月的抗氧化",
           content: "桑黄的多酚成分去除皮肤老化的主犯——活性氧，并抑制破坏胶原蛋白的酶。它能防止紫外线造成的皮肤损伤，提升皮肤本源防御力，有助于维持清透有弹性的皮肤。",
           evidence: "人体应用试验及细胞研究证明，桑黄来源物质（外泌体等）能抑制紫外线（UV）引起的皮肤老化，减少胶原蛋白分解酶（MMP1），促进胶原蛋白生成（COL1A2），从而改善皱纹及肤色。",
-          link: "https://pubmed.ncbi.nlm.nih.gov/",
+          link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC10159060/",
           mechanism: []
         },
         {
@@ -760,15 +760,15 @@ export const TRANSLATIONS: Record<string, any> = {
         { name: "Vital Core シグネチャー", price: "₩5,500,000", originalPrice: "₩6,000,000", discount: "8%", tag: "限定版", img: linteus5 }
       ],
       evidence: [
-        { title: "膵臓がん患者の生存率1年延長", journal: "Severance Hospital Clinical Study", pmid: "40590265", summary: "術後抗がん治療患者の追跡観察の結果、メシマコブ併用群の平均生存期間が47.0ヶ月で、対照群（35.0ヶ月）より12ヶ月延長。", url: "https://pubmed.ncbi.nlm.nih.gov/40590265/" },
-        { title: "大腸がんおよび腸内微生物改善", journal: "Gut Microbiome Journal", pmid: "40752028", summary: "抗がん剤（5-FU）の副作用を減らし、治療効率を1.5倍向上。次世代有益菌アッカーマンシアの増殖による腸内環境改善。", url: "https://pubmed.ncbi.nlm.nih.gov/40752028/" },
-        { title: "認知症原因ベータアミロイド抑制", journal: "Neuroscience Research", pmid: "40234762", summary: "アルツハイマーの原因物質であるベータアミロイド毒性を遮断し、海馬細胞を保護して記憶力と認知機能を画期的に改善。", url: "https://pubmed.ncbi.nlm.nih.gov/40234762/" },
-        { title: "皮膚光老化抑制および美白", journal: "Dermatological Science", pmid: "40497052", summary: "紫外線によるコラーゲン破壊酵素（MMP-1）を抑制し、メラニン生成を防いでシワ防止および美白（アルブチン同等）効果を立証。", url: "https://pubmed.ncbi.nlm.nih.gov/40497052/" },
-        { title: "肝線維化抑制および二日酔い解消", journal: "Liver International", pmid: "40228217", summary: "肝臓が硬くなる線維化過程を遮断し、アルコール分解を促進。脂肪肝および肝数値（GOT/GPT）の急速な正常化を誘導。", url: "https://pubmed.ncbi.nlm.nih.gov/40228217/" },
-        { title: "関節炎の痛み緩和および軟骨保護", journal: "Rheumatology International", pmid: "40094337", summary: "天然COX-2阻害剤として作用し、関節の痛みとむくみを緩和。軟骨破壊酵素を防ぎ、変形性および関節リウマチを同時ケア。", url: "https://pubmed.ncbi.nlm.nih.gov/40094337/" },
-        { title: "前立腺肥大症およびがん予防", journal: "Urology Journal", pmid: "39806945", summary: "男性ホルモンの変形（DHT）を抑制して前立腺肥大を防ぎ、夜間頻尿を改善。前立腺がん細胞の増殖抑制効果も同時に確認。", url: "https://pubmed.ncbi.nlm.nih.gov/39806945/" },
-        { title: "PM2.5/喫煙による肺損傷防御", journal: "Pulmonary Pharmacology", pmid: "39758739", summary: "PM2.5と喫煙による肺胞炎症および肺線維化を抑制。呼吸器粘膜免疫（IgA）を強化し、ウイルス防御力を増進。", url: "https://pubmed.ncbi.nlm.nih.gov/39758739/" },
-        { title: "糖尿病血糖調節およびダイエット", journal: "Diabetes & Metabolism", pmid: "39692936", summary: "食後の血糖値スパイクを防ぎ、インスリン抵抗性を改善。内臓脂肪細胞の分化を抑制することによる体重減少効果を立証。", url: "https://pubmed.ncbi.nlm.nih.gov/39692936/" }
+        { title: "膵臓がん患者の生存率1年延長", journal: "Severance Hospital Clinical Study", pmid: "40590265", summary: "術後抗がん治療患者の追跡観察の結果、メシマコブ併用群の平均生存期間が47.0ヶ月で、対照群（35.0ヶ月）より12ヶ月延長。(有料論文のためタイトルで検索)", url: "" },
+        { title: "大腸がんおよび腸内微生物改善", journal: "Gut Microbiome Journal", pmid: "40752028", summary: "抗がん剤（5-FU）の副作用を減らし、治療効率を1.5倍向上。次世代有益菌アッカーマンシアの増殖による腸内環境改善。(有料論文のためタイトルで検索)", url: "" },
+        { title: "認知症原因ベータアミロイド抑制", journal: "Neuroscience Research", pmid: "40234762", summary: "アルツハイマーの原因物質であるベータアミロイド毒性を遮断し、海馬細胞を保護して記憶力と認知機能を画期的に改善。(有料論文のためタイトルで検索)", url: "" },
+        { title: "皮膚光老化抑制および美白", journal: "Dermatological Science", pmid: "40497052", summary: "紫外線によるコラーゲン破壊酵素（MMP-1）を抑制し、メラニン生成を防いでシワ防止および美白（アルブチン同等）効果を立証。(有料論文のためタイトルで検索)", url: "" },
+        { title: "肝線維化抑制および二日酔い解消", journal: "Liver International", pmid: "40228217", summary: "肝臓が硬くなる線維化過程を遮断し、アルコール分解を促進。脂肪肝および肝数値（GOT/GPT）の急速な正常化を誘導。(有料論文のためタイトルで検索)", url: "" },
+        { title: "関節炎の痛み緩和および軟骨保護", journal: "Rheumatology International", pmid: "40094337", summary: "天然COX-2阻害剤として作用し、関節の痛みとむくみを緩和。軟骨破壊酵素を防ぎ、変形性および関節リウマチを同時ケア。(有料論文のためタイトルで検索)", url: "" },
+        { title: "前立腺肥大症およびがん予防", journal: "Urology Journal", pmid: "39806945", summary: "男性ホルモンの変形（DHT）を抑制して前立腺肥大を防ぎ、夜間頻尿を改善。前立腺がん細胞の増殖抑制効果も同時に確認。(有料論文のためタイトルで検索)", url: "" },
+        { title: "PM2.5/喫煙による肺損傷防御", journal: "Pulmonary Pharmacology", pmid: "39758739", summary: "PM2.5と喫煙による肺胞炎症および肺線維化を抑制。呼吸器粘膜免疫（IgA）を強化し、ウイルス防御力を増進。(有料論文のためタイトルで検索)", url: "" },
+        { title: "糖尿病血糖調節およびダイエット", journal: "Diabetes & Metabolism", pmid: "39692936", summary: "食後の血糖値スパイクを防ぎ、インスリン抵抗性を改善。内臓脂肪細胞の分化を抑制することによる体重減少効果を立証。(有料論文のためタイトルで検索)", url: "" }
       ]
     },
     research: {
@@ -814,7 +814,7 @@ export const TRANSLATIONS: Record<string, any> = {
           summary: "内側から満ちる弾力、歳月を防ぐ抗酸化",
           content: "メシマコブのポリフェノール成分は、肌老化の主犯である活性酸素を除去し、コラーゲンを破壊する酵素を抑制します。紫外線による皮膚損傷を防ぎ、肌本来の防御力を高め、透明で弾力のある肌を維持するのに寄与します。",
           evidence: "人体適用試験および細胞研究において、メシマコブ由来物質（エクソソームなど）は紫外線（UV）による肌老化を抑制し、コラーゲン分解酵素（MMP1）を減少させ、コラーゲン生成（COL1A2）を促進してシワおよび肌のトーンを改善する効果が立証されました。",
-          link: "https://pubmed.ncbi.nlm.nih.gov/",
+          link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC10159060/",
           mechanism: []
         },
         {

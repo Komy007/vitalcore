@@ -920,9 +920,11 @@ const App: React.FC = () => {
                           <p className="text-sm text-stone-400 font-light leading-relaxed mb-6 flex-grow">{paper.summary}</p>
                           <div className="flex justify-between items-center pt-4 border-t border-white/5">
                             <span className="text-[10px] text-stone-600 font-mono">PMID: {paper.pmid}</span>
-                            <a href={paper.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs font-bold text-stone-400 hover:text-white uppercase tracking-widest transition-colors">
-                              View <ExternalLink size={12} />
-                            </a>
+                            {paper.url && (
+                              <a href={paper.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs font-bold text-stone-400 hover:text-white uppercase tracking-widest transition-colors">
+                                View <ExternalLink size={12} />
+                              </a>
+                            )}
                           </div>
                         </div>
                       ))}
@@ -1035,9 +1037,11 @@ const App: React.FC = () => {
                           <span className="text-[10px] text-amber-500 font-bold uppercase tracking-wider">{t.research.papers[activeTab]?.journal}</span>
                           <span className="text-[10px] text-stone-500 font-mono">Impact: {t.research.papers[activeTab]?.impact}</span>
                         </div>
-                        <a href={t.research.papers[activeTab]?.url} target="_blank" rel="noopener noreferrer" className="w-full py-4 bg-amber-600 hover:bg-amber-500 rounded-xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 text-white">
-                          {t.common.view_paper} <ExternalLink size={14} />
-                        </a>
+                        {t.research.papers[activeTab]?.url && (
+                          <a href={t.research.papers[activeTab]?.url} target="_blank" rel="noopener noreferrer" className="w-full py-4 bg-amber-600 hover:bg-amber-500 rounded-xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 text-white">
+                            {t.common.view_paper} <ExternalLink size={14} />
+                          </a>
+                        )}
                       </div>
                       {/* Simplified Chart Message */}
                       <p className="text-xs text-stone-500 text-center">Detailed charts are available on the desktop version.</p>
@@ -1072,14 +1076,16 @@ const App: React.FC = () => {
                     <span className="text-[10px] text-amber-500 font-bold uppercase tracking-wider">{t.research.papers[activeTab]?.journal}</span>
                     <span className="text-[10px] text-stone-500 font-mono">Impact: {t.research.papers[activeTab]?.impact}</span>
                   </div>
-                  <a href={t.research.papers[activeTab]?.url} target="_blank" rel="noopener noreferrer" className="w-full py-5 bg-amber-600 hover:bg-amber-500 rounded-3xl font-black text-xs uppercase tracking-widest flex flex-col items-center justify-center gap-1 transition-all shadow-xl text-center mt-4 group">
-                    <span className="flex items-center gap-2">
-                      {t.common.view_paper} <ExternalLink size={14} />
-                    </span>
-                    <span className="font-serif text-[10px] capitalize opacity-70 group-hover:opacity-100 font-medium tracking-wide border-t border-white/20 pt-1 mt-1 w-2/3 mx-auto">
-                      {t.research.papers[activeTab]?.journal}
-                    </span>
-                  </a>
+                  {t.research.papers[activeTab]?.url && (
+                    <a href={t.research.papers[activeTab]?.url} target="_blank" rel="noopener noreferrer" className="w-full py-5 bg-amber-600 hover:bg-amber-500 rounded-3xl font-black text-xs uppercase tracking-widest flex flex-col items-center justify-center gap-1 transition-all shadow-xl text-center mt-4 group">
+                      <span className="flex items-center gap-2">
+                        {t.common.view_paper} <ExternalLink size={14} />
+                      </span>
+                      <span className="font-serif text-[10px] capitalize opacity-70 group-hover:opacity-100 font-medium tracking-wide border-t border-white/20 pt-1 mt-1 w-2/3 mx-auto">
+                        {t.research.papers[activeTab]?.journal}
+                      </span>
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
@@ -1131,9 +1137,11 @@ const App: React.FC = () => {
                     <div className="p-6 bg-amber-900/20 rounded-2xl border border-amber-500/30">
                       <h4 className="text-amber-500 font-black text-xs uppercase tracking-[0.2em] mb-4 flex items-center gap-2"><BookOpen size={16} /> Key Evidence</h4>
                       <p className="text-stone-100 text-sm font-medium leading-relaxed mb-6">"{t.benefits.details[benefitActiveTab].evidence}"</p>
-                      <a href={t.benefits.details[benefitActiveTab].link} target="_blank" rel="noopener noreferrer" className="block w-full text-center py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-xs uppercase tracking-widest">
-                        View Study <ExternalLink size={12} className="inline ml-1" />
-                      </a>
+                      {t.benefits.details[benefitActiveTab].link && (
+                        <a href={t.benefits.details[benefitActiveTab].link} target="_blank" rel="noopener noreferrer" className="block w-full text-center py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-xs uppercase tracking-widest">
+                          View Study <ExternalLink size={12} className="inline ml-1" />
+                        </a>
+                      )}
                     </div>
                     <div className="pt-6 border-t border-white/10">
                       <button onClick={() => setIsBenefitModalOpen(false)} className="w-full py-4 bg-stone-800 text-white font-bold rounded-xl uppercase tracking-widest hover:bg-stone-700">Close</button>
@@ -1160,14 +1168,16 @@ const App: React.FC = () => {
                         <p className="text-stone-100 text-sm md:text-base font-medium leading-relaxed mb-8 relative z-10">
                           "{t.benefits.details[benefitActiveTab].evidence}"
                         </p>
-                        <a
-                          href={t.benefits.details[benefitActiveTab].link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-2xl text-xs uppercase tracking-widest transition-all shadow-lg group-hover:scale-105"
-                        >
-                          View Original Study <ExternalLink size={14} />
-                        </a>
+                        {t.benefits.details[benefitActiveTab].link && (
+                          <a
+                            href={t.benefits.details[benefitActiveTab].link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-2xl text-xs uppercase tracking-widest transition-all shadow-lg group-hover:scale-105"
+                          >
+                            View Original Study <ExternalLink size={14} />
+                          </a>
+                        )}
                       </div>
                     </div>
                   </div>
