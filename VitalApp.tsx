@@ -1255,9 +1255,11 @@ const App: React.FC = () => {
                           </p>
                         </div>
 
-                        <a href={study.link} target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex items-center gap-2 text-amber-500 text-xs font-bold uppercase tracking-widest hover:text-amber-400 transition-colors">
-                          View Paper <ExternalLink size={12} />
-                        </a>
+                        {study.link && (
+                          <a href={study.link} target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex items-center gap-2 text-amber-500 text-xs font-bold uppercase tracking-widest hover:text-amber-400 transition-colors">
+                            {t.common.view_paper || "View Paper"} <ExternalLink size={12} />
+                          </a>
+                        )}
                       </div>
                     ))}
                   </div>
