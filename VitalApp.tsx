@@ -922,7 +922,10 @@ const App: React.FC = () => {
                             <span className="text-[10px] text-stone-600 font-mono">PMID: {paper.pmid}</span>
                             {paper.url && (
                               <a href={paper.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs font-bold text-stone-400 hover:text-white uppercase tracking-widest transition-colors">
-                                View <ExternalLink size={12} />
+                                {paper.url.includes('scholar.google.com')
+                                  ? (lang === 'ko' ? "논문 검색" : lang === 'zh' ? "搜索论文" : lang === 'ja' ? "論文検索" : "Search")
+                                  : "View"}
+                                {paper.url.includes('scholar.google.com') ? <Search size={12} /> : <ExternalLink size={12} />}
                               </a>
                             )}
                           </div>
@@ -1039,7 +1042,10 @@ const App: React.FC = () => {
                         </div>
                         {t.research.papers[activeTab]?.url && (
                           <a href={t.research.papers[activeTab]?.url} target="_blank" rel="noopener noreferrer" className="w-full py-4 bg-amber-600 hover:bg-amber-500 rounded-xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 text-white">
-                            {t.common.view_paper} <ExternalLink size={14} />
+                            {t.research.papers[activeTab]?.url.includes('scholar.google.com')
+                              ? (lang === 'ko' ? "논문 검색" : lang === 'zh' ? "搜索论文" : lang === 'ja' ? "論文検索" : "Search Paper")
+                              : (t.common.view_paper || "View Paper")}
+                            {t.research.papers[activeTab]?.url.includes('scholar.google.com') ? <Search size={14} /> : <ExternalLink size={14} />}
                           </a>
                         )}
                       </div>
@@ -1079,7 +1085,10 @@ const App: React.FC = () => {
                   {t.research.papers[activeTab]?.url && (
                     <a href={t.research.papers[activeTab]?.url} target="_blank" rel="noopener noreferrer" className="w-full py-5 bg-amber-600 hover:bg-amber-500 rounded-3xl font-black text-xs uppercase tracking-widest flex flex-col items-center justify-center gap-1 transition-all shadow-xl text-center mt-4 group">
                       <span className="flex items-center gap-2">
-                        {t.common.view_paper} <ExternalLink size={14} />
+                        {t.research.papers[activeTab]?.url.includes('scholar.google.com')
+                          ? (lang === 'ko' ? "논문 검색" : lang === 'zh' ? "搜索论文" : lang === 'ja' ? "論文検索" : "Search Paper")
+                          : (t.common.view_paper || "View Paper")}
+                        {t.research.papers[activeTab]?.url.includes('scholar.google.com') ? <Search size={14} /> : <ExternalLink size={14} />}
                       </span>
                       <span className="font-serif text-[10px] capitalize opacity-70 group-hover:opacity-100 font-medium tracking-wide border-t border-white/20 pt-1 mt-1 w-2/3 mx-auto">
                         {t.research.papers[activeTab]?.journal}
@@ -1175,7 +1184,10 @@ const App: React.FC = () => {
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-2xl text-xs uppercase tracking-widest transition-all shadow-lg group-hover:scale-105"
                           >
-                            View Original Study <ExternalLink size={14} />
+                            {t.benefits.details[benefitActiveTab].link.includes('scholar.google.com')
+                              ? (lang === 'ko' ? "논문 검색" : lang === 'zh' ? "搜索论文" : lang === 'ja' ? "論文検索" : "Search Paper")
+                              : "View Original Study"}
+                            {t.benefits.details[benefitActiveTab].link.includes('scholar.google.com') ? <Search size={14} /> : <ExternalLink size={14} />}
                           </a>
                         )}
                       </div>
@@ -1252,7 +1264,12 @@ const App: React.FC = () => {
                             Scientific Evidence {i + 1}
                           </span>
                           <h4 className="text-white font-bold text-lg leading-tight mb-2 group-hover:text-amber-400 transition-colors">{study.title}</h4>
-                          <p className="text-stone-500 text-xs font-medium uppercase tracking-wider">{study.subtitle}</p>
+                          <p className="text-stone-500 text-xs font-medium uppercase tracking-wider">
+                            {study.subtitle}
+                            <span className="ml-2 text-amber-500/60 text-[10px] uppercase font-bold tracking-widest">
+                              {lang === 'ko' ? "(논문명)" : lang === 'zh' ? "(论文标题)" : lang === 'ja' ? "(論文名)" : "(Paper Title)"}
+                            </span>
+                          </p>
                         </div>
 
                         <div className="flex-grow space-y-4">
@@ -1267,7 +1284,10 @@ const App: React.FC = () => {
 
                         {study.link && (
                           <a href={study.link} target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex items-center gap-2 text-amber-500 text-xs font-bold uppercase tracking-widest hover:text-amber-400 transition-colors">
-                            {t.common.view_paper || "View Paper"} <ExternalLink size={12} />
+                            {study.link.includes('scholar.google.com')
+                              ? (lang === 'ko' ? "논문 검색" : lang === 'zh' ? "搜索论文" : lang === 'ja' ? "論文検索" : "Search Paper")
+                              : (t.common.view_paper || "View Paper")}
+                            {study.link.includes('scholar.google.com') ? <Search size={12} /> : <ExternalLink size={12} />}
                           </a>
                         )}
                       </div>
@@ -2222,12 +2242,29 @@ const App: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Full Content ({reportLang.toUpperCase()})</label>
-                  <textarea
-                    className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 h-64 font-mono leading-relaxed"
-                    placeholder="# Header\n\nBody text..."
-                    value={newReport[reportLang === 'ko' ? 'content' : `content_${reportLang}`] || ''}
-                    onChange={e => setNewReport({ ...newReport, [reportLang === 'ko' ? 'content' : `content_${reportLang}`]: e.target.value })}
-                  />
+                  <div className="h-96 mb-12">
+                    <ReactQuill
+                      theme="snow"
+                      value={newReport[reportLang === 'ko' ? 'content' : `content_${reportLang}`] || ''}
+                      onChange={(value) => setNewReport({ ...newReport, [reportLang === 'ko' ? 'content' : `content_${reportLang}`]: value })}
+                      modules={{
+                        toolbar: [
+                          [{ 'header': [1, 2, 3, false] }],
+                          ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                          [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                          ['link', 'image'],
+                          ['clean'],
+                          [{ 'color': [] }, { 'background': [] }],
+                          [{ 'align': [] }],
+                        ],
+                        imageResize: {
+                          parchment: Quill.import('parchment'),
+                          modules: ['Resize', 'DisplaySize']
+                        }
+                      }}
+                      className="bg-stone-800 rounded-xl text-white border border-white/5 h-full quill-editor"
+                    />
+                  </div>
                 </div>
               </div>
               <div className="p-6 border-t border-white/5 bg-stone-900 rounded-b-3xl flex justify-end gap-4">
