@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LucideIcon, Menu, X, ChevronRight, Check, Play, Award, Microscope, Leaf, Shield, Heart, Zap, Brain, Activity, ArrowRight, ArrowLeft, Star, Quote, Search, Globe, User, LogOut, ChevronDown, Lock, Mail, Phone, MapPin, Send, LayoutTemplate, Megaphone, Plus, Edit, Trash2, Save, Image as ImageIcon, MessageCircle, Sparkles, AlertTriangle, Droplet, ShoppingBag, Eye, BookOpen, ExternalLink, Info, FlaskConical, GraduationCap, Coffee, Flame, ShieldCheck, CheckCircle2, FileText, Loader2, Languages } from 'lucide-react';
+import { LucideIcon, Menu, X, ChevronRight, Check, Play, Award, Microscope, Leaf, Shield, Heart, Zap, Brain, Activity, ArrowRight, ArrowLeft, Star, Quote, Search, Globe, User, LogOut, ChevronDown, Lock, Mail, Phone, MapPin, Send, LayoutTemplate, Megaphone, Plus, Edit, Trash2, Save, Image as ImageIcon, MessageCircle, Sparkles, AlertTriangle, Droplet, ShoppingBag, Eye, BookOpen, ExternalLink, Info, FlaskConical, GraduationCap, Coffee, Flame, ShieldCheck, CheckCircle2, FileText, Loader2, Languages, Maximize2, Minimize2 } from 'lucide-react';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ImageResize from 'quill-image-resize-module-react';
@@ -39,6 +39,7 @@ const App: React.FC = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup' | 'forgot'>('login');
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
+  const [isEditorFullScreen, setIsEditorFullScreen] = useState(false);
 
   // Password Management State
   const [isChangePwModalOpen, setIsChangePwModalOpen] = useState(false);
@@ -2241,8 +2242,28 @@ const App: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Full Content ({reportLang.toUpperCase()})</label>
-                  <div className="h-96 mb-12">
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="block text-stone-500 text-xs font-bold uppercase">Full Content ({reportLang.toUpperCase()})</label>
+                    <button
+                      onClick={() => setIsEditorFullScreen(!isEditorFullScreen)}
+                      className="flex items-center gap-2 text-stone-400 hover:text-amber-500 text-xs font-bold uppercase transition-colors"
+                    >
+                      {isEditorFullScreen ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
+                      {isEditorFullScreen ? "Minimize" : "Full Screen"}
+                    </button>
+                  </div>
+                  <div className={isEditorFullScreen ? "fixed inset-0 z-[100] bg-stone-900 p-6 flex flex-col animate-in zoom-in-95 duration-200" : "h-96 mb-12"}>
+                    {isEditorFullScreen && (
+                      <div className="flex justify-between items-center mb-4 shrink-0">
+                        <h3 className="text-white font-bold text-lg">Editing Mode</h3>
+                        <button
+                          onClick={() => setIsEditorFullScreen(false)}
+                          className="px-4 py-2 bg-stone-800 hover:bg-stone-700 text-white rounded-lg text-xs font-bold uppercase flex items-center gap-2"
+                        >
+                          <Minimize2 size={14} /> Exit Full Screen
+                        </button>
+                      </div>
+                    )}
                     <ReactQuill
                       theme="snow"
                       value={newReport[reportLang === 'ko' ? 'content' : `content_${reportLang}`] || ''}
