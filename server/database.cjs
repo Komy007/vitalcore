@@ -78,6 +78,9 @@ try {
       key_point TEXT,
       image_url TEXT,
       views INTEGER DEFAULT 0,
+      title_en TEXT, content_en TEXT, summary_en TEXT, key_point_en TEXT,
+      title_zh TEXT, content_zh TEXT, summary_zh TEXT, key_point_zh TEXT,
+      title_ja TEXT, content_ja TEXT, summary_ja TEXT, key_point_ja TEXT,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
 
@@ -101,9 +104,28 @@ try {
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (user_id) REFERENCES users (id)
     );
+    
+    -- (Migration block removed)
 
   `);
   console.log('[Database] Schema initialized.');
+
+  // --- Migrations (Run Once) ---
+  try {
+    const columns = [
+      'title_en', 'content_en', 'summary_en', 'key_point_en',
+      'title_zh', 'content_zh', 'summary_zh', 'key_point_zh',
+      'title_ja', 'content_ja', 'summary_ja', 'key_point_ja'
+    ];
+    columns.forEach(col => {
+      try {
+        db.prepare(`ALTER TABLE health_reports ADD COLUMN ${col} TEXT`).run();
+        console.log(`[Database] Migrated health_reports: Added column ${col}`);
+      } catch (e) {
+        // Ignore "duplicate column name" error
+      }
+    });
+  } catch (e) { console.error('[Database] Migration Error:', e); }
 
   // --- Migrations (Outside SQL String) ---
   try { db.exec("ALTER TABLE password_resets ADD COLUMN token TEXT;"); } catch (e) { }
