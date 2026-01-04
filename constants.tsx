@@ -326,12 +326,12 @@ export const TRANSLATIONS: Record<string, any> = {
         }
       ],
       products: [
-        { name: "Wild Phellinus 374g", price: "₩1,900,000", originalPrice: "₩2,300,000", discount: "17%", tag: "Wild, Dried", img: linteus0 },
-        { name: "Wild Phellinus 926g", price: "₩4,700,000", originalPrice: "₩5,000,000", discount: "6%", tag: "Wild, Dried", img: linteus1 },
-        { name: "Wild Phellinus 980g", price: "₩4,300,000", originalPrice: "₩5,000,000", discount: "14%", tag: "Whole Dried", img: linteus2 },
-        { name: "Phellinus Gift Set", price: "₩1,200,000", originalPrice: "₩1,400,000", discount: "14%", tag: "Gift Set", img: linteus3 },
-        { name: "Phellinus Powder", price: "₩450,000", originalPrice: "₩500,000", discount: "10%", tag: "Powder", img: linteus4 },
-        { name: "Vital Core Signature", price: "₩5,500,000", originalPrice: "₩6,000,000", discount: "8%", tag: "Limited", img: linteus5 }
+        { name: "Wild Phellinus 374g", price: "₩1,900,000", originalPrice: "₩2,300,000", discount: "17%", tag: "Wild, Dried", img: linteus0, desc: "Premium wild Phellinus that has absorbed the energy of primeval forests for decades." },
+        { name: "Wild Phellinus 926g", price: "₩4,700,000", originalPrice: "₩5,000,000", discount: "6%", tag: "Wild, Dried", img: linteus1, desc: "Phellinus in Cambodian primeval forests grows naturally attached in shapes like this." },
+        { name: "Wild Phellinus 980g", price: "₩4,300,000", originalPrice: "₩5,000,000", discount: "14%", tag: "Whole Dried", img: linteus2, desc: "This shows the shape of Phellinus Linteus harvested in its early stage. The green hues fade over time. Truly a woody mud mushroom." },
+        { name: "Phellinus Gift Set", price: "₩1,200,000", originalPrice: "₩1,400,000", discount: "14%", tag: "Gift Set", img: linteus3, desc: "An example of high-quality products sold in Korea." },
+        { name: "Phellinus Powder", price: "₩450,000", originalPrice: "₩500,000", discount: "10%", tag: "Powder", img: linteus4, desc: "An example of high-quality products sold in Korea." },
+        { name: "Vital Core Signature", price: "₩5,500,000", originalPrice: "₩6,000,000", discount: "8%", tag: "Limited", img: linteus5, desc: "An example of high-quality products sold in Korea." }
       ],
       evidence: [
         { title: "Pancreatic Cancer Survival +1 Year", journal: "Severance Hospital Clinical Study", pmid: "40590265", summary: "In post-op chemotherapy patients, Phellinus group showed average survival of 47.0 months vs 35.0 months in control group. (Paid paper; click to search)", url: "https://scholar.google.com/scholar?q=Phellinus+linteus+pancreatic+cancer+survival" },
@@ -539,12 +539,12 @@ export const TRANSLATIONS: Record<string, any> = {
         }
       ],
       products: [
-        { name: "自然桑黄 374g", price: "₩1,900,000", originalPrice: "₩2,300,000", discount: "17%", tag: "自然, 干燥", img: linteus0 },
-        { name: "自然桑黄 926g", price: "₩4,700,000", originalPrice: "₩5,000,000", discount: "6%", tag: "自然, 干燥", img: linteus1 },
-        { name: "自然桑黄 980g", price: "₩4,300,000", originalPrice: "₩5,000,000", discount: "14%", tag: "全干", img: linteus2 },
-        { name: "桑黄礼盒套装", price: "₩1,200,000", originalPrice: "₩1,400,000", discount: "14%", tag: "礼品", img: linteus3 },
-        { name: "桑黄粉末", price: "₩450,000", originalPrice: "₩500,000", discount: "10%", tag: "粉末", img: linteus4 },
-        { name: "Vital Core 签名版", price: "₩5,500,000", originalPrice: "₩6,000,000", discount: "8%", tag: "限量版", img: linteus5 }
+        { name: "自然桑黄 374g", price: "₩1,900,000", originalPrice: "₩2,300,000", discount: "17%", tag: "自然, 干燥", img: linteus0, desc: "吸收了原始森林数十年精气的顶级野生桑黄。" },
+        { name: "自然桑黄 926g", price: "₩4,700,000", originalPrice: "₩5,000,000", discount: "6%", tag: "自然, 干燥", img: linteus1, desc: "柬埔寨原始森林的桑黄通常以类似这种形状附着生长。" },
+        { name: "自然桑黄 980g", price: "₩4,300,000", originalPrice: "₩5,000,000", discount: "14%", tag: "全干", img: linteus2, desc: "这是Phellinus Linteus早期采摘时的形态。随着时间推移，绿色会消失。这是真正的木质泥菇。" },
+        { name: "桑黄礼盒套装", price: "₩1,200,000", originalPrice: "₩1,400,000", discount: "14%", tag: "礼品", img: linteus3, desc: "这是一个在韩国销售的优质产品示例。" },
+        { name: "桑黄粉末", price: "₩450,000", originalPrice: "₩500,000", discount: "10%", tag: "粉末", img: linteus4, desc: "这是一个在韩国销售的优质产品示例。" },
+        { name: "Vital Core 签名版", price: "₩5,500,000", originalPrice: "₩6,000,000", discount: "8%", tag: "限量版", img: linteus5, desc: "这是一个在韩国销售的优质产品示例。" }
       ],
       evidence: [
         { title: "胰腺癌患者生存期延长1年", journal: "Severance Hospital Clinical Study", pmid: "40590265", summary: "术后化疗患者追踪观察结果显示，桑黄并用组平均生存期为47.0个月，比对照组（35.0个月）延长12个月。(付费论文：点击搜索标题)", url: "https://scholar.google.com/scholar?q=Phellinus+linteus+pancreatic+cancer+survival" },
@@ -752,12 +752,12 @@ export const TRANSLATIONS: Record<string, any> = {
         }
       ],
       products: [
-        { name: "自然産メシマコブ 374g", price: "₩1,900,000", originalPrice: "₩2,300,000", discount: "17%", tag: "自然産, 乾燥", img: linteus0 },
-        { name: "自然産メシマコブ 926g", price: "₩4,700,000", originalPrice: "₩5,000,000", discount: "6%", tag: "自然産, 乾燥", img: linteus1 },
-        { name: "自然産メシマコブ 980g", price: "₩4,300,000", originalPrice: "₩5,000,000", discount: "14%", tag: "丸ごと乾燥", img: linteus2 },
-        { name: "メシマコブギフトセット", price: "₩1,200,000", originalPrice: "₩1,400,000", discount: "14%", tag: "ギフト", img: linteus3 },
-        { name: "メシマコブ粉末", price: "₩450,000", originalPrice: "₩500,000", discount: "10%", tag: "粉末", img: linteus4 },
-        { name: "Vital Core シグネチャー", price: "₩5,500,000", originalPrice: "₩6,000,000", discount: "8%", tag: "限定版", img: linteus5 }
+        { name: "自然産メシマコブ 374g", price: "₩1,900,000", originalPrice: "₩2,300,000", discount: "17%", tag: "自然産, 乾燥", img: linteus0, desc: "数十年間、原生林の精気を浴びた最高級の自然産メシマコブです。" },
+        { name: "自然産メシマコブ 926g", price: "₩4,700,000", originalPrice: "₩5,000,000", discount: "6%", tag: "自然産, 乾燥", img: linteus1, desc: "カンボジア原生林のメシマコブは、このような形で自生しています。" },
+        { name: "自然産メシマコブ 980g", price: "₩4,300,000", originalPrice: "₩5,000,000", discount: "14%", tag: "丸ごと乾燥", img: linteus2, desc: "初期のPhellinus Linteus（メシマコブ）の形状です。時間が経つにつれて緑色は消えていきます。まさに木質泥キノコです。" },
+        { name: "メシマコブギフトセット", price: "₩1,200,000", originalPrice: "₩1,400,000", discount: "14%", tag: "ギフト", img: linteus3, desc: "韓国で販売されている良質な製品の例です。" },
+        { name: "メシマコブ粉末", price: "₩450,000", originalPrice: "₩500,000", discount: "10%", tag: "粉末", img: linteus4, desc: "韓国で販売されている良質な製品の例です。" },
+        { name: "Vital Core シグネチャー", price: "₩5,500,000", originalPrice: "₩6,000,000", discount: "8%", tag: "限定版", img: linteus5, desc: "韓国で販売されている良質な製品の例です。" }
       ],
       evidence: [
         { title: "膵臓がん患者の生存率1年延長", journal: "Severance Hospital Clinical Study", pmid: "40590265", summary: "術後抗がん治療患者の追跡観察の結果、メシマコブ併用群の平均生存期間が47.0ヶ月で、対照群（35.0ヶ月）より12ヶ月延長。(有料論文：クリックしてタイトル検索)", url: "https://scholar.google.com/scholar?q=Phellinus+linteus+pancreatic+cancer+survival" },
