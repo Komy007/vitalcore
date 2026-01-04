@@ -1,0 +1,62 @@
+﻿apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  annotations:
+    run.googleapis.com/build-enable-automatic-updates: 'false'
+    run.googleapis.com/build-id: 34626178-74df-4875-b686-8ca2dbffdd0e
+    run.googleapis.com/build-image-uri: asia-northeast3-docker.pkg.dev/vitalcore-482015/cloud-run-source-deploy/vital-core
+    run.googleapis.com/build-name: projects/523576312686/locations/asia-northeast3/builds/34626178-74df-4875-b686-8ca2dbffdd0e
+    run.googleapis.com/build-source-location: gs://run-sources-vitalcore-482015-asia-northeast3/services/vital-core/1767488401.055823-41cc83fb92434fcb8014dd91b5872aca.zip#1767488456556536
+    run.googleapis.com/ingress: all
+    run.googleapis.com/ingress-status: all
+    run.googleapis.com/maxScale: '20'
+    run.googleapis.com/urls: '["https://vital-core-523576312686.asia-northeast3.run.app","https://vital-core-27sdv5yc6q-du.a.run.app"]'
+  labels:
+    cloud.googleapis.com/location: asia-northeast3
+    run.googleapis.com/satisfiesPzs: 'true'
+  name: vital-core
+  namespace: '523576312686'
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: '20'
+        run.googleapis.com/client-name: gcloud
+        run.googleapis.com/client-version: 550.0.0
+        run.googleapis.com/execution-environment: gen2
+        run.googleapis.com/startup-cpu-boost: 'true'
+      labels:
+        client.knative.dev/nonce: uumkwgddnh
+        run.googleapis.com/startupProbeType: Default
+    spec:
+      containerConcurrency: 80
+      containers:
+      - image: asia-northeast3-docker.pkg.dev/vitalcore-482015/cloud-run-source-deploy/vital-core@sha256:4aa82d16e076a8bb9b5078302568ff510d131e0f6bba0417f71636542b012d7d
+        ports:
+        - containerPort: 8080
+          name: http1
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        volumeMounts:
+        - mountPath: /mnt/gcs
+          name: db-storage
+        startupProbe:
+          failureThreshold: 1
+          periodSeconds: 240
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 240
+      serviceAccountName: 523576312686-compute@developer.gserviceaccount.com
+      timeoutSeconds: 300
+      volumes:
+      - name: db-storage
+        csi:
+          driver: gcsfuse.run.googleapis.com
+          readOnly: false
+          volumeAttributes:
+            bucketName: vitalcore-db-storage
+  traffic:
+  - latestRevision: true
+    percent: 100

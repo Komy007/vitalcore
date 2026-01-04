@@ -17,6 +17,12 @@ if (process.env.NODE_ENV === 'production' || process.env.K_SERVICE || process.en
   const mountPath = '/mnt/gcs';
   const dbFile = 'vitalcore.db';
 
+  console.log('[Database] Checking Mount Path:', mountPath);
+  try {
+    if (fs.existsSync('/mnt')) console.log('[Database] /mnt contents:', fs.readdirSync('/mnt'));
+    if (fs.existsSync(mountPath)) console.log('[Database] /mnt/gcs contents:', fs.readdirSync(mountPath));
+  } catch (e) { console.error('[Database] FS Check Error:', e.message); }
+
   if (fs.existsSync(mountPath)) {
     dbPath = path.join(mountPath, dbFile);
     console.log('[Database] GCS Volume Detected. Using Persistent Storage:', dbPath);
