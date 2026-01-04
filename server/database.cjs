@@ -17,18 +17,60 @@ if (process.env.NODE_ENV === 'production' || process.env.K_SERVICE || process.en
   const mountPath = '/mnt/gcs';
   const dbFile = 'vitalcore.db';
 
+  // Wait for GCS Mount (Synchronous Blocking Wait)
+  // We must block here because commonJS requires synchronous exports.
+  const waitStart = Date.now();
+  while (Date.now() - waitStart < 15000) { // 15s Timeout
+    if (fs.existsSync(mountPath)) {
+      // Check if vitalcore.db exists inside
+      try {
+        if (fs.readdirSync(mountPath).includes(dbFile)) {
+          console.log('[Database] Mount & DB File Ready:', mountPath);
+          break;
+        }
+      } catch (e) { }
+    }
+    // Busy wait (short sleep via calculation or execSync if available, but loop is fine for startup)
+  }
+
   console.log('[Database] Checking Mount Path:', mountPath);
   try {
+    // Debug logging
     if (fs.existsSync('/mnt')) console.log('[Database] /mnt contents:', fs.readdirSync('/mnt'));
     if (fs.existsSync(mountPath)) console.log('[Database] /mnt/gcs contents:', fs.readdirSync(mountPath));
   } catch (e) { console.error('[Database] FS Check Error:', e.message); }
 
   if (fs.existsSync(mountPath)) {
-    dbPath = path.join(mountPath, dbFile);
-    console.log('[Database] GCS Volume Detected. Using Persistent Storage:', dbPath);
+    // SYNC STRATEGY: Copy from GCS to /tmp for performance avoiding Fuse locks
+    const gcsFile = path.join(mountPath, dbFile);
+    const tmpFile = path.join('/tmp', dbFile);
+
+    if (fs.existsSync(gcsFile)) {
+      console.log('[Database] Restoring from GCS to /tmp...');
+      try {
+        fs.copyFileSync(gcsFile, tmpFile);
+        console.log('[Database] Restore Complete.');
+      } catch (e) {
+        console.error('[Database] Restore Failed:', e);
+      }
+    }
+
+    dbPath = tmpFile; // Always run on /tmp
+    console.log('[Database] Running on Ephemeral /tmp (Synced mode)');
+
+    // Start Content Sync (Backup to GCS)
+    setInterval(async () => {
+      try {
+        if (db) {
+          await db.backup(gcsFile);
+          // console.log('[Database] Synced to GCS'); // Verbose
+        }
+      } catch (e) { console.error('[Database] Sync Failed:', e.message); }
+    }, 5000); // Sync every 5 seconds (Fast enough for testing)
+
   } else {
     dbPath = path.join('/tmp', dbFile);
-    console.log('[Database] WARNING: No Persistence Volume found. Using Ephemeral /tmp:', dbPath);
+    console.log('[Database] WARNING: No Persistence Volume found. Using pure Ephemeral /tmp:', dbPath);
   }
 } else {
   // Local Development -> Use ./data
@@ -52,8 +94,12 @@ try {
   db = new Database(dbPath, { verbose: console.log });
   console.log('[Database] Connection successful.');
 
-  // --- Initialize Schema ---
-  db.exec(`
+} catch (e) { console.error('[Database] FS Check Error:', e.message); }
+
+// (Removed Async Helper)
+
+// --- Initialize Schema ---
+db.exec(`
     CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       email TEXT UNIQUE NOT NULL,
@@ -114,113 +160,109 @@ try {
     -- (Migration block removed)
 
   `);
-  console.log('[Database] Schema initialized.');
+console.log('[Database] Schema initialized.');
 
-  // --- Migrations (Run Once) ---
-  try {
-    const columns = [
-      'title_en', 'content_en', 'summary_en', 'key_point_en',
-      'title_zh', 'content_zh', 'summary_zh', 'key_point_zh',
-      'title_ja', 'content_ja', 'summary_ja', 'key_point_ja'
-    ];
-    columns.forEach(col => {
-      try {
-        db.prepare(`ALTER TABLE health_reports ADD COLUMN ${col} TEXT`).run();
-        console.log(`[Database] Migrated health_reports: Added column ${col}`);
-      } catch (e) {
-        // Ignore "duplicate column name" error
-      }
-    });
-  } catch (e) { console.error('[Database] Migration Error:', e); }
+// --- Migrations (Run Once) ---
+try {
+  const columns = [
+    'title_en', 'content_en', 'summary_en', 'key_point_en',
+    'title_zh', 'content_zh', 'summary_zh', 'key_point_zh',
+    'title_ja', 'content_ja', 'summary_ja', 'key_point_ja'
+  ];
+  columns.forEach(col => {
+    try {
+      db.prepare(`ALTER TABLE health_reports ADD COLUMN ${col} TEXT`).run();
+      console.log(`[Database] Migrated health_reports: Added column ${col}`);
+    } catch (e) {
+      // Ignore "duplicate column name" error
+    }
+  });
+} catch (e) { console.error('[Database] Migration Error:', e); }
 
-  // --- Migrations (Outside SQL String) ---
-  try { db.exec("ALTER TABLE password_resets ADD COLUMN token TEXT;"); } catch (e) { }
-  try { db.exec("ALTER TABLE password_resets ADD COLUMN expires_at DATETIME;"); } catch (e) { }
+// --- Migrations (Outside SQL String) ---
+try { db.exec("ALTER TABLE password_resets ADD COLUMN token TEXT;"); } catch (e) { }
+try { db.exec("ALTER TABLE password_resets ADD COLUMN expires_at DATETIME;"); } catch (e) { }
 
-  // --- Migrations for Multi-Language Support ---
+// --- Migrations for Multi-Language Support ---
 
+const tableInfo = db.prepare("PRAGMA table_info(health_reports)").all();
+const columns = tableInfo.map(c => c.name);
+// ... logic for health reports ...
+
+// Migrations for Notices
+const noticeInfo = db.prepare("PRAGMA table_info(notices)").all();
+const noticeCols = noticeInfo.map(c => c.name);
+
+const languages = ['en', 'zh', 'ja'];
+const fields = ['title', 'content'];
+
+languages.forEach(lang => {
+  fields.forEach(field => {
+    const colName = `${field}_${lang}`;
+    if (!noticeCols.includes(colName)) {
+      console.log(`[Database] Adding column ${colName} to notices...`);
+      db.prepare(`ALTER TABLE notices ADD COLUMN ${colName} TEXT`).run();
+    }
+  });
+});
+
+// Migration for Notice Type
+if (!noticeCols.includes('type')) {
+  console.log('[Database] Adding column type to notices...');
+  db.prepare("ALTER TABLE notices ADD COLUMN type TEXT DEFAULT 'normal'").run(); // 'normal', 'banner', 'popup'
+}
+if (!noticeCols.includes('is_active')) {
+  console.log('[Database] Adding column is_active to notices...');
+  db.prepare("ALTER TABLE notices ADD COLUMN is_active INTEGER DEFAULT 1").run();
+}
+try {
   const tableInfo = db.prepare("PRAGMA table_info(health_reports)").all();
   const columns = tableInfo.map(c => c.name);
-  // ... logic for health reports ...
-
-  // Migrations for Notices
-  const noticeInfo = db.prepare("PRAGMA table_info(notices)").all();
-  const noticeCols = noticeInfo.map(c => c.name);
 
   const languages = ['en', 'zh', 'ja'];
-  const fields = ['title', 'content'];
+  const fields = ['title', 'content', 'summary', 'key_point'];
 
   languages.forEach(lang => {
     fields.forEach(field => {
       const colName = `${field}_${lang}`;
-      if (!noticeCols.includes(colName)) {
-        console.log(`[Database] Adding column ${colName} to notices...`);
-        db.prepare(`ALTER TABLE notices ADD COLUMN ${colName} TEXT`).run();
+      if (!columns.includes(colName)) {
+        console.log(`[Database] Adding column ${colName} to health_reports...`);
+        db.prepare(`ALTER TABLE health_reports ADD COLUMN ${colName} TEXT`).run();
       }
     });
   });
-
-  // Migration for Notice Type
-  if (!noticeCols.includes('type')) {
-    console.log('[Database] Adding column type to notices...');
-    db.prepare("ALTER TABLE notices ADD COLUMN type TEXT DEFAULT 'normal'").run(); // 'normal', 'banner', 'popup'
-  }
-  if (!noticeCols.includes('is_active')) {
-    console.log('[Database] Adding column is_active to notices...');
-    db.prepare("ALTER TABLE notices ADD COLUMN is_active INTEGER DEFAULT 1").run();
-  }
-  try {
-    const tableInfo = db.prepare("PRAGMA table_info(health_reports)").all();
-    const columns = tableInfo.map(c => c.name);
-
-    const languages = ['en', 'zh', 'ja'];
-    const fields = ['title', 'content', 'summary', 'key_point'];
-
-    languages.forEach(lang => {
-      fields.forEach(field => {
-        const colName = `${field}_${lang}`;
-        if (!columns.includes(colName)) {
-          console.log(`[Database] Adding column ${colName} to health_reports...`);
-          db.prepare(`ALTER TABLE health_reports ADD COLUMN ${colName} TEXT`).run();
-        }
-      });
-    });
-  } catch (err) {
-    console.error('[Database] Migration Failed:', err);
-  }
-
-  // --- Seed Data (Welcome Question) ---
-  try {
-    const count = db.prepare('SELECT count(*) as count FROM questions').get();
-    if (count && count.count === 0) {
-      // Need a dummy user first
-      db.exec("INSERT OR IGNORE INTO users (id, email, password, name, role) VALUES (1, 'system@vitalcore.com', 'system', 'VitalCore Admin', 'admin')");
-      // db.exec("INSERT INTO questions (user_id, title, content, is_secret, answer) VALUES (1, 'Welcome to Vital Core Q&A', 'This is a test question to verify the database connection. If you see this, the system is working!', 0, 'Welcome! Feel free to ask any questions.')");
-      console.log('[Database] System User Checked.');
-    }
-  } catch (e) {
-    console.error('[Database] Failed to insert welcome question:', e);
-  }
-
-  // --- Create Default Admin ---
-  const createAdmin = () => {
-    const adminEmail = 'cambodia.bae@gmail.com';
-    const stmt = db.prepare('SELECT * FROM users WHERE email = ?');
-    const admin = stmt.get(adminEmail);
-
-    if (!admin) {
-      const hashedPassword = bcrypt.hashSync('123456', 10);
-      const insert = db.prepare('INSERT INTO users (email, password, name, role) VALUES (?, ?, ?, ?)');
-      insert.run(adminEmail, hashedPassword, 'Admin', 'admin');
-      console.log('[Database] Default admin account created.');
-    }
-  };
-  createAdmin();
-
 } catch (err) {
-  console.error('[Database] Initialization FAILED:', err);
-  // Do NOT exit here. Throw error so index.cjs can catch it and Soft Start.
-  throw err;
+  console.error('[Database] Migration Failed:', err);
 }
+
+// --- Seed Data (Welcome Question) ---
+try {
+  const count = db.prepare('SELECT count(*) as count FROM questions').get();
+  if (count && count.count === 0) {
+    // Need a dummy user first
+    db.exec("INSERT OR IGNORE INTO users (id, email, password, name, role) VALUES (1, 'system@vitalcore.com', 'system', 'VitalCore Admin', 'admin')");
+    // db.exec("INSERT INTO questions (user_id, title, content, is_secret, answer) VALUES (1, 'Welcome to Vital Core Q&A', 'This is a test question to verify the database connection. If you see this, the system is working!', 0, 'Welcome! Feel free to ask any questions.')");
+    console.log('[Database] System User Checked.');
+  }
+} catch (e) {
+  console.error('[Database] Failed to insert welcome question:', e);
+}
+
+// --- Create Default Admin ---
+const createAdmin = () => {
+  const adminEmail = 'cambodia.bae@gmail.com';
+  const stmt = db.prepare('SELECT * FROM users WHERE email = ?');
+  const admin = stmt.get(adminEmail);
+
+  if (!admin) {
+    const hashedPassword = bcrypt.hashSync('123456', 10);
+    const insert = db.prepare('INSERT INTO users (email, password, name, role) VALUES (?, ?, ?, ?)');
+    insert.run(adminEmail, hashedPassword, 'Admin', 'admin');
+    console.log('[Database] Default admin account created.');
+  }
+};
+createAdmin();
+
+// End of Initialization
 
 module.exports = db;
