@@ -63,10 +63,9 @@ if (process.env.NODE_ENV === 'production' || process.env.K_SERVICE || process.en
       try {
         if (db) {
           await db.backup(gcsFile);
-          // console.log('[Database] Synced to GCS'); // Verbose
         }
       } catch (e) { console.error('[Database] Sync Failed:', e.message); }
-    }, 5000); // Sync every 5 seconds (Fast enough for testing)
+    }, 3600000); // Sync every 1 hour (Reduces Operation Costs significantly)
 
   } else {
     dbPath = path.join('/tmp', dbFile);
