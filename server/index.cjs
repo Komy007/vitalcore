@@ -1,9 +1,9 @@
-require('dotenv').config(); // Load environment variables first
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const path = require('path');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 
@@ -12,8 +12,11 @@ console.log('[Server] Starting Full Monolithic Server (Safe Mode)...');
 // --- Database Loading (Soft Start) ---
 console.log('[Server] Loading database module...');
 let db;
+let triggerManualBackup;
 try {
-    db = require('./database.cjs');
+    const dbModule = require('./database.cjs');
+    db = dbModule.db;
+    triggerManualBackup = dbModule.triggerManualBackup;
     console.log('[Server] Database module loaded success.');
 } catch (err) {
     console.error('[Server] CRITICAL FAIL: Could not load database:', err);
@@ -391,7 +394,11 @@ if (db) {
                 title_zh || '', content_zh || '', summary_zh || '', key_point_zh || '',
                 title_ja || '', content_ja || '', summary_ja || '', key_point_ja || ''
             );
-            res.json({ id: info.lastInsertRowid, message: 'Report created successfully' });
+            const reportId = info.lastInsertRowid;
+            res.json({ id: reportId, message: 'Report created successfully' });
+
+            // Trigger immediate backup to GCS to prevent data loss on mobile shutdown
+            if (triggerManualBackup) triggerManualBackup();
         } catch (e) { res.status(500).json({ error: e.message }); }
     });
 
@@ -425,6 +432,9 @@ if (db) {
                 id
             );
             res.json({ message: 'Report updated successfully' });
+
+            // Trigger immediate backup to GCS
+            if (triggerManualBackup) triggerManualBackup();
         } catch (e) { res.status(500).json({ error: e.message }); }
     });
 
@@ -434,6 +444,9 @@ if (db) {
             const { id } = req.params;
             db.prepare('DELETE FROM health_reports WHERE id = ?').run(id);
             res.json({ message: 'Report deleted' });
+
+            // Trigger immediate backup to GCS
+            if (triggerManualBackup) triggerManualBackup();
         } catch (e) { res.status(500).json({ error: e.message }); }
     });
 

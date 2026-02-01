@@ -58,14 +58,20 @@ if (process.env.NODE_ENV === 'production' || process.env.K_SERVICE || process.en
     dbPath = tmpFile; // Always run on /tmp
     console.log('[Database] Running on Ephemeral /tmp (Synced mode)');
 
+    // Export backup targets for manual triggering
+    global.gcsBackupFile = gcsFile;
+
     // Start Content Sync (Backup to GCS)
+    // Updated: Sync every 10 minutes (600,000ms) instead of 1 hour to prevent data loss on mobile
     setInterval(async () => {
       try {
         if (db) {
+          console.log('[Database] Periodic backup starting...');
           await db.backup(gcsFile);
+          console.log('[Database] Periodic backup complete.');
         }
       } catch (e) { console.error('[Database] Sync Failed:', e.message); }
-    }, 3600000); // Sync every 1 hour (Reduces Operation Costs significantly)
+    }, 600000);
 
   } else {
     dbPath = path.join('/tmp', dbFile);
@@ -262,6 +268,25 @@ const createAdmin = () => {
 };
 createAdmin();
 
+// --- Manual Backup Function ---
+const triggerManualBackup = async () => {
+  if (db && global.gcsBackupFile) {
+    try {
+      console.log('[Database] Manual backup triggered...');
+      await db.backup(global.gcsBackupFile);
+      console.log('[Database] Manual backup complete.');
+      return true;
+    } catch (e) {
+      console.error('[Database] Manual backup failed:', e.message);
+      return false;
+    }
+  }
+  return false;
+};
+
 // End of Initialization
 
-module.exports = db;
+module.exports = {
+  db,
+  triggerManualBackup
+};
