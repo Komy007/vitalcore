@@ -603,6 +603,43 @@ const App: React.FC = () => {
     }
   };
 
+  const handleStartEditReport = async (reportId: number) => {
+    try {
+      // Fetch full content before editing
+      const fullReport = await api.health.get(reportId);
+      setEditingReportId(reportId);
+      setNewReport({
+        title: fullReport.title || '',
+        content: fullReport.content || '',
+        summary: fullReport.summary || '',
+        key_point: fullReport.key_point || '',
+        image_url: fullReport.image_url || '',
+
+        title_en: fullReport.title_en || '',
+        content_en: fullReport.content_en || '',
+        summary_en: fullReport.summary_en || '',
+        key_point_en: fullReport.key_point_en || '',
+
+        title_zh: fullReport.title_zh || '',
+        content_zh: fullReport.content_zh || '',
+        summary_zh: fullReport.summary_zh || '',
+        key_point_zh: fullReport.key_point_zh || '',
+
+        title_ja: fullReport.title_ja || '',
+        content_ja: fullReport.content_ja || '',
+        summary_ja: fullReport.summary_ja || '',
+        key_point_ja: fullReport.key_point_ja || '',
+
+        views: fullReport.views
+      });
+      setSelectedReport(null); // Close reader
+      setIsReportModalOpen(true); // Open editor
+    } catch (e) {
+      console.error(e);
+      alert('Failed to load report for editing.');
+    }
+  };
+
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
@@ -2167,8 +2204,8 @@ const App: React.FC = () => {
       {/* Create Report Modal */}
       {
         isReportModalOpen && (
-          <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-in fade-in duration-300">
-            <div className="bg-stone-900 rounded-3xl w-full max-w-4xl max-h-[90vh] flex flex-col border border-white/10 shadow-2xl relative">
+          <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/95 backdrop-blur-md p-0 md:p-4 animate-in fade-in duration-300">
+            <div className="bg-stone-900 rounded-none md:rounded-3xl w-full max-w-4xl h-[100dvh] md:h-[90vh] flex flex-col border border-white/10 shadow-2xl relative">
               <div className="px-8 py-6 border-b border-white/5 flex justify-between items-center bg-stone-900 rounded-t-3xl">
                 <div>
                   <h3 className="text-2xl font-serif font-bold text-white">{editingReportId ? 'Edit Health Report' : 'New Health Report'}</h3>
@@ -2448,7 +2485,31 @@ const App: React.FC = () => {
 
                   <div className="mt-16 pt-10 border-t border-white/5 text-center flex flex-col items-center gap-4">
                     <p className="text-stone-500 text-sm">Vital Core Premium Lab</p>
+                    <p className="text-stone-500 text-sm">Vital Core Premium Lab</p>
                     <button onClick={() => setSelectedReport(null)} className="px-10 py-4 bg-stone-800 hover:bg-stone-700 text-white font-bold rounded-full uppercase tracking-widest text-xs transition-all">Close Article</button>
+
+                    {/* Admin Controls in Reader */}
+                    {isAdmin && (
+                      <div className="flex gap-4 mt-6 pt-6 border-t border-white/5 w-full justify-center">
+                        <button
+                          onClick={() => handleStartEditReport(selectedReport.id)}
+                          className="px-6 py-2 bg-amber-900/30 text-amber-500 border border-amber-500/30 rounded-lg hover:bg-amber-600 hover:text-white transition-all text-xs font-bold uppercase flex items-center gap-2"
+                        >
+                          <Edit size={14} /> Edit Report
+                        </button>
+                        <button
+                          onClick={async () => {
+                            if (confirm('Delete this report?')) {
+                              await handleDeleteReport(selectedReport.id);
+                              setSelectedReport(null);
+                            }
+                          }}
+                          className="px-6 py-2 bg-red-900/30 text-red-500 border border-red-500/30 rounded-lg hover:bg-red-600 hover:text-white transition-all text-xs font-bold uppercase flex items-center gap-2"
+                        >
+                          <Trash2 size={14} /> Delete Report
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
