@@ -9,7 +9,7 @@ metadata:
     run.googleapis.com/build-source-location: gs://run-sources-vitalcore-482015-asia-northeast3/services/vital-core/1767488401.055823-41cc83fb92434fcb8014dd91b5872aca.zip#1767488456556536
     run.googleapis.com/ingress: all
     run.googleapis.com/ingress-status: all
-    run.googleapis.com/maxScale: '20'
+    run.googleapis.com/maxScale: '5'
     run.googleapis.com/urls: '["https://vital-core-523576312686.asia-northeast3.run.app","https://vital-core-27sdv5yc6q-du.a.run.app"]'
   labels:
     cloud.googleapis.com/location: asia-northeast3

@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const { GoogleGenerativeAI } = require('@google/genai');
 
 console.log('[Server] Starting Full Monolithic Server (Safe Mode)...');
 
@@ -93,13 +94,20 @@ app.get('/api/health', (req, res) => {
     });
 });
 
-// Ensure API Key is loaded
-const TRANSLATE_API_KEY = process.env.GOOGLE_TRANSLATE_API_KEY;
-
 if (!TRANSLATE_API_KEY) {
     console.warn('[Server] WARNING: GOOGLE_TRANSLATE_API_KEY is not set in .env. Translation features will fail.');
 } else {
     console.log('[Server] Google Translate API Key is configured.');
+}
+
+// --- Gemini AI Configuration ---
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.API_KEY;
+let genAI;
+if (GEMINI_API_KEY) {
+    genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+    console.log('[Server] Gemini AI initialized.');
+} else {
+    console.warn('[Server] WARNING: GEMINI_API_KEY is not set. AI features will fail.');
 }
 
 const axios = require('axios');
@@ -158,6 +166,53 @@ app.post('/api/translate', async (req, res) => {
             details: e.response ? e.response.data : 'No details',
             keyConfigured: !!TRANSLATE_API_KEY
         });
+    }
+});
+
+// AI Health Post Generation
+app.post('/api/ai/health-post', async (req, res) => {
+    if (!genAI) return res.status(500).json({ error: 'AI not configured' });
+    try {
+        const { language } = req.body;
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }); // Use stable model
+
+        const prompt = `Generate a short, informative health news article about the latest research on Phellinus linteus (Sanghwang mushroom) in the year 2024 or 2025. 
+        The article should mention potential benefits like anti-cancer properties, immune system boost, or diabetes management. 
+        Language: ${language}. 
+        Return ONLY a JSON object with "title" and "content" fields.`;
+
+        const result = await model.generateContent(prompt);
+        const responseText = result.response.text();
+
+        // Use regex to extract JSON if Gemini adds markdown formatting
+        const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+        const data = jsonMatch ? JSON.parse(jsonMatch[0]) : JSON.parse(responseText);
+
+        res.json(data);
+    } catch (e) {
+        console.error('[Gemini API Error]', e);
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// AI Health Search (Grounding)
+app.post('/api/ai/search-health', async (req, res) => {
+    if (!genAI) return res.status(500).json({ error: 'AI not configured' });
+    try {
+        const { query, language } = req.body;
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+        const result = await model.generateContent({
+            contents: [{ role: 'user', parts: [{ text: `Search for information about: ${query}. Focus on scientific evidence and health studies. Language: ${language}.` }] }],
+        });
+
+        res.json({
+            text: result.response.text(),
+            sources: []
+        });
+    } catch (e) {
+        console.error('[Gemini Search Error]', e);
+        res.status(500).json({ error: e.message });
     }
 });
 
