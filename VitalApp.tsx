@@ -632,6 +632,7 @@ const App: React.FC = () => {
 
         views: fullReport.views
       });
+      setReportLang(lang as any); // Sync editor language with current app language
       setSelectedReport(null); // Close reader
       setIsReportModalOpen(true); // Open editor
     } catch (e) {
