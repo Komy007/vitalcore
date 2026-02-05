@@ -2302,6 +2302,7 @@ const App: React.FC = () => {
                       </div>
                     )}
                     <ReactQuill
+                      key={editingReportId ? `edit-${editingReportId}-${reportLang}` : `new-${reportLang}`}
                       theme="snow"
                       value={newReport[reportLang === 'ko' ? 'content' : `content_${reportLang}`] || ''}
                       onChange={(value) => setNewReport({ ...newReport, [reportLang === 'ko' ? 'content' : `content_${reportLang}`]: value })}

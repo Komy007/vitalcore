@@ -122,7 +122,7 @@ export const api = {
             return res.json();
         },
         get: async (id: number) => {
-            const res = await fetch(`${API_URL}/health-reports/${id}`);
+            const res = await fetch(`${API_URL}/health-reports/${id}`, { cache: 'no-store' });
             if (!res.ok) throw await res.json();
             return res.json();
         },
