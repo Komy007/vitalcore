@@ -632,7 +632,20 @@ const App: React.FC = () => {
 
         views: fullReport.views
       });
-      setReportLang(lang as any); // Sync editor language with current app language
+
+      // Smart Tab Switching:
+      // If the user is viewing in English (lang='en') but the report only has Korean content (content_en is empty),
+      // the Reader shows the Korean content as fallback.
+      // However, the Editor would show a blank page for 'en'.
+      // To fix this, we check if the target language content exists. If not, and Korean content exists, we switch to 'ko' tab.
+      const currentLangContent = lang === 'ko' ? fullReport.content : fullReport[`content_${lang}`];
+      if (!currentLangContent && fullReport.content && lang !== 'ko') {
+        setReportLang('ko');
+        // Optional: We could show a toast here saying "Switched to original language"
+      } else {
+        setReportLang(lang as any);
+      }
+
       setSelectedReport(null); // Close reader
       setIsReportModalOpen(true); // Open editor
     } catch (e) {
