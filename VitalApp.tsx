@@ -1812,7 +1812,7 @@ const App: React.FC = () => {
                           </div>
                         </div>
                         <div className="flex gap-2 pt-2 border-t border-white/5 mt-auto">
-                          <button onClick={() => { setEditingReportId(report.id); setNewReport(report); setIsReportModalOpen(true); }} className="flex-1 py-2 bg-stone-800 text-stone-400 hover:text-white text-xs font-bold rounded uppercase">Edit</button>
+                          <button onClick={() => handleStartEditReport(report.id)} className="flex-1 py-2 bg-stone-800 text-stone-400 hover:text-white text-xs font-bold rounded uppercase">Edit</button>
                           <button onClick={() => handleDeleteReport(report.id)} className="flex-1 py-2 bg-stone-800 text-red-500 hover:text-white hover:bg-red-600 text-xs font-bold rounded uppercase transition-colors">Delete</button>
                         </div>
                       </div>
