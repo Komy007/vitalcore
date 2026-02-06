@@ -31,6 +31,7 @@ const app = express();
 app.set('trust proxy', 1);
 
 const JWT_SECRET = process.env.JWT_SECRET || 'vitalcore-secret-key-change-this-production';
+const TRANSLATE_API_KEY = process.env.GOOGLE_TRANSLATE_API_KEY;
 
 // --- Security Middleware ---
 app.use(helmet({
