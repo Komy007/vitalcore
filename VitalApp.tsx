@@ -1412,51 +1412,7 @@ const App: React.FC = () => {
             </div>
           </section>
 
-          {/* Report Writer Modal (Admin) */}
-          {
-            isAdmin && isReportModalOpen && (
-              <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/95 backdrop-blur-3xl p-4 md:p-10 animate-in fade-in">
-                <div className="bg-stone-900 rounded-[2rem] p-8 w-full max-w-4xl h-[90vh] overflow-y-auto border border-white/10 shadow-2xl relative flex flex-col">
-                  <div className="flex justify-between items-center mb-6">
-                    <span className="text-amber-600 text-xs font-bold uppercase tracking-widest">Writing Health Essay</span>
-                    <button onClick={() => setIsReportModalOpen(false)} className="text-stone-500 hover:text-white"><X size={32} /></button>
-                  </div>
 
-                  <div className="space-y-6 flex-grow">
-                    <div>
-                      <label className="block text-stone-500 text-xs font-bold mb-2 uppercase">Title</label>
-                      <input className="w-full text-3xl font-serif font-bold bg-transparent border-b border-white/10 p-2 text-white placeholder-stone-700 outline-none focus:border-amber-500 transition-colors" placeholder="Enter Title..." value={newReport.title} onChange={e => setNewReport({ ...newReport, title: e.target.value })} />
-                    </div>
-
-                    <div>
-                      <label className="block text-amber-500 text-xs font-bold mb-2 uppercase flex items-center gap-2"><Sparkles size={12} /> Key Point (Core Message)</label>
-                      <input className="w-full text-lg bg-amber-900/10 border border-amber-500/20 rounded-xl p-4 text-amber-100 placeholder-amber-900/50 outline-none focus:border-amber-500" placeholder="e.g. Consistency is key for immunity..." value={newReport.key_point} onChange={e => setNewReport({ ...newReport, key_point: e.target.value })} />
-                    </div>
-
-                    <div>
-                      <label className="block text-stone-500 text-xs font-bold mb-2 uppercase">Cover Image URL (Optional)</label>
-                      <input className="w-full bg-stone-800 border border-white/5 rounded-xl p-3 text-stone-300 text-sm outline-none focus:border-amber-500" placeholder="https://..." value={newReport.image_url} onChange={e => setNewReport({ ...newReport, image_url: e.target.value })} />
-                    </div>
-
-                    <div className="flex-grow flex flex-col">
-                      <label className="block text-stone-500 text-xs font-bold mb-2 uppercase">Essay Content</label>
-                      <textarea
-                        className="w-full flex-grow bg-stone-950/50 border border-white/5 rounded-2xl p-6 text-lg leading-relaxed text-stone-300 outline-none focus:border-amber-500 resize-none font-serif min-h-[400px]"
-                        placeholder="Write your health essay here... (Supports copy & paste)"
-                        value={newReport.content}
-                        onChange={e => setNewReport({ ...newReport, content: e.target.value })}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="pt-6 mt-6 border-t border-white/5 flex justify-end gap-4">
-                    <button onClick={() => setIsReportModalOpen(false)} className="px-8 py-3 text-stone-500 hover:text-white font-bold transition-colors">Cancel</button>
-                    <button onClick={handlePostReport} className="px-10 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-full shadow-lg transition-all flex items-center gap-2">Publish Essay <ArrowRight size={16} /></button>
-                  </div>
-                </div>
-              </div>
-            )
-          }
 
           {/* Report Reader Modal - Improved Mobile UX */}
 
