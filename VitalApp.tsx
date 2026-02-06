@@ -2296,6 +2296,7 @@ const App: React.FC = () => {
                       theme="snow"
                       value={newReport[reportLang === 'ko' ? 'content' : `content_${reportLang}`] || ''}
                       onChange={(value) => setNewReport({ ...newReport, [reportLang === 'ko' ? 'content' : `content_${reportLang}`]: value })}
+                      style={{ color: '#ffffff' }} // Force white text inline
                       modules={{
                         toolbar: [
                           [{ 'header': [1, 2, 3, false] }],
@@ -2328,13 +2329,11 @@ const App: React.FC = () => {
       {/* Create Notice Modal */}
       {
         isNoticeModalOpen && (
-          <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-in fade-in duration-300">
-            <div className="bg-stone-900 rounded-3xl w-full max-w-4xl max-h-[90vh] flex flex-col border border-white/10 shadow-2xl relative">
-
-              {/* Header (Sticky) */}
-              <div className="px-8 py-6 border-b border-white/5 flex justify-between items-center bg-stone-900 rounded-t-3xl shrink-0">
+          <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 backdrop-blur-sm animate-in fade-in duration-200">
+            <div className="bg-stone-900 rounded-3xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl border border-white/10">
+              <div className="p-8 border-b border-white/5 flex justify-between items-center bg-stone-900 rounded-t-3xl">
                 <div>
-                  <h3 className="text-2xl font-serif font-bold text-white">New Notice</h3>
+                  <h3 className="text-3xl font-serif text-white mb-2">Edit Health Report <span className="text-amber-500 text-sm font-sans tracking-wide border border-amber-500/30 px-2 py-0.5 rounded ml-2">SYSTEM UPDATED</span></h3>
                   <div className="flex gap-2 mt-4">
                     {['ko', 'en', 'zh', 'ja'].map((l) => (
                       <button key={l} onClick={() => setNoticeLang(l as any)} className={`px-3 py-1 text-xs font-bold uppercase rounded-full transition-all ${noticeLang === l ? 'bg-amber-600 text-white' : 'bg-stone-800 text-stone-500 hover:text-stone-300'}`}>
