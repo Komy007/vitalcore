@@ -607,10 +607,17 @@ const App: React.FC = () => {
     try {
       // Fetch full content before editing
       const fullReport = await api.health.get(reportId);
+
+      // DEBUG: Diagnose why content is missing
+      // alert(`Debug: Received Report ID ${reportId}\nContent Length: ${fullReport.content ? fullReport.content.length : '0 (Empty)'}\nSummary Length: ${fullReport.summary ? fullReport.summary.length : '0'}`);
+
+      // Fallback: If content is missing but summary exists (common in recovery), use summary as content
+      const safeContent = fullReport.content || fullReport.summary || '';
+
       setEditingReportId(reportId);
       setNewReport({
         title: fullReport.title || '',
-        content: fullReport.content || '',
+        content: safeContent,
         summary: fullReport.summary || '',
         key_point: fullReport.key_point || '',
         image_url: fullReport.image_url || '',
