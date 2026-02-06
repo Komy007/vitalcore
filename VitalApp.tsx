@@ -2315,6 +2315,19 @@ const App: React.FC = () => {
                       className="bg-stone-800 rounded-xl text-white border border-white/5 h-full quill-editor"
                     />
                   </div>
+
+                  {/* EMERGENCY BACKUP EDITOR: Visible if Quill fails */}
+                  <div className="mt-4 p-4 bg-stone-800/50 rounded-xl border border-white/10">
+                    <label className="text-amber-500 text-xs font-bold uppercase block mb-2 flex items-center gap-2">
+                      Emergency Text Editor (Use this if main editor is empty)
+                    </label>
+                    <textarea
+                      className="w-full bg-black/50 text-white p-4 rounded-lg min-h-[200px] font-sans leading-relaxed focus:outline-none focus:ring-2 focus:ring-amber-500/50"
+                      value={newReport[reportLang === 'ko' ? 'content' : `content_${reportLang}`] || newReport.summary || ''}
+                      onChange={(e) => setNewReport({ ...newReport, [reportLang === 'ko' ? 'content' : `content_${reportLang}`]: e.target.value })}
+                      placeholder="Type content here if the main editor is not working..."
+                    />
+                  </div>
                 </div>
               </div>
               <div className="p-6 border-t border-white/5 bg-stone-900 rounded-b-3xl flex justify-end gap-4">
@@ -2333,7 +2346,7 @@ const App: React.FC = () => {
             <div className="bg-stone-900 rounded-3xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl border border-white/10">
               <div className="p-8 border-b border-white/5 flex justify-between items-center bg-stone-900 rounded-t-3xl">
                 <div>
-                  <h3 className="text-3xl font-serif text-white mb-2">Edit Health Report <span className="text-amber-500 text-sm font-sans tracking-wide border border-amber-500/30 px-2 py-0.5 rounded ml-2">SYSTEM UPDATED</span></h3>
+                  <h3 className="text-3xl font-serif text-white mb-2">Edit Health Report <span className="text-emerald-500 text-sm font-sans tracking-wide border border-emerald-500/30 px-2 py-0.5 rounded ml-2">FIXED v2.0 (BACKUP MODE)</span></h3>
                   <div className="flex gap-2 mt-4">
                     {['ko', 'en', 'zh', 'ja'].map((l) => (
                       <button key={l} onClick={() => setNoticeLang(l as any)} className={`px-3 py-1 text-xs font-bold uppercase rounded-full transition-all ${noticeLang === l ? 'bg-amber-600 text-white' : 'bg-stone-800 text-stone-500 hover:text-stone-300'}`}>
