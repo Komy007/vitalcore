@@ -2259,6 +2259,16 @@ const App: React.FC = () => {
                       {isEditorFullScreen ? "Minimize" : "Full Screen"}
                     </button>
                   </div>
+                  {/* DEBUG: Raw Content View to prove data exists */}
+                  <div className="bg-red-900/20 p-4 rounded-xl border border-red-500/30 mb-4">
+                    <label className="text-red-500 text-xs font-bold uppercase block mb-2">Debug data view (If you see this, data is safe)</label>
+                    <textarea
+                      readOnly
+                      className="w-full bg-black/50 text-stone-300 text-xs font-mono h-20 p-2 rounded"
+                      value={newReport[reportLang === 'ko' ? 'content' : `content_${reportLang}`] || '(No content loaded)'}
+                    />
+                  </div>
+
                   <div className={isEditorFullScreen ? "fixed inset-0 z-[100] bg-stone-900 p-6 flex flex-col animate-in zoom-in-95 duration-200" : "h-96 mb-12"}>
                     {isEditorFullScreen && (
                       <div className="flex justify-between items-center mb-4 shrink-0">
@@ -2286,10 +2296,10 @@ const App: React.FC = () => {
                           [{ 'color': [] }, { 'background': [] }],
                           [{ 'align': [] }],
                         ],
-                        imageResize: {
-                          parchment: Quill.import('parchment'),
-                          modules: ['Resize', 'DisplaySize']
-                        }
+                        // imageResize: {
+                        //   parchment: Quill.import('parchment'),
+                        //   modules: ['Resize', 'DisplaySize']
+                        // }
                       }}
                       className="bg-stone-800 rounded-xl text-white border border-white/5 h-full quill-editor"
                     />
