@@ -608,6 +608,10 @@ const App: React.FC = () => {
       // Fetch full content before editing
       const fullReport = await api.health.get(reportId);
 
+      // DEBUG: PROBE PRODUCTION DATA
+      // Please tell me what you see in this alert!
+      alert(`DEBUG PROBE:\nID: ${reportId}\nTitle: ${fullReport.title}\nContent Len: ${fullReport.content?.length}\nSummary Len: ${fullReport.summary?.length}\nFull Keys: ${Object.keys(fullReport).join(', ')}`);
+
       // Robust Fallback Logic:
       // 1. Check if content is effectively empty (stripping HTML tags like <p><br></p>)
       const rawContent = fullReport.content || '';
