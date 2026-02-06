@@ -608,11 +608,19 @@ const App: React.FC = () => {
       // Fetch full content before editing
       const fullReport = await api.health.get(reportId);
 
-      // DEBUG: Diagnose why content is missing
-      // alert(`Debug: Received Report ID ${reportId}\nContent Length: ${fullReport.content ? fullReport.content.length : '0 (Empty)'}\nSummary Length: ${fullReport.summary ? fullReport.summary.length : '0'}`);
+      // Robust Fallback Logic:
+      // 1. Check if content is effectively empty (stripping HTML tags like <p><br></p>)
+      const rawContent = fullReport.content || '';
+      const strippedContent = rawContent.replace(/<[^>]*>/g, '').trim();
+      const isContentEmpty = strippedContent.length === 0;
 
-      // Fallback: If content is missing but summary exists (common in recovery), use summary as content
-      const safeContent = fullReport.content || fullReport.summary || '';
+      // 2. Use summary if content is empty
+      const safeContent = isContentEmpty ? (fullReport.summary || '') : rawContent;
+
+      // Optional: Notify user if we fell back to summary
+      if (isContentEmpty && fullReport.summary) {
+        // console.log("Recovered content from summary");
+      }
 
       setEditingReportId(reportId);
       setNewReport({
@@ -2265,15 +2273,6 @@ const App: React.FC = () => {
                       {isEditorFullScreen ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
                       {isEditorFullScreen ? "Minimize" : "Full Screen"}
                     </button>
-                  </div>
-                  {/* DEBUG: Raw Content View to prove data exists */}
-                  <div className="bg-red-900/20 p-4 rounded-xl border border-red-500/30 mb-4">
-                    <label className="text-red-500 text-xs font-bold uppercase block mb-2">Debug data view (If you see this, data is safe)</label>
-                    <textarea
-                      readOnly
-                      className="w-full bg-black/50 text-stone-300 text-xs font-mono h-20 p-2 rounded"
-                      value={newReport[reportLang === 'ko' ? 'content' : `content_${reportLang}`] || '(No content loaded)'}
-                    />
                   </div>
 
                   <div className={isEditorFullScreen ? "fixed inset-0 z-[100] bg-stone-900 p-6 flex flex-col animate-in zoom-in-95 duration-200" : "h-96 mb-12"}>
