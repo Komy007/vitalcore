@@ -85,7 +85,7 @@
     border-bottom-left-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
     border-color: rgba(255, 255, 255, 0.1) !important;
-    color: #e7e5e4;
+    color: #e7e5e4 !important;
     /* stone-200 */
     font-size: 1.125rem;
     /* text-lg */
@@ -94,6 +94,19 @@
 
 .ql-editor {
     min-height: 200px;
+    color: #e7e5e4 !important;
+}
+
+.ql-editor p,
+.ql-editor span,
+.ql-editor li,
+.ql-editor div {
+    color: #e7e5e4 !important;
+}
+
+.ql-editor.ql-blank::before {
+    color: rgba(255, 255, 255, 0.3) !important;
+    font-style: italic;
 }
 
 /* Toolbar Icons */
