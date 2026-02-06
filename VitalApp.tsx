@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { LucideIcon, Menu, X, ChevronRight, Check, Play, Award, Microscope, Leaf, Shield, Heart, Zap, Brain, Activity, ArrowRight, ArrowLeft, Star, Quote, Search, Globe, User, LogOut, ChevronDown, Lock, Mail, Phone, MapPin, Send, LayoutTemplate, Megaphone, Plus, Edit, Trash2, Save, Image as ImageIcon, MessageCircle, Sparkles, AlertTriangle, Droplet, ShoppingBag, Eye, BookOpen, ExternalLink, Info, FlaskConical, GraduationCap, Coffee, Flame, ShieldCheck, CheckCircle2, FileText, Loader2, Languages, Maximize2, Minimize2 } from 'lucide-react';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import './src/quill-dark.css'; // Dark Mode Overrides
 import ImageResize from 'quill-image-resize-module-react';
 
 Quill.register('modules/imageResize', ImageResize);
