@@ -30,7 +30,12 @@ const app = express();
 // Cloud Run / Load Balancer Proxy Trust
 app.set('trust proxy', 1);
 
-const JWT_SECRET = process.env.JWT_SECRET || 'vitalcore-secret-key-change-this-production';
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+    console.error('[CRITICAL SECURITY] JWT_SECRET environment variable is not set! Server cannot start safely.');
+    process.exit(1);
+}
+const JWT_EXPIRES_IN = '24h';
 const TRANSLATE_API_KEY = process.env.GOOGLE_TRANSLATE_API_KEY;
 
 // --- Security Middleware ---
@@ -81,8 +86,8 @@ app.use('/api/', globalLimiter);
 app.use('/api/auth/login', authLimiter);
 app.use('/api/auth/register', authLimiter);
 // Middleware
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(express.static('dist'));
 app.use('/img', express.static('img')); // Serve images
 
@@ -237,8 +242,8 @@ const isAdmin = (req, res, next) => {
 // --- Database Guard Middleware ---
 app.use((req, res, next) => {
     if (!db && req.path.startsWith('/api') && req.path !== '/api/health') {
-        const errorMsg = global.dbLoadError ? (global.dbLoadError.message + '\n' + global.dbLoadError.stack) : 'Unknown DB Error';
-        return res.status(503).json({ error: 'Database service unavailable', details: errorMsg });
+        if (global.dbLoadError) console.error('[DB Guard] Load error:', global.dbLoadError);
+        return res.status(503).json({ error: 'Database service unavailable' });
     }
     next();
 });
@@ -250,12 +255,13 @@ if (db) {
         try {
             const { email, password, name, country, phone } = req.body;
             if (!email || !password || !name) return res.status(400).json({ error: 'Missing required fields' });
+            if (password.length < 8) return res.status(400).json({ error: 'Password must be at least 8 characters' });
 
-            const hashedPassword = bcrypt.hashSync(password, 10);
+            const hashedPassword = bcrypt.hashSync(password, 12);
             const stmt = db.prepare('INSERT INTO users (email, password, name, country, phone) VALUES (?, ?, ?, ?, ?)');
             const info = stmt.run(email, hashedPassword, name, country, phone);
             const user = { id: info.lastInsertRowid, email, role: 'user', name };
-            const token = jwt.sign(user, JWT_SECRET);
+            const token = jwt.sign(user, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
             res.json({ token, user });
         } catch (e) {
             console.error('[Register Error]', e);
@@ -272,7 +278,7 @@ if (db) {
             if (!user || !bcrypt.compareSync(password, user.password)) return res.status(401).json({ error: 'Invalid credentials' });
 
             const tokenUser = { id: user.id, email: user.email, role: user.role, name: user.name };
-            const token = jwt.sign(tokenUser, JWT_SECRET);
+            const token = jwt.sign(tokenUser, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
             res.json({ token, user: tokenUser });
         } catch (e) {
             console.error('[Login Error]', e);
@@ -289,8 +295,9 @@ if (db) {
             if (!bcrypt.compareSync(currentPassword, user.password)) {
                 return res.status(401).json({ error: 'Current password is incorrect' });
             }
+            if (!newPassword || newPassword.length < 8) return res.status(400).json({ error: 'New password must be at least 8 characters' });
 
-            const hashedPassword = bcrypt.hashSync(newPassword, 10);
+            const hashedPassword = bcrypt.hashSync(newPassword, 12);
             db.prepare('UPDATE users SET password = ? WHERE id = ?').run(hashedPassword, req.user.id);
             res.json({ message: 'Password changed successfully' });
         } catch (e) { res.status(500).json({ error: e.message }); }
@@ -356,15 +363,17 @@ if (db) {
 
             if (!resetRequest) return res.status(404).json({ error: 'Request not found' });
 
-            // Set temporary password "vital1234"
-            const tempPassword = bcrypt.hashSync('vital1234', 10);
+            // Set temporary password (random 16-char hex)
+            const crypto = require('crypto');
+            const rawTemp = crypto.randomBytes(8).toString('hex');
+            const tempPassword = bcrypt.hashSync(rawTemp, 12);
 
             db.transaction(() => {
                 db.prepare('UPDATE users SET password = ? WHERE id = ?').run(tempPassword, resetRequest.user_id);
                 db.prepare("UPDATE password_resets SET status = 'completed' WHERE id = ?").run(id);
             })();
 
-            res.json({ message: 'Password reset to default (vital1234)' });
+            res.json({ message: 'Password reset successfully', tempPassword: rawTemp });
         } catch (e) { res.status(500).json({ error: e.message }); }
     });
 
@@ -375,7 +384,7 @@ if (db) {
 
             // Optional Password Update
             if (password) {
-                const hashedPassword = bcrypt.hashSync(password, 10);
+                const hashedPassword = bcrypt.hashSync(password, 12);
                 const stmt = db.prepare('UPDATE users SET name = ?, email = ?, role = ?, password = ?, country = ?, phone = ? WHERE id = ?');
                 stmt.run(name, email, role, hashedPassword, country, phone, id);
             } else {
@@ -549,62 +558,6 @@ if (db) {
             });
 
             res.json(filtered);
-        } catch (e) { res.status(500).json({ error: e.message }); }
-    });
-
-    app.put('/api/questions/:id', authenticateToken, (req, res) => {
-        try {
-            const { id } = req.params;
-            const { title, content, is_secret } = req.body;
-
-            // Verify ownership
-            const existing = db.prepare('SELECT user_id FROM questions WHERE id = ?').get(id);
-            if (!existing) return res.status(404).json({ error: 'Question not found' });
-            if (existing.user_id !== req.user.id && req.user.role !== 'admin') {
-                return res.status(403).json({ error: 'Not authorized' });
-            }
-
-            const stmt = db.prepare('UPDATE questions SET title = ?, content = ?, is_secret = ? WHERE id = ?');
-            stmt.run(title, content, is_secret ? 1 : 0, id);
-            res.json({ message: 'Question updated' });
-        } catch (e) { res.status(500).json({ error: e.message }); }
-    });
-
-    app.post('/api/questions', authenticateToken, (req, res) => {
-        try {
-            const { title, content, is_secret } = req.body;
-            console.log(`[Q&A] Received submission from User ${req.user.id}: ${title} (Secret: ${is_secret})`);
-
-            if (!title || !content) return res.status(400).json({ error: 'Title and content are required' });
-
-            const stmt = db.prepare('INSERT INTO questions (user_id, title, content, is_secret) VALUES (?, ?, ?, ?)');
-            const info = stmt.run(req.user.id, title, content, is_secret ? 1 : 0);
-            res.json({ id: info.lastInsertRowid, message: 'Question submitted' });
-        } catch (e) { res.status(500).json({ error: e.message }); }
-    });
-
-    // 4. Admin Answer (Special PUT)
-    app.put('/api/questions/:id/answer', authenticateToken, isAdmin, (req, res) => {
-        try {
-            const { id } = req.params;
-            const { answer } = req.body;
-            db.prepare('UPDATE questions SET answer = ? WHERE id = ?').run(answer, id);
-            res.json({ message: 'Answer updated' });
-        } catch (e) { res.status(500).json({ error: e.message }); }
-    });
-
-    app.delete('/api/questions/:id', authenticateToken, (req, res) => {
-        try {
-            const { id } = req.params;
-            const q = db.prepare('SELECT user_id FROM questions WHERE id = ?').get(id);
-            if (!q) return res.status(404).json({ error: 'Question not found' });
-
-            if (q.user_id !== req.user.id && req.user.role !== 'admin') {
-                return res.status(403).json({ error: 'Not authorized' });
-            }
-
-            db.prepare('DELETE FROM questions WHERE id = ?').run(id);
-            res.json({ message: 'Question deleted' });
         } catch (e) { res.status(500).json({ error: e.message }); }
     });
 
@@ -793,7 +746,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // Email Pw Reset 1: Request Link
-app.post('/api/auth/forgot-password-email', async (req, res) => {
+app.post('/api/auth/forgot-password-email', authLimiter, async (req, res) => {
     const { email } = req.body;
     try {
         if (!db) return res.status(503).json({ error: 'Database unavailable' });
