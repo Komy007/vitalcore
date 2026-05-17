@@ -96,7 +96,7 @@ console.log(`[Database] Initializing SQLite at: ${dbPath}`);
 
 let db;
 try {
-  db = new Database(dbPath, { verbose: console.log });
+  db = new Database(dbPath, { verbose: process.env.NODE_ENV !== 'production' ? console.log : undefined });
   console.log('[Database] Connection successful.');
 
 } catch (e) { console.error('[Database] FS Check Error:', e.message); }
@@ -255,15 +255,21 @@ try {
 
 // --- Create Default Admin ---
 const createAdmin = () => {
-  const adminEmail = 'cambodia.bae@gmail.com';
+  const adminEmail = process.env.ADMIN_EMAIL || 'cambodia.bae@gmail.com';
   const stmt = db.prepare('SELECT * FROM users WHERE email = ?');
   const admin = stmt.get(adminEmail);
 
   if (!admin) {
-    const hashedPassword = bcrypt.hashSync('123456', 10);
+    const crypto = require('crypto');
+    const initialPassword = process.env.ADMIN_INITIAL_PASSWORD || crypto.randomBytes(12).toString('hex');
+    const hashedPassword = bcrypt.hashSync(initialPassword, 12);
     const insert = db.prepare('INSERT INTO users (email, password, name, role) VALUES (?, ?, ?, ?)');
     insert.run(adminEmail, hashedPassword, 'Admin', 'admin');
-    console.log('[Database] Default admin account created.');
+    if (!process.env.ADMIN_INITIAL_PASSWORD) {
+      console.warn('[Database] ADMIN_INITIAL_PASSWORD not set. Generated one-time password:', initialPassword);
+      console.warn('[Database] SAVE THIS PASSWORD NOW — it will not be shown again.');
+    }
+    console.log('[Database] Default admin account created for:', adminEmail);
   }
 };
 createAdmin();
