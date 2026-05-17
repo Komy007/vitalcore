@@ -145,7 +145,10 @@ app.post('/api/translate', async (req, res) => {
             },
             {
                 params: { key: TRANSLATE_API_KEY },
-                headers: { 'Content-Type': 'application/json' }
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Referer': 'https://linteus.com'
+                }
             }
         );
 
