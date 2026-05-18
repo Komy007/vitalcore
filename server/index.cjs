@@ -428,7 +428,10 @@ if (db) {
     app.get('/api/health-reports/:id', (req, res) => {
         try {
             const { id } = req.params;
-            db.prepare('UPDATE health_reports SET views = views + 1 WHERE id = ?').run(id);
+            // Only increment views for real readers, not admin edit fetches
+            if (req.query.edit !== '1') {
+                db.prepare('UPDATE health_reports SET views = views + 1 WHERE id = ?').run(id);
+            }
             const report = db.prepare('SELECT * FROM health_reports WHERE id = ?').get(id);
             if (!report) return res.status(404).json({ error: 'Report not found' });
             res.json(report);

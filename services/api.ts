@@ -121,8 +121,11 @@ export const api = {
             if (!res.ok) throw await res.json();
             return res.json();
         },
-        get: async (id: number) => {
-            const res = await fetch(`${API_URL}/health-reports/${id}`, { cache: 'no-store' });
+        get: async (id: number, forEdit = false) => {
+            const url = forEdit
+                ? `${API_URL}/health-reports/${id}?edit=1`
+                : `${API_URL}/health-reports/${id}`;
+            const res = await fetch(url, { cache: 'no-store' });
             if (!res.ok) throw await res.json();
             return res.json();
         },

@@ -666,27 +666,14 @@ const App: React.FC = () => {
 
   const handleStartEditReport = async (reportId: number) => {
     try {
-      // Fetch full content before editing
-      const fullReport = await api.health.get(reportId);
-
-      // Robust Fallback Logic:
-      // 1. Check if content is effectively empty (stripping HTML tags like <p><br></p>)
-      const rawContent = fullReport.content || '';
-      const strippedContent = rawContent.replace(/<[^>]*>/g, '').trim();
-      const isContentEmpty = strippedContent.length === 0;
-
-      // 2. Use summary if content is empty
-      const safeContent = isContentEmpty ? (fullReport.summary || '') : rawContent;
-
-      // Optional: Notify user if we fell back to summary
-      if (isContentEmpty && fullReport.summary) {
-        // console.log("Recovered content from summary");
-      }
+      // Always fetch the FULL report (SELECT *) — the list API omits content fields
+      // forEdit=true → server skips views increment
+      const fullReport = await api.health.get(reportId, true);
 
       setEditingReportId(reportId);
       setNewReport({
         title: fullReport.title || '',
-        content: safeContent,
+        content: fullReport.content || '',
         summary: fullReport.summary || '',
         key_point: fullReport.key_point || '',
         image_url: fullReport.image_url || '',
@@ -2024,7 +2011,7 @@ const App: React.FC = () => {
                             </div>
                           </div>
                           <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-all">
-                            <button onClick={() => { setEditingReportId(report.id); setNewReport(report); setIsReportModalOpen(true); }} className="p-1.5 bg-black/50 hover:bg-amber-600 rounded text-white"><Edit size={12} /></button>
+                            <button onClick={() => handleStartEditReport(report.id)} className="p-1.5 bg-black/50 hover:bg-amber-600 rounded text-white"><Edit size={12} /></button>
                             <button onClick={() => handleDeleteReport(report.id)} className="p-1.5 bg-black/50 hover:bg-red-600 rounded text-white"><Trash2 size={12} /></button>
                           </div>
                         </div>
