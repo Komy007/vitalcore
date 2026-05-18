@@ -5,6 +5,24 @@ import 'react-quill/dist/quill.snow.css';
 import ImageResize from 'quill-image-resize-module-react';
 
 Quill.register('modules/imageResize', ImageResize);
+
+// Force all Quill links to open in new tab
+const QuillLink = Quill.import('formats/link') as any;
+class NewTabLink extends QuillLink {
+  static create(value: string) {
+    const node = super.create(value);
+    node.setAttribute('target', '_blank');
+    node.setAttribute('rel', 'noopener noreferrer');
+    return node;
+  }
+}
+Quill.register(NewTabLink, true);
+
+// Helper: add target="_blank" to all <a> tags in stored HTML
+const addLinkTargets = (html: string): string => {
+  if (!html) return '';
+  return html.replace(/<a\s/gi, '<a target="_blank" rel="noopener noreferrer" ');
+};
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
@@ -363,15 +381,28 @@ const App: React.FC = () => {
     } catch (err: any) { alert(`Failed to ${editingReportId ? 'update' : 'publish'} report: ${err.error || err.message || 'Unknown error'}`); }
   };
 
+  const loadImageFile = (file: File) => {
+    if (file.size > 5 * 1024 * 1024) return alert('파일 크기가 너무 큽니다. 최대 5MB.');
+    const reader = new FileReader();
+    reader.onloadend = () => setNewReport((prev: any) => ({ ...prev, image_url: reader.result as string }));
+    reader.readAsDataURL(file);
+  };
+
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) return alert('File size too large. Max 5MB.');
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setNewReport({ ...newReport, image_url: reader.result as string });
-      };
-      reader.readAsDataURL(file);
+    if (file) loadImageFile(file);
+  };
+
+  const handleCoverImagePaste = (e: React.ClipboardEvent) => {
+    const items = e.clipboardData?.items;
+    if (!items) return;
+    for (const item of Array.from(items)) {
+      if (item.type.startsWith('image/')) {
+        e.preventDefault();
+        const file = item.getAsFile();
+        if (file) loadImageFile(file);
+        break;
+      }
     }
   };
 
@@ -2230,15 +2261,38 @@ const App: React.FC = () => {
 
                 {/* Image is Shared */}
                 <div className="bg-stone-800/50 p-4 rounded-xl border border-white/5">
-                  <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Cover Image (Shared)</label>
+                  <label className="block text-stone-500 text-xs font-bold uppercase mb-3">커버 이미지 (Cover Image)</label>
                   <div className="space-y-3">
+                    {/* Preview + paste zone */}
+                    <div
+                      onPaste={handleCoverImagePaste}
+                      className="relative w-full h-36 rounded-xl border-2 border-dashed border-white/10 hover:border-amber-500/50 transition-colors flex items-center justify-center overflow-hidden bg-stone-900 cursor-pointer"
+                      title="이미지를 복사 후 여기에 Ctrl+V로 붙여넣기"
+                    >
+                      {newReport.image_url ? (
+                        <img src={newReport.image_url} alt="cover" className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="text-center text-stone-500 pointer-events-none select-none">
+                          <ImageIcon size={28} className="mx-auto mb-2 opacity-40" />
+                          <p className="text-xs font-bold uppercase">Ctrl+V 로 이미지 붙여넣기</p>
+                          <p className="text-[10px] mt-1 opacity-60">또는 아래에서 파일 선택</p>
+                        </div>
+                      )}
+                      {newReport.image_url && (
+                        <button
+                          onClick={() => setNewReport({ ...newReport, image_url: '' })}
+                          className="absolute top-2 right-2 w-6 h-6 bg-black/60 rounded-full flex items-center justify-center text-white hover:bg-red-600 transition-colors"
+                        ><X size={12} /></button>
+                      )}
+                    </div>
+                    {/* File input */}
                     <input
                       type="file"
                       accept="image/*"
                       onChange={handleImageUpload}
                       className="block w-full text-sm text-stone-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-stone-800 file:text-amber-500 hover:file:bg-stone-700"
                     />
-                    <input className="w-full bg-stone-800 p-4 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 font-mono text-sm" placeholder="https://..." value={newReport.image_url || ''} onChange={e => setNewReport({ ...newReport, image_url: e.target.value })} />
+                    <input className="w-full bg-stone-800 p-3 rounded-xl text-white outline-none focus:border-amber-500 border border-white/5 font-mono text-xs" placeholder="또는 이미지 URL 직접 입력 (https://...)" value={newReport.image_url?.startsWith('data:') ? '' : newReport.image_url || ''} onChange={e => setNewReport({ ...newReport, image_url: e.target.value })} />
                   </div>
                 </div>
 
@@ -2321,18 +2375,6 @@ const App: React.FC = () => {
                     />
                   </div>
 
-                  {/* EMERGENCY BACKUP EDITOR: Visible if Quill fails */}
-                  <div className="mt-4 p-4 bg-stone-800/50 rounded-xl border border-white/10">
-                    <label className="text-amber-500 text-xs font-bold uppercase block mb-2 flex items-center gap-2">
-                      Emergency Text Editor (Use this if main editor is empty)
-                    </label>
-                    <textarea
-                      className="w-full bg-black/50 text-white p-4 rounded-lg min-h-[200px] font-sans leading-relaxed focus:outline-none focus:ring-2 focus:ring-amber-500/50"
-                      value={newReport[reportLang === 'ko' ? 'content' : `content_${reportLang}`] || newReport.summary || ''}
-                      onChange={(e) => setNewReport({ ...newReport, [reportLang === 'ko' ? 'content' : `content_${reportLang}`]: e.target.value })}
-                      placeholder="Type content here if the main editor is not working..."
-                    />
-                  </div>
                 </div>
               </div>
               <div className="p-6 border-t border-white/5 bg-stone-900 rounded-b-3xl flex justify-end gap-4">
@@ -2485,7 +2527,7 @@ const App: React.FC = () => {
                         {/* Content - Rich Text Display (Safe for admins) */}
                         <div
                           className="text-stone-200 text-lg md:text-xl leading-8 font-light whitespace-pre-wrap min-h-[100px] font-sans max-w-3xl quill-content"
-                          dangerouslySetInnerHTML={{ __html: displayContent }}
+                          dangerouslySetInnerHTML={{ __html: addLinkTargets(displayContent) }}
                         />
                       </>
                     );
