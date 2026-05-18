@@ -388,6 +388,27 @@ const App: React.FC = () => {
     reader.readAsDataURL(file);
   };
 
+  // Global paste listener — active whenever the report editor modal is open.
+  // This allows Ctrl+V anywhere in the modal (not just on the paste zone div)
+  // to capture an image and set it as the cover.
+  useEffect(() => {
+    if (!isReportModalOpen) return;
+    const handleGlobalPaste = (e: ClipboardEvent) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (const item of Array.from(items)) {
+        if (item.type.startsWith('image/')) {
+          e.preventDefault();
+          const file = item.getAsFile();
+          if (file) loadImageFile(file);
+          break;
+        }
+      }
+    };
+    document.addEventListener('paste', handleGlobalPaste);
+    return () => document.removeEventListener('paste', handleGlobalPaste);
+  }, [isReportModalOpen]);
+
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) loadImageFile(file);
@@ -2213,9 +2234,11 @@ const App: React.FC = () => {
                   <div className="space-y-3">
                     {/* Preview + paste zone */}
                     <div
+                      tabIndex={0}
                       onPaste={handleCoverImagePaste}
-                      className="relative w-full h-36 rounded-xl border-2 border-dashed border-white/10 hover:border-amber-500/50 transition-colors flex items-center justify-center overflow-hidden bg-stone-900 cursor-pointer"
-                      title="이미지를 복사 후 여기에 Ctrl+V로 붙여넣기"
+                      onClick={(e) => (e.currentTarget as HTMLDivElement).focus()}
+                      className="relative w-full h-36 rounded-xl border-2 border-dashed border-white/10 hover:border-amber-500/50 focus:border-amber-500 focus:outline-none transition-colors flex items-center justify-center overflow-hidden bg-stone-900 cursor-pointer"
+                      title="이미지를 복사 후 Ctrl+V로 붙여넣기"
                     >
                       {newReport.image_url ? (
                         <img src={newReport.image_url} alt="cover" className="w-full h-full object-cover" />
