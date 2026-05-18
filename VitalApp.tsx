@@ -813,11 +813,11 @@ const App: React.FC = () => {
       <nav className={`fixed w-full z-50 transition-all duration-700 ${isScrolled || isMenuOpen ? 'bg-stone-950/80 backdrop-blur-2xl py-4 border-b border-white/5' : 'bg-transparent py-8'}`}>
         <div className="max-w-[1700px] mx-auto px-6 lg:px-12">
           <div className="nav-container justify-between flex items-center">
-            <div className="flex items-center gap-4 cursor-pointer z-50 group shrink-0" onClick={() => { setCurrentView('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
-              <VitalCoreLogo className="w-14 h-14 md:w-20 md:h-20 drop-shadow-[0_0_20px_rgba(217,119,6,0.5)]" />
+            <div className="flex items-center gap-3 cursor-pointer z-50 group shrink-0" onClick={() => { setCurrentView('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+              <VitalCoreLogo className="w-10 h-10 md:w-16 md:h-16 drop-shadow-[0_0_20px_rgba(217,119,6,0.5)]" />
               <div className="flex flex-col justify-center">
-                <span className="text-[10px] text-stone-500 font-mono mb-0.5 tracking-wider group-hover:text-amber-500 transition-colors">www.linteus.com</span>
-                <span className="font-serif font-bold text-2xl md:text-3xl tracking-tight text-white uppercase leading-none">VITAL <span className="text-amber-500">CORE</span></span>
+                <span className="text-[9px] md:text-[10px] text-stone-500 font-mono mb-0.5 tracking-wider group-hover:text-amber-500 transition-colors">www.linteus.com</span>
+                <span className="font-serif font-bold text-xl md:text-3xl tracking-tight text-white uppercase leading-none">VITAL <span className="text-amber-500">CORE</span></span>
                 <span className="text-[10px] text-stone-500 tracking-[0.4em] font-black uppercase hidden md:block mt-1">Phellinus Lab</span>
               </div>
             </div>
@@ -954,39 +954,37 @@ const App: React.FC = () => {
       {currentView === 'home' && (
         <>
           {/* Hero Section */}
-          <section className="relative h-[100vh] min-h-[800px] flex items-center justify-center bg-fixed bg-center bg-cover overflow-hidden" style={{ backgroundImage: `url(${IMAGES.hero_forest})` }}>
-            <div className="absolute inset-0 bg-stone-950/30 backdrop-blur-[2px]"></div>
+          <section className="relative h-[100svh] min-h-[600px] md:min-h-[800px] flex items-center justify-center bg-scroll md:bg-fixed bg-center bg-cover overflow-hidden" style={{ backgroundImage: `url(${IMAGES.hero_forest})` }}>
+            <div className="absolute inset-0 bg-stone-950/40 md:bg-stone-950/30 backdrop-blur-[2px]"></div>
 
-            <div className="relative z-10 w-full max-w-[1800px] px-8 lg:px-12 flex flex-col items-center justify-center h-full pt-28 text-center">
-              <div className="animate-fade-in-up max-w-6xl">
-                <div className="inline-block px-4 py-1.5 rounded-full border border-amber-500/30 bg-amber-900/10 backdrop-blur-md mb-6">
-                  <span className="text-amber-500 text-xs font-black uppercase tracking-[0.3em]">{t.hero.badge}</span>
+            <div className="relative z-10 w-full max-w-[1800px] px-5 md:px-8 lg:px-12 flex flex-col items-center justify-center h-full pt-24 md:pt-28 text-center">
+              <div className="animate-fade-in-up max-w-6xl w-full">
+                <div className="inline-block px-4 py-1.5 rounded-full border border-amber-500/30 bg-amber-900/20 backdrop-blur-md mb-5 md:mb-6">
+                  <span className="text-amber-400 text-[10px] md:text-xs font-black uppercase tracking-[0.3em]">{t.hero.badge}</span>
                 </div>
-                {/* Refined Title Sizes for Harmony across Languages */}
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif font-medium text-white mb-8 leading-[1.1] tracking-tight drop-shadow-2xl">
+                <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-serif font-medium text-white mb-5 md:mb-8 leading-[1.15] md:leading-[1.1] tracking-tight drop-shadow-2xl">
                   {t.hero.title_top} <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-500 to-amber-700 font-serif italic pr-2">{t.hero.title_highlight}</span>
                 </h1>
-                {/* Refined Description Size & Max Width */}
-                <p className="text-base md:text-lg lg:text-xl text-stone-300 mb-12 font-light leading-8 md:leading-relaxed max-w-2xl mx-auto tracking-wide">{t.hero.desc}</p>
-                <button onClick={() => scrollToSection('research')} className="px-12 py-5 bg-amber-700 hover:bg-amber-600 text-white text-sm font-bold rounded-full shadow-[0_0_30px_rgba(180,83,9,0.4)] transition-all uppercase tracking-[0.2em] border border-white/10">{t.hero.btn_research}</button>
+                <p className="text-sm md:text-lg lg:text-xl text-stone-300 mb-8 md:mb-12 font-light leading-7 md:leading-8 max-w-2xl mx-auto tracking-wide px-2 md:px-0">{t.hero.desc}</p>
+                <button onClick={() => scrollToSection('research')} className="px-8 md:px-12 py-4 md:py-5 bg-amber-700 hover:bg-amber-600 text-white text-xs md:text-sm font-bold rounded-full shadow-[0_0_30px_rgba(180,83,9,0.4)] transition-all uppercase tracking-[0.2em] border border-white/10">{t.hero.btn_research}</button>
               </div>
             </div>
           </section>
 
           {/* About Section - Expanded with Recommended Phellinus Tab */}
-          <section id="about" className="py-24 md:py-32 relative overflow-hidden bg-fixed bg-center bg-cover" style={{ backgroundImage: `url(${IMAGES.about_bg})` }}>
-            <div className="absolute inset-0 bg-stone-950/35 backdrop-blur-sm"></div>
-            <div className="max-w-[1500px] mx-auto px-8 relative z-10 text-center">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-medium text-amber-500 mb-8 uppercase tracking-tight">{t.about.title}</h2>
-              <div className="flex flex-wrap justify-center gap-3 mb-12 px-4">
+          <section id="about" className="py-16 md:py-24 lg:py-32 relative overflow-hidden bg-scroll md:bg-fixed bg-center bg-cover" style={{ backgroundImage: `url(${IMAGES.about_bg})` }}>
+            <div className="absolute inset-0 bg-stone-950/50 md:bg-stone-950/35 backdrop-blur-sm"></div>
+            <div className="max-w-[1500px] mx-auto px-4 md:px-8 relative z-10 text-center">
+              <h2 className="text-2xl md:text-4xl lg:text-5xl font-serif font-medium text-amber-500 mb-6 md:mb-8 uppercase tracking-tight">{t.about.title}</h2>
+              <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-8 md:mb-12 px-2 md:px-4">
                 {Object.entries(t.about.tabs).map(([key, label]) => (
-                  <button key={key} onClick={() => handleAboutTabClick(key)} className={`px-6 py-3 rounded-full border text-xs font-bold uppercase tracking-widest transition-all ${aboutActiveTab === key ? 'bg-amber-700 border-amber-600 text-white shadow-xl scale-105' : 'bg-stone-900/50 border-white/5 text-stone-500 hover:text-stone-300 hover:border-white/10'}`}>
+                  <button key={key} onClick={() => handleAboutTabClick(key)} className={`px-4 md:px-6 py-2 md:py-3 rounded-full border text-[10px] md:text-xs font-bold uppercase tracking-widest transition-all ${aboutActiveTab === key ? 'bg-amber-700 border-amber-600 text-white shadow-xl scale-105' : 'bg-stone-900/50 border-white/10 text-stone-400 hover:text-stone-300 hover:border-white/20'}`}>
                     {label as string}
                   </button>
                 ))}
               </div>
 
-              <div className="bg-stone-900/60 backdrop-blur-3xl border border-white/10 p-10 md:p-16 rounded-[4rem] text-left min-h-[500px] shadow-2xl transition-all duration-500">
+              <div className="bg-stone-900/70 backdrop-blur-3xl border border-white/10 p-5 sm:p-8 md:p-12 lg:p-16 rounded-[2rem] md:rounded-[3rem] lg:rounded-[4rem] text-left min-h-[400px] md:min-h-[500px] shadow-2xl transition-all duration-500">
                 {aboutActiveTab === 'recommended' ? (
                   <div className="max-w-7xl mx-auto">
                     <div className="flex items-center gap-4 mb-12 border-b border-white/10 pb-6">
@@ -1083,32 +1081,32 @@ const App: React.FC = () => {
                     </MobileModal>
 
                     {aboutActiveTab === 'intro' && t.about.introDetails ? (
-                      <div className="grid lg:grid-cols-2 gap-12 items-start">
+                      <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
                         <div>
-                          <p className="text-lg md:text-xl lg:text-2xl font-light leading-[1.8] text-stone-50 opacity-95 whitespace-pre-wrap first-letter:text-5xl first-letter:font-serif first-letter:float-left first-letter:mr-3 first-letter:text-amber-500">
+                          <p className="text-base md:text-xl lg:text-2xl font-light leading-[1.8] text-stone-100 opacity-95 whitespace-pre-wrap first-letter:text-4xl md:first-letter:text-5xl first-letter:font-serif first-letter:float-left first-letter:mr-3 first-letter:text-amber-500">
                             {t.about.cards[0]?.desc}
                           </p>
                         </div>
-                        <div className="space-y-4">
+                        <div className="space-y-3 md:space-y-4">
                           {t.about.introDetails.map((item: any, i: number) => (
-                            <div key={i} className="bg-stone-950/50 p-6 rounded-2xl border border-white/10 hover:border-amber-500/30 transition-colors">
-                              <h4 className="text-amber-500 font-bold mb-3 text-lg font-serif">{item.title}</h4>
+                            <div key={i} className="bg-stone-950/60 p-4 md:p-6 rounded-xl md:rounded-2xl border border-white/10 hover:border-amber-500/30 transition-colors">
+                              <h4 className="text-amber-500 font-bold mb-2 md:mb-3 text-base md:text-lg font-serif">{item.title}</h4>
                               <p className="text-stone-300 text-sm leading-relaxed whitespace-pre-line">{item.content}</p>
                             </div>
                           ))}
                         </div>
                       </div>
                     ) : (
-                      <p className="text-lg md:text-xl lg:text-2xl font-light leading-[1.8] text-stone-50 opacity-95 whitespace-pre-wrap first-letter:text-5xl first-letter:font-serif first-letter:float-left first-letter:mr-3 first-letter:text-amber-500">
+                      <p className="text-base md:text-xl lg:text-2xl font-light leading-[1.8] text-stone-100 opacity-95 whitespace-pre-wrap first-letter:text-4xl md:first-letter:text-5xl first-letter:font-serif first-letter:float-left first-letter:mr-3 first-letter:text-amber-500">
                         {aboutActiveTab === 'intro' ? t.about.cards[0]?.desc :
                           aboutActiveTab === 'compounds' ? t.about.cards[1]?.desc :
                             aboutActiveTab === 'mechanism' ? t.about.cards[2]?.desc : t.about.cards[3]?.desc}
                       </p>
                     )}
-                    <div className="mt-12 flex gap-4">
-                      <span className="p-3 bg-amber-600/10 rounded-full text-amber-500"><Info size={24} /></span>
-                      <span className="p-3 bg-amber-600/10 rounded-full text-amber-500"><FlaskConical size={24} /></span>
-                      <span className="p-3 bg-amber-600/10 rounded-full text-amber-500"><Shield size={24} /></span>
+                    <div className="mt-8 md:mt-12 flex gap-3 md:gap-4">
+                      <span className="p-2.5 md:p-3 bg-amber-600/10 rounded-full text-amber-500"><Info size={20} className="md:w-6 md:h-6" /></span>
+                      <span className="p-2.5 md:p-3 bg-amber-600/10 rounded-full text-amber-500"><FlaskConical size={20} className="md:w-6 md:h-6" /></span>
+                      <span className="p-2.5 md:p-3 bg-amber-600/10 rounded-full text-amber-500"><Shield size={20} className="md:w-6 md:h-6" /></span>
                     </div>
                   </div>
                 )}
@@ -1117,18 +1115,18 @@ const App: React.FC = () => {
           </section>
 
           {/* Research Section */}
-          <section id="research" className="py-24 relative bg-fixed bg-center bg-cover" style={{ backgroundImage: `url(${IMAGES.research_bg})` }}>
-            <div className="absolute inset-0 bg-stone-950/40 backdrop-blur-md"></div>
-            <div className="max-w-7xl mx-auto px-8 relative z-10 text-white text-center">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-medium mb-12 uppercase tracking-tight">{t.research.title}</h2>
+          <section id="research" className="py-16 md:py-24 relative bg-scroll md:bg-fixed bg-center bg-cover" style={{ backgroundImage: `url(${IMAGES.research_bg})` }}>
+            <div className="absolute inset-0 bg-stone-950/55 md:bg-stone-950/40 backdrop-blur-md"></div>
+            <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10 text-white text-center">
+              <h2 className="text-2xl md:text-4xl lg:text-5xl font-serif font-medium mb-8 md:mb-12 uppercase tracking-tight">{t.research.title}</h2>
 
-              <div className="grid lg:grid-cols-3 gap-16 items-start text-left">
+              <div className="grid lg:grid-cols-3 gap-8 lg:gap-16 items-start text-left">
                 {/* Chart Area */}
-                <div className="lg:col-span-2 space-y-8">
+                <div className="lg:col-span-2 space-y-6 md:space-y-8">
                   {/* New Research Tabs Grid */}
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
                     {Object.entries(t.research.tabs).map(([key, label]) => (
-                      <button key={key} onClick={() => handleResearchTabClick(key as any)} className={`px-4 py-3 rounded-xl border text-xs font-bold uppercase tracking-wider transition-all ${activeTab === key ? 'bg-amber-600 border-amber-500 text-white shadow-lg scale-105' : 'bg-stone-900/60 border-white/10 text-stone-400 hover:bg-stone-800 hover:text-white'}`}>
+                      <button key={key} onClick={() => handleResearchTabClick(key as any)} className={`px-3 md:px-4 py-2.5 md:py-3 rounded-xl border text-[10px] md:text-xs font-bold uppercase tracking-wider transition-all ${activeTab === key ? 'bg-amber-600 border-amber-500 text-white shadow-lg scale-105' : 'bg-stone-900/60 border-white/10 text-stone-400 hover:bg-stone-800 hover:text-white'}`}>
                         {label as string}
                       </button>
                     ))}
@@ -1164,7 +1162,7 @@ const App: React.FC = () => {
                     </div>
                   </MobileModal>
 
-                  <div className="bg-stone-900/40 backdrop-blur-3xl p-10 rounded-[2.5rem] border border-white/10 shadow-2xl h-[400px]">
+                  <div className="bg-stone-900/60 backdrop-blur-3xl p-4 md:p-10 rounded-[1.5rem] md:rounded-[2.5rem] border border-white/10 shadow-2xl h-[280px] md:h-[400px]">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={researchData}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#444" vertical={false} />
@@ -1208,20 +1206,20 @@ const App: React.FC = () => {
           </section>
 
           {/* Benefits Section */}
-          <section id="benefits" className="py-24 relative bg-scroll md:bg-fixed bg-center bg-cover bg-stone-950" style={{ backgroundImage: `url(${IMAGES.benefits_bg})` }}>
-            <div className="absolute inset-0 bg-stone-950/30 backdrop-blur-lg"></div>
-            <div className="max-w-[1600px] mx-auto px-8 relative z-10 text-white">
-              <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-medium tracking-tight mb-6 uppercase text-white">{t.benefits.title}</h2>
-                <p className="text-white text-sm md:text-base font-bold tracking-[0.2em] uppercase">{t.benefits.desc}</p>
+          <section id="benefits" className="py-16 md:py-24 relative bg-scroll md:bg-fixed bg-center bg-cover bg-stone-950" style={{ backgroundImage: `url(${IMAGES.benefits_bg})` }}>
+            <div className="absolute inset-0 bg-stone-950/50 md:bg-stone-950/30 backdrop-blur-lg"></div>
+            <div className="max-w-[1600px] mx-auto px-4 md:px-8 relative z-10 text-white">
+              <div className="text-center mb-10 md:mb-16">
+                <h2 className="text-2xl md:text-4xl lg:text-5xl font-serif font-medium tracking-tight mb-4 md:mb-6 uppercase text-white">{t.benefits.title}</h2>
+                <p className="text-stone-300 md:text-white text-xs md:text-base font-bold tracking-[0.2em] uppercase">{t.benefits.desc}</p>
               </div>
-              <div className="flex flex-wrap justify-center gap-5 mb-16 relative z-20">
+              <div className="flex flex-wrap justify-center gap-2 md:gap-5 mb-8 md:mb-16 relative z-20">
                 {t.benefits.items.map((item: string, i: number) => {
                   const Icon = benefitIcons[i] || Activity;
                   return (
-                    <button key={i} onClick={() => handleBenefitClick(i)} className={`flex items-center gap-5 px-8 py-5 rounded-[1.5rem] border transition-all duration-500 ${benefitActiveTab === i ? 'bg-amber-600 border-amber-600 text-white shadow-2xl scale-105' : 'bg-stone-800 border-white/20 text-stone-200 hover:bg-stone-700 hover:border-amber-500/50'}`}>
-                      <Icon size={28} className={benefitActiveTab === i ? 'text-white' : 'text-stone-400'} />
-                      <span className="font-black text-sm xl:text-base tracking-tight uppercase whitespace-nowrap">{item}</span>
+                    <button key={i} onClick={() => handleBenefitClick(i)} className={`flex items-center gap-3 md:gap-5 px-5 py-3 md:px-8 md:py-5 rounded-2xl md:rounded-[1.5rem] border transition-all duration-500 ${benefitActiveTab === i ? 'bg-amber-600 border-amber-600 text-white shadow-2xl scale-105' : 'bg-stone-800/80 border-white/15 text-stone-200 hover:bg-stone-700 hover:border-amber-500/50'}`}>
+                      <Icon size={20} className={`md:w-7 md:h-7 ${benefitActiveTab === i ? 'text-white' : 'text-stone-400'}`} />
+                      <span className="font-black text-xs md:text-sm xl:text-base tracking-tight uppercase whitespace-nowrap">{item}</span>
                     </button>
                   );
                 })}
@@ -1265,20 +1263,20 @@ const App: React.FC = () => {
                   </div>
                 )}
               </MobileModal>
-              <div className="bg-stone-900/60 backdrop-blur-3xl p-8 md:p-12 lg:p-16 rounded-[4rem] border border-white/5 shadow-2xl min-h-[400px] flex items-center mb-16 text-left relative overflow-hidden">
+              <div className="bg-stone-900/70 backdrop-blur-3xl p-5 sm:p-8 md:p-12 lg:p-16 rounded-[2rem] md:rounded-[3rem] lg:rounded-[4rem] border border-white/5 shadow-2xl min-h-[350px] md:min-h-[400px] flex items-center mb-10 md:mb-16 text-left relative overflow-hidden">
                 {t.benefits.details && t.benefits.details[benefitActiveTab] && (
-                  <div className="grid lg:grid-cols-5 gap-12 lg:gap-16 w-full relative z-10">
-                    <div className="lg:col-span-3 space-y-8">
-                      <div className="space-y-4">
+                  <div className="grid lg:grid-cols-5 gap-8 lg:gap-16 w-full relative z-10">
+                    <div className="lg:col-span-3 space-y-6 md:space-y-8">
+                      <div className="space-y-3 md:space-y-4">
                         <span className="text-amber-500 font-black text-[10px] md:text-xs uppercase tracking-[0.4em] block">{t.benefits.details[benefitActiveTab].scientificTerm}</span>
-                        <h3 className="text-2xl md:text-4xl font-serif font-bold text-white leading-tight">{t.benefits.details[benefitActiveTab].title}</h3>
-                        <p className="text-amber-200 text-lg md:text-xl font-serif italic border-l-4 border-amber-600 pl-4 py-1">{t.benefits.details[benefitActiveTab].summary}</p>
+                        <h3 className="text-xl md:text-4xl font-serif font-bold text-white leading-tight">{t.benefits.details[benefitActiveTab].title}</h3>
+                        <p className="text-amber-200 text-base md:text-xl font-serif italic border-l-4 border-amber-600 pl-4 py-1">{t.benefits.details[benefitActiveTab].summary}</p>
                       </div>
                       <div className="h-px bg-white/10 w-full"></div>
-                      <p className="text-stone-300 text-base md:text-lg leading-[1.8] font-light opacity-95 whitespace-pre-wrap">{t.benefits.details[benefitActiveTab].content}</p>
+                      <p className="text-stone-300 text-sm md:text-lg leading-[1.8] font-light opacity-95 whitespace-pre-wrap">{t.benefits.details[benefitActiveTab].content}</p>
                     </div>
                     <div className="lg:col-span-2 space-y-8 flex flex-col justify-center">
-                      <div className="p-8 bg-amber-900/20 rounded-[2.5rem] border border-amber-500/30 shadow-inner relative group">
+                      <div className="p-5 md:p-8 bg-amber-900/20 rounded-[1.5rem] md:rounded-[2.5rem] border border-amber-500/30 shadow-inner relative group">
                         <div className="absolute top-0 right-0 p-6 opacity-20"><FlaskConical size={64} className="text-amber-600" /></div>
                         <h4 className="text-amber-500 font-black text-xs uppercase tracking-[0.2em] mb-4 flex items-center gap-2"><BookOpen size={16} /> Key Evidence (NCBI/PMC)</h4>
                         <p className="text-stone-100 text-sm md:text-base font-medium leading-relaxed mb-8 relative z-10">
@@ -1303,14 +1301,14 @@ const App: React.FC = () => {
                 )}
               </div>
               <div className="max-w-5xl mx-auto animate-in fade-in slide-in-from-bottom-10 duration-1000">
-                <div className="relative p-10 md:p-14 bg-gradient-to-br from-amber-600/20 via-stone-900/80 to-stone-950/90 backdrop-blur-2xl rounded-[4rem] border border-amber-500/30 shadow-[0_0_50px_rgba(217,119,6,0.15)] overflow-hidden text-left">
+                <div className="relative p-6 md:p-10 lg:p-14 bg-gradient-to-br from-amber-600/20 via-stone-900/80 to-stone-950/90 backdrop-blur-2xl rounded-[2rem] md:rounded-[3rem] lg:rounded-[4rem] border border-amber-500/30 shadow-[0_0_50px_rgba(217,119,6,0.15)] overflow-hidden text-left">
                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent opacity-50"></div>
-                  <Quote size={64} className="text-amber-500/20 absolute -top-4 -left-4 rotate-180" />
-                  <div className="relative z-10 flex flex-col md:flex-row items-center gap-10">
-                    <div className="shrink-0 p-6 bg-amber-600/10 rounded-full border border-amber-500/20 shadow-inner"><FlaskConical size={64} className="text-amber-500" /></div>
-                    <div className="space-y-6">
-                      <h4 className="text-2xl md:text-3xl font-serif font-bold text-white italic">Scientific Summary</h4>
-                      <p className="text-lg md:text-xl text-stone-100 font-light leading-relaxed italic">"{t.benefits.conclusion}"</p>
+                  <Quote size={48} className="text-amber-500/20 absolute -top-2 -left-2 rotate-180 md:w-16 md:h-16" />
+                  <div className="relative z-10 flex flex-col md:flex-row items-center gap-6 md:gap-10">
+                    <div className="shrink-0 p-5 md:p-6 bg-amber-600/10 rounded-full border border-amber-500/20 shadow-inner"><FlaskConical size={48} className="text-amber-500 md:w-16 md:h-16" /></div>
+                    <div className="space-y-4 md:space-y-6 text-center md:text-left">
+                      <h4 className="text-xl md:text-3xl font-serif font-bold text-white italic">Scientific Summary</h4>
+                      <p className="text-base md:text-xl text-stone-100 font-light leading-relaxed italic">"{t.benefits.conclusion}"</p>
                     </div>
                   </div>
                 </div>
@@ -1319,35 +1317,35 @@ const App: React.FC = () => {
           </section>
 
           {/* Usage Section */}
-          <section id="usage" className="py-24 relative bg-fixed bg-center bg-cover" style={{ backgroundImage: `url(${IMAGES.usage_bg})` }}>
-            <div className="absolute inset-0 bg-stone-950/40 backdrop-blur-xl"></div>
-            <div className="max-w-7xl mx-auto px-8 relative z-10 text-white text-left">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-medium text-center mb-20 uppercase tracking-tight">{t.usage.title}</h2>
-              <div className="space-y-16">
+          <section id="usage" className="py-16 md:py-24 relative bg-scroll md:bg-fixed bg-center bg-cover" style={{ backgroundImage: `url(${IMAGES.usage_bg})` }}>
+            <div className="absolute inset-0 bg-stone-950/55 md:bg-stone-950/40 backdrop-blur-xl"></div>
+            <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10 text-white text-left">
+              <h2 className="text-2xl md:text-4xl lg:text-5xl font-serif font-medium text-center mb-10 md:mb-20 uppercase tracking-tight">{t.usage.title}</h2>
+              <div className="space-y-10 md:space-y-16">
                 {/* Boiling Method Steps */}
-                <div className="bg-stone-900/65 backdrop-blur-3xl p-8 md:p-14 rounded-[3.5rem] border border-white/10 shadow-2xl relative overflow-hidden">
+                <div className="bg-stone-900/75 backdrop-blur-3xl p-5 md:p-10 lg:p-14 rounded-[2rem] md:rounded-[3.5rem] border border-white/10 shadow-2xl relative overflow-hidden">
                   <div className="absolute top-0 right-0 p-8 opacity-5"><Coffee size={120} /></div>
-                  <div className="flex items-center gap-5 mb-12 relative z-10">
-                    <span className="p-4 bg-amber-600/20 rounded-full text-amber-500 border border-amber-600/30"><Flame size={32} /></span>
+                  <div className="flex items-center gap-4 md:gap-5 mb-8 md:mb-12 relative z-10">
+                    <span className="p-3 md:p-4 bg-amber-600/20 rounded-full text-amber-500 border border-amber-600/30 shrink-0"><Flame size={24} className="md:w-8 md:h-8" /></span>
                     <div>
-                      <h3 className="text-2xl md:text-3xl font-serif font-bold text-white uppercase tracking-tight">{t.usage.sub1}</h3>
-                      <p className="text-stone-400 text-sm font-medium mt-1 opacity-80">Follow these steps to extract the maximum potency.</p>
+                      <h3 className="text-xl md:text-3xl font-serif font-bold text-white uppercase tracking-tight">{t.usage.sub1}</h3>
+                      <p className="text-stone-400 text-xs md:text-sm font-medium mt-1 opacity-80">Follow these steps to extract the maximum potency.</p>
                     </div>
                   </div>
 
-                  <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-8 relative z-10">
+                  <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-8 relative z-10">
                     {t.usage.steps?.map((step: any, i: number) => (
-                      <div key={i} className="group flex flex-col gap-6">
-                        <div className="relative aspect-[4/5] md:aspect-square rounded-[2rem] overflow-hidden border border-white/10 shadow-lg cursor-pointer">
+                      <div key={i} className="group flex flex-col gap-3 md:gap-6">
+                        <div className="relative aspect-square rounded-[1.2rem] md:rounded-[2rem] overflow-hidden border border-white/10 shadow-lg cursor-pointer">
                           <img src={step.image} alt={`Step ${step.step}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 filter brightness-[0.85] group-hover:brightness-100" />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
-                          <div className="absolute top-4 left-4 w-12 h-12 flex items-center justify-center bg-white/10 backdrop-blur-md text-white font-black rounded-full text-sm border border-white/20 shadow-xl group-hover:bg-amber-600 group-hover:border-amber-500 transition-colors">
+                          <div className="absolute top-3 left-3 md:top-4 md:left-4 w-9 h-9 md:w-12 md:h-12 flex items-center justify-center bg-white/10 backdrop-blur-md text-white font-black rounded-full text-xs md:text-sm border border-white/20 shadow-xl group-hover:bg-amber-600 group-hover:border-amber-500 transition-colors">
                             {step.step}
                           </div>
                         </div>
                         <div>
-                          <h4 className="text-white font-bold text-lg mb-2 leading-tight group-hover:text-amber-500 transition-colors">Step {step.step}</h4>
-                          <p className="text-stone-400 text-sm leading-relaxed border-l-2 border-stone-800 pl-4 group-hover:border-amber-600/50 transition-colors">{step.text}</p>
+                          <h4 className="text-white font-bold text-sm md:text-lg mb-1 md:mb-2 leading-tight group-hover:text-amber-500 transition-colors">Step {step.step}</h4>
+                          <p className="text-stone-400 text-xs md:text-sm leading-relaxed border-l-2 border-stone-800 pl-3 md:pl-4 group-hover:border-amber-600/50 transition-colors">{step.text}</p>
                         </div>
                       </div>
                     ))}
@@ -1356,16 +1354,16 @@ const App: React.FC = () => {
 
                 {/* Intake Recommendations & Safety Studies */}
                 <div className="space-y-12">
-                  <div className="flex items-center gap-5 justify-center md:justify-start">
-                    <div className="w-16 h-16 bg-amber-600/20 rounded-2xl flex items-center justify-center border border-amber-600/30">
-                      <ShieldCheck size={32} className="text-amber-500" />
+                  <div className="flex items-center gap-4 justify-center md:justify-start">
+                    <div className="w-12 h-12 md:w-16 md:h-16 bg-amber-600/20 rounded-2xl flex items-center justify-center border border-amber-600/30 shrink-0">
+                      <ShieldCheck size={24} className="text-amber-500 md:w-8 md:h-8" />
                     </div>
-                    <h3 className="text-2xl md:text-3xl font-serif font-bold text-white uppercase tracking-tight">{t.usage.sub2}</h3>
+                    <h3 className="text-xl md:text-3xl font-serif font-bold text-white uppercase tracking-tight">{t.usage.sub2}</h3>
                   </div>
 
-                  <div className="grid lg:grid-cols-3 gap-6">
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                     {t.usage.safetyStudies?.map((study: any, i: number) => (
-                      <div key={i} className="bg-stone-900/40 backdrop-blur-md p-8 rounded-[2.5rem] border border-white/5 hover:border-amber-500/30 transition-colors group flex flex-col">
+                      <div key={i} className="bg-stone-900/60 backdrop-blur-md p-5 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] border border-white/5 hover:border-amber-500/30 transition-colors group flex flex-col">
                         <div className="mb-6">
                           <span className="inline-block px-3 py-1 bg-amber-900/30 text-amber-500 text-[10px] font-bold uppercase tracking-widest rounded-full mb-3 border border-amber-500/20">
                             Scientific Evidence {i + 1}
@@ -1417,95 +1415,46 @@ const App: React.FC = () => {
             </div>
           </section>
 
-          {/* Health Report Section */}
-          <section id="health" className="py-24 relative bg-stone-900 text-center">
-            <div className="max-w-6xl mx-auto px-8">
-              <h2 className="text-3xl md:text-4xl font-serif font-medium text-white mb-12 uppercase tracking-tight">{t.nav.health}</h2>
-
-              <div className="grid md:grid-cols-2 gap-8 text-left">
-                {(!Array.isArray(healthReports) || healthReports.length === 0) && <p className="text-stone-500 col-span-2 text-center">No reports available yet.</p>}
-                {Array.isArray(healthReports) && healthReports.map((report) => (
-                  <div key={report.id} className="bg-gradient-to-br from-stone-900 to-stone-950 p-8 rounded-[2rem] border border-amber-500/10 hover:border-amber-500/30 shadow-2xl relative overflow-hidden group transition-all">
-                    <span className="text-amber-500 text-[10px] font-black uppercase tracking-widest mb-4 block">Exclusive Report</span>
-                    <h3 className="text-xl font-serif font-bold text-white mb-4 group-hover:text-amber-500 transition-colors">
-                      {report[`title_${lang}`] || report.title}
-                    </h3>
-                    <p className="text-stone-400 text-sm leading-relaxed mb-6 line-clamp-3">
-                      {report[`summary_${lang}`] || report.summary || "Detailed analysis of Phellinus Linteus effects."}
-                    </p>
-                    <div className="flex justify-between items-center mt-auto">
-                      <span className="text-xs text-stone-600 font-mono">{new Date(report.created_at).toLocaleDateString()} • {report.views} views</span>
-                      <button onClick={() => handleReadReport(report)} className="px-6 py-2 bg-white/5 hover:bg-amber-600 hover:text-white border border-white/10 rounded-full font-bold transition-all text-xs uppercase tracking-wider">
-                        Read Report
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {!isAuthenticated && viewedReportCount >= 3 && (
-                <div className="mt-12 p-8 border border-amber-500/20 rounded-3xl bg-amber-900/10 inline-block">
-                  <Lock size={32} className="text-amber-500 mx-auto mb-4" />
-                  <p className="text-stone-300 mb-4">You have used your 3 free articles. Please login to continue reading.</p>
-                  <button onClick={() => setIsAuthModalOpen(true)} className="px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-full transition-all">Login / Join</button>
-                </div>
-              )}
-
-              {/* Admin Post Report (Optional: Add UI for admin to post) */}
-              {isAdmin && (
-                <div className="mt-12 border-t border-white/5 pt-8">
-                  <h4 className="text-amber-500 font-bold mb-4">Admin: Post New Report</h4>
-                  {/* Simplified Admin Form - could be in a modal or separate page */}
-                  <button
-                    onClick={() => setIsReportModalOpen(true)}
-                    className="px-6 py-2 bg-stone-800 text-stone-400 hover:text-white rounded-lg text-xs uppercase font-bold"
-                  >
-                    + Write Health Essay
-                  </button>
-                </div>
-              )}
-            </div>
-          </section>
-
-
-
-          {/* Report Reader Modal - Improved Mobile UX */}
-
-
-          {/* Conditional Content based on Current View */}
-          <section id="health" className="py-24 relative bg-stone-900 border-t border-white/5">
-            <div className="max-w-7xl mx-auto px-6">
-              <div className="flex justify-between items-end mb-12 border-b border-white/10 pb-6">
+          {/* Health Reports Preview Section */}
+          <section id="health" className="py-16 md:py-24 relative bg-stone-900 border-t border-white/5">
+            <div className="max-w-7xl mx-auto px-4 md:px-6">
+              <div className="flex flex-wrap justify-between items-end gap-4 mb-8 md:mb-12 border-b border-white/10 pb-5 md:pb-6">
                 <div>
                   <h2 onClick={() => { setCurrentView('health'); window.scrollTo(0, 0); }} className="text-3xl md:text-5xl font-serif font-medium text-white uppercase tracking-tight mb-2 cursor-pointer hover:text-amber-500 transition-colors">{t.nav.health}</h2>
                   <p className="text-stone-400 text-sm">Vital Core Research Team</p>
                 </div>
                 <button onClick={() => { setCurrentView('health'); window.scrollTo(0, 0); }} className="px-6 py-3 bg-stone-800 text-stone-300 font-bold rounded-full text-xs uppercase tracking-widest hover:text-white transition-all">View All Reports &rarr;</button>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                {healthReports.length === 0 && (
+                  <p className="text-stone-500 col-span-3 text-center py-10">No reports available yet.</p>
+                )}
                 {healthReports.slice(0, 3).map((report) => (
-                  <div key={report.id} onClick={() => handleReadReport(report)} className="cursor-pointer group">
-                    <div className="aspect-[4/3] rounded-2xl overflow-hidden mb-6 bg-stone-900 border border-white/5 relative">
+                  <div key={report.id} onClick={() => handleReadReport(report)} className="cursor-pointer group bg-stone-950/50 rounded-2xl overflow-hidden border border-white/5 hover:border-amber-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-amber-900/10">
+                    <div className="aspect-[16/10] overflow-hidden bg-stone-900 relative">
                       {report.image_url ? (
                         <img src={report.image_url} alt={report.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-stone-800 text-stone-600"><FileText size={48} /></div>
+                        <div className="w-full h-full flex items-center justify-center bg-stone-800 text-stone-600"><FileText size={36} /></div>
                       )}
-                      <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all"></div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-stone-950/60 to-transparent"></div>
                     </div>
-                    <span className="text-amber-500 font-bold text-xs uppercase tracking-widest mb-2 block">{new Date(report.created_at).toLocaleDateString()}</span>
-                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-amber-500 transition-colors lineHeight-tight">{report[`title_${lang}`] || report.title}</h3>
+                    <div className="p-4 md:p-5">
+                      <span className="text-amber-500 font-bold text-[10px] uppercase tracking-widest mb-2 block">{new Date(report.created_at).toLocaleDateString()}</span>
+                      <h3 className="text-base md:text-lg font-bold text-white mb-2 group-hover:text-amber-500 transition-colors leading-snug">{report[`title_${lang}`] || report.title}</h3>
+                      <p className="text-stone-500 text-xs md:text-sm leading-relaxed line-clamp-2">{report[`summary_${lang}`] || report.summary || ''}</p>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
           </section>
 
-          <section id="faq" className="py-24 relative bg-stone-950">
-            <div className="max-w-5xl mx-auto px-8 text-center">
-              <h2 onClick={() => { setCurrentView('faq'); window.scrollTo(0, 0); }} className="text-3xl md:text-4xl font-serif font-medium text-white uppercase tracking-tight mb-6 cursor-pointer hover:text-amber-500 transition-colors">{t.nav.faq}</h2>
-              <p className="text-stone-400 mb-8">Join our community discussions.</p>
-              <button onClick={() => { setCurrentView('faq'); window.scrollTo(0, 0); }} className="px-8 py-4 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-full uppercase tracking-widest shadow-lg transition-all">{t.board?.ask_btn || "Ask Question"}</button>
+          <section id="faq" className="py-14 md:py-20 relative bg-stone-950">
+            <div className="max-w-5xl mx-auto px-5 md:px-8 text-center">
+              <h2 onClick={() => { setCurrentView('faq'); window.scrollTo(0, 0); }} className="text-2xl md:text-4xl font-serif font-medium text-white uppercase tracking-tight mb-4 md:mb-6 cursor-pointer hover:text-amber-500 transition-colors">{t.nav.faq}</h2>
+              <p className="text-stone-400 text-sm md:text-base mb-6 md:mb-8">Join our community discussions.</p>
+              <button onClick={() => { setCurrentView('faq'); window.scrollTo(0, 0); }} className="px-7 md:px-8 py-3 md:py-4 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-full text-sm uppercase tracking-widest shadow-lg transition-all">{t.board?.ask_btn || "Ask Question"}</button>
             </div>
           </section>
         </>
@@ -1513,33 +1462,32 @@ const App: React.FC = () => {
 
       {
         currentView === 'health' && (
-          <div className="pt-32 min-h-screen bg-stone-950">
-            <section className="max-w-7xl mx-auto px-6 mb-24">
-              <div className="flex justify-between items-end mb-12 border-b border-white/10 pb-6">
+          <div className="pt-24 md:pt-32 min-h-screen bg-stone-950">
+            <section className="max-w-7xl mx-auto px-4 md:px-6 mb-16 md:mb-24">
+              <div className="flex flex-wrap justify-between items-end gap-4 mb-8 md:mb-12 border-b border-white/10 pb-5 md:pb-6">
                 <div>
-                  <h2 className="text-3xl md:text-5xl font-serif font-medium text-white uppercase tracking-tight mb-2">{t.nav.health}</h2>
+                  <h2 className="text-2xl md:text-5xl font-serif font-medium text-white uppercase tracking-tight mb-2">{t.nav.health}</h2>
                   <p className="text-stone-400 text-sm">Medical Evidence & Case Studies</p>
                 </div>
-                {isAdmin && <button onClick={() => setIsReportModalOpen(true)} className="px-6 py-3 bg-stone-800 hover:bg-stone-700 text-white font-bold rounded-full text-xs uppercase tracking-widest shadow-lg flex items-center gap-2 transition-all"><Edit size={14} /> Write Health Essay</button>}
+                {isAdmin && <button onClick={() => setIsReportModalOpen(true)} className="px-5 py-2.5 md:px-6 md:py-3 bg-stone-800 hover:bg-stone-700 text-white font-bold rounded-full text-xs uppercase tracking-widest shadow-lg flex items-center gap-2 transition-all"><Edit size={14} /> Write Health Essay</button>}
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-8">
+                {healthReports.length === 0 && <p className="col-span-3 text-center text-stone-500 py-10">No reports available yet.</p>}
                 {healthReports.map((report) => (
-                  <div key={report.id} onClick={() => handleReadReport(report)} className="cursor-pointer group">
-                    <div className="aspect-[4/3] rounded-2xl overflow-hidden mb-6 bg-stone-900 border border-white/5 relative">
+                  <div key={report.id} onClick={() => handleReadReport(report)} className="cursor-pointer group bg-stone-900/60 rounded-2xl overflow-hidden border border-white/5 hover:border-amber-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-amber-900/10">
+                    <div className="aspect-[16/10] overflow-hidden bg-stone-900 relative">
                       {report.image_url ? (
                         <img src={report.image_url} alt={report.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-stone-800 text-stone-600"><FileText size={48} /></div>
+                        <div className="w-full h-full flex items-center justify-center bg-stone-800 text-stone-600"><FileText size={36} /></div>
                       )}
-                      <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all"></div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-stone-950/60 to-transparent"></div>
                     </div>
-                    <span className="text-amber-500 font-bold text-xs uppercase tracking-widest mb-2 block">{new Date(report.created_at).toLocaleDateString()}</span>
-                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-amber-500 transition-colors lineHeight-tight">
-                      {report[`title_${lang}`] || report.title}
-                    </h3>
-                    <p className="text-stone-400 text-sm line-clamp-2">
-                      {report[`summary_${lang}`] || report.summary || report.content?.substring(0, 100)}...
-                    </p>
+                    <div className="p-4 md:p-5">
+                      <span className="text-amber-500 font-bold text-[10px] uppercase tracking-widest mb-2 block">{new Date(report.created_at).toLocaleDateString()} · {report.views || 0} views</span>
+                      <h3 className="text-base md:text-lg font-bold text-white mb-2 group-hover:text-amber-500 transition-colors leading-snug">{report[`title_${lang}`] || report.title}</h3>
+                      <p className="text-stone-500 text-xs md:text-sm leading-relaxed line-clamp-2">{report[`summary_${lang}`] || report.summary || ''}</p>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -1550,29 +1498,29 @@ const App: React.FC = () => {
 
       {
         currentView === 'faq' && (
-          <div className="pt-32 min-h-screen bg-stone-950 px-6">
-            <section className="max-w-5xl mx-auto relative z-10 mb-24">
-              <div className="flex justify-between items-end mb-12 border-b border-white/10 pb-6">
+          <div className="pt-24 md:pt-32 min-h-screen bg-stone-950 px-4 md:px-6">
+            <section className="max-w-5xl mx-auto relative z-10 mb-16 md:mb-24">
+              <div className="flex flex-wrap justify-between items-start gap-4 mb-8 md:mb-12 border-b border-white/10 pb-5 md:pb-6">
                 <div>
-                  <h2 className="text-3xl md:text-4xl font-serif font-medium text-white uppercase tracking-tight mb-2">{t.nav.faq}</h2>
-                  <p className="text-stone-400 text-sm">
+                  <h2 className="text-2xl md:text-4xl font-serif font-medium text-white uppercase tracking-tight mb-2">{t.nav.faq}</h2>
+                  <p className="text-stone-400 text-xs md:text-sm">
                     귀하의 언어로 편하게 문의 하세요 / Please feel free to ask in your own language
                   </p>
                 </div>
-                {isAuthenticated && <button onClick={() => setIsQnaModalOpen(true)} className="px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-full text-xs uppercase tracking-widest shadow-lg flex items-center gap-2"><Edit size={14} /> {t.board?.ask_btn}</button>}
+                {isAuthenticated && <button onClick={() => setIsQnaModalOpen(true)} className="px-5 py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-full text-xs uppercase tracking-widest shadow-lg flex items-center gap-2 shrink-0"><Edit size={14} /> {t.board?.ask_btn}</button>}
               </div>
 
-              <div className="flex justify-center gap-4 mb-8">
+              <div className="flex justify-center gap-3 md:gap-4 mb-6 md:mb-8">
                 <button
                   onClick={() => setFaqTab('notices')}
-                  className={`px-8 py-3 rounded-full font-bold uppercase tracking-widest transition-all text-xs md:text-sm flex items-center gap-2 ${faqTab === 'notices' ? 'bg-amber-600 text-white shadow-lg scale-105' : 'bg-stone-800 text-stone-500 hover:text-white'}`}
+                  className={`px-5 md:px-8 py-2.5 md:py-3 rounded-full font-bold uppercase tracking-widest transition-all text-xs md:text-sm flex items-center gap-2 ${faqTab === 'notices' ? 'bg-amber-600 text-white shadow-lg scale-105' : 'bg-stone-800 text-stone-500 hover:text-white'}`}
                 >
                   <Megaphone size={16} />
                   {t.board?.tab_notice || "Notices"}
                 </button>
                 <button
                   onClick={() => setFaqTab('questions')}
-                  className={`px-8 py-3 rounded-full font-bold uppercase tracking-widest transition-all text-xs md:text-sm flex items-center gap-2 ${faqTab === 'questions' ? 'bg-amber-600 text-white shadow-lg scale-105' : 'bg-stone-800 text-stone-500 hover:text-white'}`}
+                  className={`px-5 md:px-8 py-2.5 md:py-3 rounded-full font-bold uppercase tracking-widest transition-all text-xs md:text-sm flex items-center gap-2 ${faqTab === 'questions' ? 'bg-amber-600 text-white shadow-lg scale-105' : 'bg-stone-800 text-stone-500 hover:text-white'}`}
                 >
                   <MessageCircle size={16} />
                   {t.board?.tab_qna || "Q&A"}
@@ -1709,25 +1657,25 @@ const App: React.FC = () => {
       }
 
       {/* Footer */}
-      <footer className="py-24 relative bg-stone-950 text-stone-500 border-t border-white/5">
-        <div className="max-w-7xl mx-auto px-10 text-center">
-          <VitalCoreLogo className="w-20 h-20 mx-auto mb-8 opacity-25 group-hover:opacity-100 transition-opacity" />
-          <h4 className="font-serif font-bold text-2xl text-white mb-4 uppercase tracking-tighter">VITAL CORE PREMIUM</h4>
+      <footer className="py-14 md:py-24 relative bg-stone-950 text-stone-500 border-t border-white/5">
+        <div className="max-w-7xl mx-auto px-5 md:px-10 text-center">
+          <VitalCoreLogo className="w-14 h-14 md:w-20 md:h-20 mx-auto mb-6 md:mb-8 opacity-25" />
+          <h4 className="font-serif font-bold text-xl md:text-2xl text-white mb-3 md:mb-4 uppercase tracking-tighter">VITAL CORE PREMIUM</h4>
           <p className="text-xs text-stone-600 font-mono">v1.5.0 • System Status: {healthStatus}</p>
-          <p className="text-stone-600 max-w-lg mx-auto mb-10 font-light text-base">Scientific myco-oncology from the Cambodian highlands.</p>
-          <div className="flex flex-col md:flex-row items-center justify-center gap-8 mb-10 text-stone-400 text-sm">
-            <div className="flex items-center gap-2">
-              <Mail size={16} className="text-amber-600" />
+          <p className="text-stone-600 max-w-lg mx-auto mb-8 md:mb-10 font-light text-sm md:text-base">Scientific myco-oncology from the Cambodian highlands.</p>
+          <div className="flex flex-col items-center justify-center gap-4 md:gap-8 mb-8 md:mb-10 text-stone-400 text-sm">
+            <div className="flex items-center gap-2 flex-wrap justify-center">
+              <Mail size={15} className="text-amber-600 shrink-0" />
               <span className="font-bold text-stone-300">{t.footer.contact?.label}:</span>
-              <a href="mailto:cambodia.bae@gmail.com" className="hover:text-amber-500 transition-colors">cambodia.bae@gmail.com</a>
+              <a href="mailto:cambodia.bae@gmail.com" className="hover:text-amber-500 transition-colors break-all">cambodia.bae@gmail.com</a>
             </div>
-            <div className="flex items-center gap-2">
-              <Send size={16} className="text-amber-600" />
+            <div className="flex items-center gap-2 flex-wrap justify-center">
+              <Send size={15} className="text-amber-600 shrink-0" />
               <span className="font-bold text-stone-300">Telegram:</span>
               <a href="https://t.me/cambodiabae" target="_blank" rel="noopener noreferrer" className="hover:text-amber-500 transition-colors">{t.footer.contact?.telegram}</a>
             </div>
           </div>
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-stone-900 rounded-full border border-white/5 mb-10">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-stone-900 rounded-full border border-white/5 mb-8 md:mb-10">
             <Lock size={12} className="text-stone-600" />
             <span className="text-xs text-stone-500">{t.footer.contact?.secret}</span>
           </div>
