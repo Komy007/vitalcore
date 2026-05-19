@@ -9,6 +9,14 @@ const getHeaders = () => {
     };
 };
 
+// Global auth-error handler: if any authenticated API call returns 401/403,
+// dispatch 'auth:expired' so the app can auto-logout and show re-login modal.
+const checkAuthError = (res: Response) => {
+    if (res.status === 401 || res.status === 403) {
+        window.dispatchEvent(new CustomEvent('auth:expired'));
+    }
+};
+
 export const api = {
     translate: async (text: string, targetLang: string) => {
         const res = await fetch(`${API_URL}/translate`, {
@@ -40,11 +48,13 @@ export const api = {
         },
         me: async () => {
             const res = await fetch(`${API_URL}/auth/me`, { headers: getHeaders() });
+            checkAuthError(res);
             if (!res.ok) throw await res.json();
             return res.json();
         },
         getUsers: async () => {
             const res = await fetch(`${API_URL}/admin/users`, { headers: getHeaders() });
+            checkAuthError(res);
             if (!res.ok) throw await res.json();
             return res.json();
         },
@@ -54,6 +64,7 @@ export const api = {
                 headers: getHeaders(),
                 body: JSON.stringify(data),
             });
+            checkAuthError(res);
             if (!res.ok) throw await res.json();
             return res.json();
         },
@@ -62,6 +73,7 @@ export const api = {
                 method: 'DELETE',
                 headers: getHeaders(),
             });
+            checkAuthError(res);
             if (!res.ok) throw await res.json();
             return res.json();
         },
@@ -71,6 +83,7 @@ export const api = {
                 headers: getHeaders(),
                 body: JSON.stringify(data),
             });
+            checkAuthError(res);
             if (!res.ok) throw await res.json();
             return res.json();
         },
@@ -85,6 +98,7 @@ export const api = {
         },
         async getResetRequests() {
             const res = await fetch(`${API_URL}/admin/resets`, { headers: getHeaders() });
+            checkAuthError(res);
             if (!res.ok) throw await res.json();
             return res.json();
         },
@@ -93,6 +107,7 @@ export const api = {
                 method: 'POST',
                 headers: getHeaders(),
             });
+            checkAuthError(res);
             if (!res.ok) throw await res.json();
             return res.json();
         },
@@ -135,6 +150,7 @@ export const api = {
                 headers: getHeaders(),
                 body: JSON.stringify(data),
             });
+            checkAuthError(res);
             if (!res.ok) throw await res.json();
             return res.json();
         },
@@ -144,6 +160,7 @@ export const api = {
                 headers: getHeaders(),
                 body: JSON.stringify(data),
             });
+            checkAuthError(res);
             if (!res.ok) throw await res.json();
             return res.json();
         },
@@ -152,6 +169,7 @@ export const api = {
                 method: 'DELETE',
                 headers: getHeaders(),
             });
+            checkAuthError(res);
             if (!res.ok) throw await res.json();
             return res.json();
         },
@@ -168,6 +186,7 @@ export const api = {
                 headers: getHeaders(),
                 body: JSON.stringify(data),
             });
+            checkAuthError(res);
             if (!res.ok) throw await res.json();
             return res.json();
         },
@@ -177,6 +196,7 @@ export const api = {
                 headers: getHeaders(),
                 body: JSON.stringify(data),
             });
+            checkAuthError(res);
             if (!res.ok) throw await res.json();
             return res.json();
         },
@@ -186,6 +206,7 @@ export const api = {
                 headers: getHeaders(),
                 body: JSON.stringify({ answer }),
             });
+            checkAuthError(res);
             if (!res.ok) throw await res.json();
             return res.json();
         },
@@ -194,6 +215,7 @@ export const api = {
                 method: 'DELETE',
                 headers: getHeaders(),
             });
+            checkAuthError(res);
             if (!res.ok) throw await res.json();
             return res.json();
         }
@@ -210,6 +232,7 @@ export const api = {
                 headers: getHeaders(),
                 body: JSON.stringify(data),
             });
+            checkAuthError(res);
             if (!res.ok) throw await res.json();
             return res.json();
         },
@@ -219,6 +242,7 @@ export const api = {
                 headers: getHeaders(),
                 body: JSON.stringify(data),
             });
+            checkAuthError(res);
             if (!res.ok) throw await res.json();
             return res.json();
         },
@@ -227,6 +251,7 @@ export const api = {
                 method: 'DELETE',
                 headers: getHeaders(),
             });
+            checkAuthError(res);
             if (!res.ok) throw await res.json();
             return res.json();
         }

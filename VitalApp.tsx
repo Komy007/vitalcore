@@ -186,6 +186,18 @@ const App: React.FC = () => {
     fetchNotices();
   }, []);
 
+  // Auto-logout when any API call receives 401/403 (token expired or invalid)
+  useEffect(() => {
+    const handleAuthExpired = () => {
+      logout();
+      setAuthMode('login');
+      setAuthMessage('세션이 만료되었습니다. 다시 로그인해주세요. (Session expired. Please log in again.)');
+      setIsAuthModalOpen(true);
+    };
+    window.addEventListener('auth:expired', handleAuthExpired);
+    return () => window.removeEventListener('auth:expired', handleAuthExpired);
+  }, [logout]);
+
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth' });

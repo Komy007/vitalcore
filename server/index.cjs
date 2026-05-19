@@ -35,7 +35,8 @@ if (!JWT_SECRET) {
     console.error('[CRITICAL SECURITY] JWT_SECRET environment variable is not set! Server cannot start safely.');
     process.exit(1);
 }
-const JWT_EXPIRES_IN = '24h';
+const JWT_EXPIRES_IN = '24h';       // regular users
+const JWT_EXPIRES_IN_ADMIN = '7d';  // admin: 7-day sessions for convenience
 const TRANSLATE_API_KEY = process.env.GOOGLE_TRANSLATE_API_KEY;
 
 // --- Security Middleware ---
@@ -281,7 +282,9 @@ if (db) {
             if (!user || !bcrypt.compareSync(password, user.password)) return res.status(401).json({ error: 'Invalid credentials' });
 
             const tokenUser = { id: user.id, email: user.email, role: user.role, name: user.name };
-            const token = jwt.sign(tokenUser, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+            // Admin gets a 7-day token; regular users get 24h
+            const expiry = user.role === 'admin' ? JWT_EXPIRES_IN_ADMIN : JWT_EXPIRES_IN;
+            const token = jwt.sign(tokenUser, JWT_SECRET, { expiresIn: expiry });
             res.json({ token, user: tokenUser });
         } catch (e) {
             console.error('[Login Error]', e);
