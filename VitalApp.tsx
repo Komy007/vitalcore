@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LucideIcon, Menu, X, ChevronRight, Check, Play, Award, Microscope, Leaf, Shield, Heart, Zap, Brain, Activity, ArrowRight, ArrowLeft, Star, Quote, Search, Globe, User, LogOut, ChevronDown, Lock, Mail, Phone, MapPin, Send, LayoutTemplate, Megaphone, Plus, Edit, Trash2, Save, Image as ImageIcon, MessageCircle, Sparkles, AlertTriangle, Droplet, ShoppingBag, Eye, BookOpen, ExternalLink, Info, FlaskConical, GraduationCap, Coffee, Flame, ShieldCheck, CheckCircle2, FileText, Loader2, Languages, Maximize2, Minimize2 } from 'lucide-react';
+import { LucideIcon, Menu, X, ChevronRight, Check, Play, Award, Microscope, Leaf, Shield, Heart, Zap, Brain, Activity, ArrowRight, ArrowLeft, Star, Quote, Search, Globe, User, LogOut, ChevronDown, Lock, Mail, Phone, MapPin, Send, LayoutTemplate, Megaphone, Plus, Edit, Trash2, Save, Image as ImageIcon, MessageCircle, Sparkles, AlertTriangle, Droplet, Eye, BookOpen, ExternalLink, Info, FlaskConical, GraduationCap, Coffee, Flame, ShieldCheck, CheckCircle2, FileText, Loader2, Languages, Maximize2, Minimize2 } from 'lucide-react';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ImageResize from 'quill-image-resize-module-react';
@@ -1012,12 +1012,23 @@ const App: React.FC = () => {
               <div className="bg-stone-900/70 backdrop-blur-3xl border border-white/10 p-5 sm:p-8 md:p-12 lg:p-16 rounded-[2rem] md:rounded-[3rem] lg:rounded-[4rem] text-left min-h-[400px] md:min-h-[500px] shadow-2xl transition-all duration-500">
                 {aboutActiveTab === 'recommended' ? (
                   <div className="max-w-7xl mx-auto">
-                    <div className="flex items-center gap-4 mb-12 border-b border-white/10 pb-6">
-                      <ShoppingBag className="text-amber-500" size={32} />
+                    <div className="flex items-center gap-4 mb-6 border-b border-white/10 pb-6">
+                      <BookOpen className="text-amber-500" size={32} />
                       <h3 className="text-2xl md:text-3xl font-serif font-bold text-white">
-                        Good Products
-                        {t.about.linteus_note && <span className="ml-4 text-sm font-medium text-amber-500 tracking-wide font-sans">{t.about.linteus_note}</span>}
+                        {lang === 'ko' ? '참고 자료 (정보 제공용)' : lang === 'zh' ? '参考资料（信息提供用）' : lang === 'ja' ? '参考情報（情報提供用）' : 'Reference Information (Educational)'}
                       </h3>
+                    </div>
+                    <div className="flex items-start gap-3 mb-10 px-4 py-3 bg-amber-900/15 border border-amber-500/20 rounded-2xl">
+                      <Info size={14} className="text-amber-500 shrink-0 mt-0.5" />
+                      <p className="text-amber-400/80 text-[11px] leading-relaxed">
+                        {lang === 'ko'
+                          ? '본 사이트는 상황버섯 관련 상품을 판매하지 않습니다. 이 섹션은 동료 심사를 통과한 과학 논문에 근거한 건강 정보를 공유하기 위한 참고 예시 이미지입니다.'
+                          : lang === 'zh'
+                          ? '本网站不销售任何桑黄产品。本栏目仅为展示参考示例图片，旨在基于同行评审科学论文共享健康信息。'
+                          : lang === 'ja'
+                          ? '本サイトはメシマコブ製品を販売しておりません。このセクションはピアレビュー済み科学論文に基づく健康情報共有のための参考例示画像です。'
+                          : 'This site does not sell any Phellinus linteus products. This section shows reference example images for educational purposes based on peer-reviewed scientific research.'}
+                      </p>
                     </div>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                       {t.about.products?.map((p: any, i: number) => (
@@ -1767,7 +1778,9 @@ const App: React.FC = () => {
           <VitalCoreLogo className="w-14 h-14 md:w-20 md:h-20 mx-auto mb-6 md:mb-8 opacity-25" />
           <h4 className="font-serif font-bold text-xl md:text-2xl text-white mb-3 md:mb-4 uppercase tracking-tighter">VITAL CORE PREMIUM</h4>
           <p className="text-xs text-stone-600 font-mono">v1.5.0 • System Status: {healthStatus}</p>
-          <p className="text-stone-600 max-w-lg mx-auto mb-8 md:mb-10 font-light text-sm md:text-base">Scientific myco-oncology from the Cambodian highlands.</p>
+          <p className="text-stone-600 max-w-lg mx-auto mb-8 md:mb-10 font-light text-sm md:text-base">
+            {lang === 'ko' ? '동료 심사 논문 기반의 상황버섯 건강 정보 공유 플랫폼 · 상품 판매 사이트가 아닙니다' : lang === 'zh' ? '基于同行评审学术论文的桑黄健康信息共享平台 · 非销售网站' : lang === 'ja' ? 'ピアレビュー済み論文に基づくメシマコブ健康情報プラットフォーム · 販売サイトではありません' : 'Peer-reviewed research-based health information platform · Not a product shop'}
+          </p>
           <div className="flex flex-col items-center justify-center gap-4 md:gap-8 mb-8 md:mb-10 text-stone-400 text-sm">
             <div className="flex items-center gap-2 flex-wrap justify-center">
               <Mail size={15} className="text-amber-600 shrink-0" />

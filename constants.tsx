@@ -83,14 +83,14 @@ export const TRANSLATIONS: Record<string, any> = {
       badge: "Vital Core Premium",
       title_top: "대자연이 선사한",
       title_highlight: "가장 고귀한 생명력",
-      desc: "캄보디아 원시림에서 찾은 신비의 버섯.\n과학으로 증명된 상황버섯의 항암 기적을 경험하세요.",
+      desc: "동료 심사(Peer Review)를 통과한 국제 과학 저널 게재 논문에 근거한\n상황버섯(Phellinus linteus) 건강 정보 공유 플랫폼입니다.",
       btn_research: "연구 결과 자세히 보기",
       scroll_text: "우리는 태어날 때부터 자연치유력을 지니고 있습니다. 이는 곰팡이, 바이러스, 각종 환경 요인 등 복잡하고 위험한 세상 속에서 우리의 생명을 스스로 보호하기 위해 몸 안에 내재된 본래의 방어 시스템입니다. 이 자연치유력을 우리는 흔히 면역력, 또는 면역 시스템(Immune System)이라 부릅니다. 우리 몸의 이 면역 시스템은 단순한 방어 기능을 넘어, 손상된 세포와 균형이 무너진 상태를 스스로 회복하고 다시 재생하려는 능력을 갖추고 있습니다. 우리는 이 근본적인 생명 시스템을 바이탈 코어(Vital Core)라고 부릅니다. 바이탈 코어의 원리를 정확히 이해하고 핵심을 잘 다룬다면, 인체는 언제든지 스스로 균형을 되찾고 회복하려는 방향으로 작동한다는 사실을 알 수 있습니다. 이 사이트는 이러한 자연치유력과 바이탈 코어의 본질을 현대인의 삶에 실질적으로 접목하기 위해 만들어졌습니다."
     },
     common: { view_paper: "논문 확인", login: "로그인/회원가입" },
     about: {
       title: "Phellinus Linteus (Sanghwang)",
-      tabs: { intro: "기본 정보", compounds: "핵심 성분", mechanism: "항암 기전", evidence: "학술 증거", recommended: "좋은제품" },
+      tabs: { intro: "기본 정보", compounds: "핵심 성분", mechanism: "항암 기전", evidence: "학술 증거", recommended: "참고 자료 (예시)" },
       cards: [
         { title: "의학적 정의 및 희소성", desc: "미국 국립의학도서관(NLM)의 MeSH 데이터베이스(ID: 1000048)는 상황버섯(Phellinus linteus)을 단순한 식품이 아닌 '항암제(Antineoplastic Agents)' 및 '면역 인자(Immunologic Factors)'로 규정하고 있습니다. 소나무비늘버섯과(Hymenochaetaceae)에 속하는 이 희귀 균류는 동아시아 고산 지대에서 수십 년간 자란 고목의 수액을 섭취하며 성장합니다. 인공 재배가 극히 까다롭고 자연산의 약성이 압도적으로 우수하여, 예로부터 '신이 내린 약재'로 불려왔습니다." },
         { title: "독보적인 유효 성분", desc: "핵심 성분인 '베타글루칸(Beta-glucan 1-3/1-6)'은 인체의 면역 스위치를 켜는 기폭제 역할을 합니다. 상황버섯은 현존하는 버섯 중 베타글루칸 함유량이 가장 높습니다. 또한 강력한 항산화 물질인 'hispidin'과 'styrylpyrone' 계열 폴리페놀이 세포의 산화적 손상을 막고 DNA 변이를 억제합니다. 특유의 쓴맛을 내는 트리테르펜(Triterpenoids)은 간 해독과 혈류 개선에 탁월한 효능을 보입니다." },
@@ -124,12 +124,12 @@ export const TRANSLATIONS: Record<string, any> = {
         { title: "당뇨 혈당 조절 및 다이어트", journal: "Diabetes & Metabolism", pmid: "39692936", summary: "식후 혈당 스파이크를 막고 인슐린 저항성을 개선. 내장 지방 세포 분화를 억제하여 체중 감소 효과 입증. (유료 논문: 클릭하여 제목 검색)", url: "https://scholar.google.com/scholar?q=Phellinus+linteus+diabetes+insulin+resistance" }
       ],
       products: [
-        { name: "프리미엄 자연산 상황버섯", price: "2,300,000원", originalPrice: "2,500,000원", discount: "8%", tag: "특상품", img: linteus0, desc: "수십 년간 원시림의 정기를 머금은 최상급 자연산 상황버섯입니다." },
-        { name: "고농축 상황버섯 추출액", price: "550,000원", originalPrice: "600,000원", discount: "10%", tag: "액상형", img: linteus1, desc: "캄보디아 원시림 상황버섯은 이런 모양과 비슷하게 붙어서 자생합니다." },
-        { name: "건조 상황버섯 슬라이스", price: "850,000원", originalPrice: "950,000원", discount: "11%", tag: "실속형", img: linteus2, desc: "이런 모양의 Phellinus Linteus 초기에 따오는 모양입니다. 시간이 지나면 초록색등은 없어지겠죠. 목질 진흙버섯 입니다." },
-        { name: "상황버섯 선물 세트", price: "1,200,000원", originalPrice: "1,400,000원", discount: "14%", tag: "선물용", img: linteus3, desc: "한국에서 판매하는 좋은 제품의 예시입니다." },
-        { name: "상황버섯 분말 파우더", price: "450,000원", originalPrice: "500,000원", discount: "10%", tag: "요리/첨가", img: linteus4, desc: "한국에서 판매하는 좋은 제품의 예시입니다." },
-        { name: "바이탈코어 시그니처 에디션", price: "5,500,000원", originalPrice: "6,000,000원", discount: "8%", tag: "한정판", img: linteus5, desc: "한국에서 판매하는 좋은 제품의 예시입니다." }
+        { name: "프리미엄 자연산 상황버섯", tag: "참고 예시", img: linteus0, desc: "수십 년간 원시림의 정기를 머금은 최상급 자연산 상황버섯. (정보 제공 목적의 예시 이미지)" },
+        { name: "고농축 상황버섯 추출액", tag: "참고 예시", img: linteus1, desc: "캄보디아 원시림 상황버섯은 이런 모양과 비슷하게 붙어서 자생합니다." },
+        { name: "건조 상황버섯 슬라이스", tag: "참고 예시", img: linteus2, desc: "이런 모양의 Phellinus Linteus 초기에 따오는 모양입니다. 시간이 지나면 초록색등은 없어지겠죠. 목질 진흙버섯 입니다." },
+        { name: "상황버섯 선물 세트", tag: "참고 예시", img: linteus3, desc: "한국에서 유통되는 상황버섯 제품의 참고 예시입니다. 본 사이트에서 판매하지 않습니다." },
+        { name: "상황버섯 분말 파우더", tag: "참고 예시", img: linteus4, desc: "한국에서 유통되는 상황버섯 제품의 참고 예시입니다. 본 사이트에서 판매하지 않습니다." },
+        { name: "바이탈코어 시그니처 에디션", tag: "참고 예시", img: linteus5, desc: "한국에서 유통되는 상황버섯 제품의 참고 예시입니다. 본 사이트에서 판매하지 않습니다." }
       ]
     },
     research: {
@@ -335,14 +335,14 @@ export const TRANSLATIONS: Record<string, any> = {
       badge: "Vital Core Premium",
       title_top: "Nature's",
       title_highlight: "Most Powerful Gift",
-      desc: "Vitality from Cambodian forests.\nExperience the miracle proven by science.",
+      desc: "A peer-reviewed research-based health information platform.\nSharing scientific knowledge on Phellinus linteus — not a shop.",
       btn_research: "View Research",
       scroll_text: "We possess innate natural healing power from birth. This is an inherent defense system designed to protect our lives from complex environmental dangers such as fungi and viruses. We often call this 'Immunity' or the 'Immune System'. Beyond simple defense, this system has the ability to recover and regenerate damaged cells and restore balance. We call this fundamental life system 'Vital Core'. If we correctly understand the principles of Vital Core, we see that the human body always operates to regain balance and recover. This site is created to bridge the essence of this natural healing power and Vital Core into modern life."
     },
     common: { view_paper: "View Paper", login: "Login" },
     about: {
       title: "Phellinus Linteus",
-      tabs: { intro: "Overview", compounds: "Compounds", mechanism: "Mechanism", evidence: "Evidence", recommended: "Products" },
+      tabs: { intro: "Overview", compounds: "Compounds", mechanism: "Mechanism", evidence: "Evidence", recommended: "References (Info Only)" },
       cards: [
         { title: "Habitat & Rarity", desc: "Phellinus linteus is an extremely rare medicinal fungus that grows for decades in primeval forests. It is dubbed 'The Mushroom from God' due to the difficulty of cultivation. Wild mushrooms from Cambodia and Korea hold overwhelming value in terms of potency. Our priority is to preserve and deliver this primordial energy." },
         { title: "Active Compounds", desc: "The core component is Beta-Glucan (1-3, 1-6), which fundamentally re-engineers the body's immune system. Rich in polyphenols, it provides powerful antioxidant effects, preventing cellular mutation. Triterpenoids aid in liver detoxification and help regulate blood pressure. We insist on pure ingredients verified by analysis." },
@@ -365,12 +365,12 @@ export const TRANSLATIONS: Record<string, any> = {
         }
       ],
       products: [
-        { name: "Wild Phellinus 374g", price: "₩1,900,000", originalPrice: "₩2,300,000", discount: "17%", tag: "Wild, Dried", img: linteus0, desc: "Premium wild Phellinus that has absorbed the energy of primeval forests for decades." },
-        { name: "Wild Phellinus 926g", price: "₩4,700,000", originalPrice: "₩5,000,000", discount: "6%", tag: "Wild, Dried", img: linteus1, desc: "Phellinus in Cambodian primeval forests grows naturally attached in shapes like this." },
-        { name: "Wild Phellinus 980g", price: "₩4,300,000", originalPrice: "₩5,000,000", discount: "14%", tag: "Whole Dried", img: linteus2, desc: "This shows the shape of Phellinus Linteus harvested in its early stage. The green hues fade over time. Truly a woody mud mushroom." },
-        { name: "Phellinus Gift Set", price: "₩1,200,000", originalPrice: "₩1,400,000", discount: "14%", tag: "Gift Set", img: linteus3, desc: "An example of high-quality products sold in Korea." },
-        { name: "Phellinus Powder", price: "₩450,000", originalPrice: "₩500,000", discount: "10%", tag: "Powder", img: linteus4, desc: "An example of high-quality products sold in Korea." },
-        { name: "Vital Core Signature", price: "₩5,500,000", originalPrice: "₩6,000,000", discount: "8%", tag: "Limited", img: linteus5, desc: "An example of high-quality products sold in Korea." }
+        { name: "Wild Phellinus 374g", tag: "Reference Only", img: linteus0, desc: "Premium wild Phellinus that has absorbed the energy of primeval forests for decades. (Reference example — not for sale here)" },
+        { name: "Wild Phellinus 926g", tag: "Reference Only", img: linteus1, desc: "Phellinus in Cambodian primeval forests grows naturally attached in shapes like this." },
+        { name: "Wild Phellinus 980g", tag: "Reference Only", img: linteus2, desc: "This shows the shape of Phellinus Linteus harvested in its early stage. The green hues fade over time." },
+        { name: "Phellinus Gift Set", tag: "Reference Only", img: linteus3, desc: "Reference example of Phellinus products available in Korea. This site does not sell products." },
+        { name: "Phellinus Powder", tag: "Reference Only", img: linteus4, desc: "Reference example of Phellinus products available in Korea. This site does not sell products." },
+        { name: "Vital Core Signature", tag: "Reference Only", img: linteus5, desc: "Reference example of Phellinus products available in Korea. This site does not sell products." }
       ],
       evidence: [
         { title: "Pancreatic Cancer Survival +1 Year", journal: "Severance Hospital Clinical Study", pmid: "40590265", summary: "In post-op chemotherapy patients, Phellinus group showed average survival of 47.0 months vs 35.0 months in control group. (Paid paper; click to search)", url: "https://scholar.google.com/scholar?q=Phellinus+linteus+pancreatic+cancer+survival" },
@@ -587,14 +587,14 @@ export const TRANSLATIONS: Record<string, any> = {
       badge: "Vital Core Premium",
       title_top: "大自然赐予的",
       title_highlight: "尊贵生命力",
-      desc: "来自柬埔寨原始森林的神秘蘑菇。\n体验科学证明的抗癌奇迹。",
+      desc: "基于国际权威科学期刊同行评审学术论文\n桑黄(Phellinus linteus)健康信息共享平台（非销售网站）。",
       btn_research: "查看研究",
       scroll_text: "We possess innate natural healing power from birth. This is an inherent defense system designed to protect our lives from complex environmental dangers such as fungi and viruses. We often call this 'Immunity' or the 'Immune System'. Beyond simple defense, this system has the ability to recover and regenerate damaged cells and restore balance. We call this fundamental life system 'Vital Core'. If we correctly understand the principles of Vital Core, we see that the human body always operates to regain balance and recover. This site is created to bridge the essence of this natural healing power and Vital Core into modern life."
     },
     common: { view_paper: "查看论文", login: "登录" },
     about: {
       title: "桑黄 (Phellinus)",
-      tabs: { intro: "基本信息", compounds: "核心成分", mechanism: "抗癌机理", evidence: "学术证据", recommended: "推荐产品" },
+      tabs: { intro: "基本信息", compounds: "核心成分", mechanism: "抗癌机理", evidence: "学术证据", recommended: "参考资料 (示例)" },
       cards: [
         { title: "环境与稀缺性", desc: "桑黄生长在海拔1000米以上的原始森林中，是一种极其罕见的药用菌类。由于人工栽培难度极大，被誉为“森林黄金”。柬埔寨和韩国产的自然桑黄在浓度和药性上具有压倒性的价值。我们致力于完整地保存并传递这种原始能量。" },
         { title: "核心成分", desc: "核心成分是高分子多糖体β-葡聚糖。它能从根本上重新设计人体的免疫系统。丰富的多酚和鞣花酸具有强效抗氧化作用，防止细胞变异。三萜类成分有助于肝脏解毒和调节血压。我们坚持使用通过科学分析验证的纯净成分。" },
@@ -617,12 +617,12 @@ export const TRANSLATIONS: Record<string, any> = {
         }
       ],
       products: [
-        { name: "自然桑黄 374g", price: "₩1,900,000", originalPrice: "₩2,300,000", discount: "17%", tag: "自然, 干燥", img: linteus0, desc: "吸收了原始森林数十年精气的顶级野生桑黄。" },
-        { name: "自然桑黄 926g", price: "₩4,700,000", originalPrice: "₩5,000,000", discount: "6%", tag: "自然, 干燥", img: linteus1, desc: "柬埔寨原始森林的桑黄通常以类似这种形状附着生长。" },
-        { name: "自然桑黄 980g", price: "₩4,300,000", originalPrice: "₩5,000,000", discount: "14%", tag: "全干", img: linteus2, desc: "这是Phellinus Linteus早期采摘时的形态。随着时间推移，绿色会消失。这是真正的木质泥菇。" },
-        { name: "桑黄礼盒套装", price: "₩1,200,000", originalPrice: "₩1,400,000", discount: "14%", tag: "礼品", img: linteus3, desc: "这是一个在韩国销售的优质产品示例。" },
-        { name: "桑黄粉末", price: "₩450,000", originalPrice: "₩500,000", discount: "10%", tag: "粉末", img: linteus4, desc: "这是一个在韩国销售的优质产品示例。" },
-        { name: "Vital Core 签名版", price: "₩5,500,000", originalPrice: "₩6,000,000", discount: "8%", tag: "限量版", img: linteus5, desc: "这是一个在韩国销售的优质产品示例。" }
+        { name: "自然桑黄 374g", tag: "参考示例", img: linteus0, desc: "吸收了原始森林数十年精气的顶级野生桑黄。（仅供参考，本站不销售）" },
+        { name: "自然桑黄 926g", tag: "参考示例", img: linteus1, desc: "柬埔寨原始森林的桑黄通常以类似这种形状附着生长。" },
+        { name: "自然桑黄 980g", tag: "参考示例", img: linteus2, desc: "这是Phellinus Linteus早期采摘时的形态。随着时间推移，绿色会消失。这是真正的木质泥菇。" },
+        { name: "桑黄礼盒套装", tag: "参考示例", img: linteus3, desc: "韩国流通的桑黄产品参考示例。本网站不销售任何产品。" },
+        { name: "桑黄粉末", tag: "参考示例", img: linteus4, desc: "韩国流通的桑黄产品参考示例。本网站不销售任何产品。" },
+        { name: "Vital Core 签名版", tag: "参考示例", img: linteus5, desc: "韩国流通的桑黄产品参考示例。本网站不销售任何产品。" }
       ],
       evidence: [
         { title: "胰腺癌患者生存期延长1年", journal: "Severance Hospital Clinical Study", pmid: "40590265", summary: "术后化疗患者追踪观察结果显示，桑黄并用组平均生存期为47.0个月，比对照组（35.0个月）延长12个月。(付费论文：点击搜索标题)", url: "https://scholar.google.com/scholar?q=Phellinus+linteus+pancreatic+cancer+survival" },
@@ -839,14 +839,14 @@ export const TRANSLATIONS: Record<string, any> = {
       badge: "Vital Core Premium",
       title_top: "大自然が贈る",
       title_highlight: "気高い生命力",
-      desc: "カンボジアの原生林で見つけた神秘のキノコ。\n科学で証明された奇跡を体験してください。",
+      desc: "国際科学誌に掲載されたピアレビュー済み論文に基づく\nメシマコブ(Phellinus linteus)健康情報共有プラットフォームです（販売サイトではありません）。",
       btn_research: "研究を見る",
       scroll_text: "We possess innate natural healing power from birth. This is an inherent defense system designed to protect our lives from complex environmental dangers such as fungi and viruses. We often call this 'Immunity' or the 'Immune System'. Beyond simple defense, this system has the ability to recover and regenerate damaged cells and restore balance. We call this fundamental life system 'Vital Core'. If we correctly understand the principles of Vital Core, we see that the human body always operates to regain balance and recover. This site is created to bridge the essence of this natural healing power and Vital Core into modern life."
     },
     common: { view_paper: "論文確認", login: "ログイン" },
     about: {
       title: "メシマコブ (Phellinus)",
-      tabs: { intro: "基本情報", compounds: "主要成分", mechanism: "作用機序", evidence: "学術根拠", recommended: "おすすめ製品" },
+      tabs: { intro: "基本情報", compounds: "主要成分", mechanism: "作用機序", evidence: "学術根拠", recommended: "参考情報 (例示)" },
       cards: [
         { title: "環境と希少性", desc: "標高1000m以上の原生林で数十年間成長した最高品質のメシマコブのみを使用しています。人工栽培が非常に困難なため「神から授かったキノコ」と呼ばれています。原生林のエネルギーをそのままお届けすることを最優先事項としています。" },
         { title: "主要成分", desc: "最も核心的な成分はベータグルカン(1-3, 1-6)です。他のキノコ類と比較して圧倒的に高い含有量を誇り、免疫体系を根本から再設計します。ポリフェノールも豊富で、細胞の老化と変異を防ぎます。科学的に検証された純粋な成分のみにこだわっています。" },
@@ -869,12 +869,12 @@ export const TRANSLATIONS: Record<string, any> = {
         }
       ],
       products: [
-        { name: "自然産メシマコブ 374g", price: "₩1,900,000", originalPrice: "₩2,300,000", discount: "17%", tag: "自然産, 乾燥", img: linteus0, desc: "数十年間、原生林の精気を浴びた最高級の自然産メシマコブです。" },
-        { name: "自然産メシマコブ 926g", price: "₩4,700,000", originalPrice: "₩5,000,000", discount: "6%", tag: "自然産, 乾燥", img: linteus1, desc: "カンボジア原生林のメシマコブは、このような形で自生しています。" },
-        { name: "自然産メシマコブ 980g", price: "₩4,300,000", originalPrice: "₩5,000,000", discount: "14%", tag: "丸ごと乾燥", img: linteus2, desc: "初期のPhellinus Linteus（メシマコブ）の形状です。時間が経つにつれて緑色は消えていきます。まさに木質泥キノコです。" },
-        { name: "メシマコブギフトセット", price: "₩1,200,000", originalPrice: "₩1,400,000", discount: "14%", tag: "ギフト", img: linteus3, desc: "韓国で販売されている良質な製品の例です。" },
-        { name: "メシマコブ粉末", price: "₩450,000", originalPrice: "₩500,000", discount: "10%", tag: "粉末", img: linteus4, desc: "韓国で販売されている良質な製品の例です。" },
-        { name: "Vital Core シグネチャー", price: "₩5,500,000", originalPrice: "₩6,000,000", discount: "8%", tag: "限定版", img: linteus5, desc: "韓国で販売されている良質な製品の例です。" }
+        { name: "自然産メシマコブ 374g", tag: "参考例示", img: linteus0, desc: "数十年間、原生林の精気を浴びた最高級の自然産メシマコブです。（参考例示のみ・非売品）" },
+        { name: "自然産メシマコブ 926g", tag: "参考例示", img: linteus1, desc: "カンボジア原生林のメシマコブは、このような形で自生しています。" },
+        { name: "自然産メシマコブ 980g", tag: "参考例示", img: linteus2, desc: "初期のPhellinus Linteus（メシマコブ）の形状です。時間が経つにつれて緑色は消えていきます。まさに木質泥キノコです。" },
+        { name: "メシマコブギフトセット", tag: "参考例示", img: linteus3, desc: "韓国で流通しているメシマコブ製品の参考例示です。本サイトでは販売しておりません。" },
+        { name: "メシマコブ粉末", tag: "参考例示", img: linteus4, desc: "韓国で流通しているメシマコブ製品の参考例示です。本サイトでは販売しておりません。" },
+        { name: "Vital Core シグネチャー", tag: "参考例示", img: linteus5, desc: "韓国で流通しているメシマコブ製品の参考例示です。本サイトでは販売しておりません。" }
       ],
       evidence: [
         { title: "膵臓がん患者の生存率1年延長", journal: "Severance Hospital Clinical Study", pmid: "40590265", summary: "術後抗がん治療患者の追跡観察の結果、メシマコブ併用群の平均生存期間が47.0ヶ月で、対照群（35.0ヶ月）より12ヶ月延長。(有料論文：クリックしてタイトル検索)", url: "https://scholar.google.com/scholar?q=Phellinus+linteus+pancreatic+cancer+survival" },
