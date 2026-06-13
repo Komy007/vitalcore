@@ -1676,6 +1676,79 @@ const App: React.FC = () => {
         )
       }
 
+      {/* Privacy Policy View */}
+      {currentView === 'privacy' && (
+        <div className="pt-24 md:pt-32 min-h-screen bg-stone-950 px-4 md:px-6 pb-16 md:pb-24">
+          <section className="max-w-3xl mx-auto">
+            <div className="mb-8 md:mb-12 border-b border-white/10 pb-5 md:pb-6">
+              <span className="text-amber-500 font-bold text-[10px] uppercase tracking-widest mb-3 block">{t.legal?.updated}</span>
+              <h2 className="text-2xl md:text-4xl font-serif font-medium text-white uppercase tracking-tight">{t.legal?.privacy_title}</h2>
+            </div>
+            <div className="space-y-8">
+              {(t.legal?.privacy_sections as Array<{title: string; body: string}> | undefined)?.map((s, i) => (
+                <div key={i} className="bg-stone-900/50 rounded-2xl p-6 border border-white/5">
+                  <h3 className="text-amber-500 font-bold text-sm uppercase tracking-widest mb-3">{s.title}</h3>
+                  <p className="text-stone-400 text-sm leading-relaxed whitespace-pre-line">{s.body}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-10 text-center">
+              <button onClick={() => { setCurrentView('home'); window.scrollTo(0, 0); }} className="px-8 py-3 bg-stone-800 text-stone-300 font-bold rounded-full text-xs uppercase tracking-widest hover:text-white transition-all">← {t.nav.about}</button>
+            </div>
+          </section>
+        </div>
+      )}
+
+      {/* Terms of Service View */}
+      {currentView === 'terms' && (
+        <div className="pt-24 md:pt-32 min-h-screen bg-stone-950 px-4 md:px-6 pb-16 md:pb-24">
+          <section className="max-w-3xl mx-auto">
+            <div className="mb-8 md:mb-12 border-b border-white/10 pb-5 md:pb-6">
+              <span className="text-amber-500 font-bold text-[10px] uppercase tracking-widest mb-3 block">{t.legal?.updated}</span>
+              <h2 className="text-2xl md:text-4xl font-serif font-medium text-white uppercase tracking-tight">{t.legal?.terms_title}</h2>
+            </div>
+            <div className="space-y-8">
+              {(t.legal?.terms_sections as Array<{title: string; body: string}> | undefined)?.map((s, i) => (
+                <div key={i} className="bg-stone-900/50 rounded-2xl p-6 border border-white/5">
+                  <h3 className="text-amber-500 font-bold text-sm uppercase tracking-widest mb-3">{s.title}</h3>
+                  <p className="text-stone-400 text-sm leading-relaxed whitespace-pre-line">{s.body}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-10 text-center">
+              <button onClick={() => { setCurrentView('home'); window.scrollTo(0, 0); }} className="px-8 py-3 bg-stone-800 text-stone-300 font-bold rounded-full text-xs uppercase tracking-widest hover:text-white transition-all">← {t.nav.about}</button>
+            </div>
+          </section>
+        </div>
+      )}
+
+      {/* Medical Disclaimer View */}
+      {currentView === 'disclaimer' && (
+        <div className="pt-24 md:pt-32 min-h-screen bg-stone-950 px-4 md:px-6 pb-16 md:pb-24">
+          <section className="max-w-3xl mx-auto">
+            <div className="mb-8 md:mb-12 border-b border-white/10 pb-5 md:pb-6">
+              <span className="text-amber-500 font-bold text-[10px] uppercase tracking-widest mb-3 block">{t.legal?.updated}</span>
+              <h2 className="text-2xl md:text-4xl font-serif font-medium text-white uppercase tracking-tight">{t.legal?.disclaimer_title}</h2>
+            </div>
+            <div className="mb-6 p-5 bg-amber-900/20 border border-amber-500/30 rounded-2xl flex items-start gap-3">
+              <AlertTriangle size={20} className="text-amber-500 shrink-0 mt-0.5" />
+              <p className="text-amber-300 text-sm leading-relaxed font-medium">{(t.legal?.disclaimer_sections as Array<{title: string; body: string}> | undefined)?.[0]?.body}</p>
+            </div>
+            <div className="space-y-8">
+              {(t.legal?.disclaimer_sections as Array<{title: string; body: string}> | undefined)?.slice(1).map((s, i) => (
+                <div key={i} className="bg-stone-900/50 rounded-2xl p-6 border border-white/5">
+                  <h3 className="text-amber-500 font-bold text-sm uppercase tracking-widest mb-3">{s.title}</h3>
+                  <p className="text-stone-400 text-sm leading-relaxed whitespace-pre-line">{s.body}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-10 text-center">
+              <button onClick={() => { setCurrentView('home'); window.scrollTo(0, 0); }} className="px-8 py-3 bg-stone-800 text-stone-300 font-bold rounded-full text-xs uppercase tracking-widest hover:text-white transition-all">← {t.nav.about}</button>
+            </div>
+          </section>
+        </div>
+      )}
+
       {/* Footer */}
       <footer className="py-14 md:py-24 relative bg-stone-950 text-stone-500 border-t border-white/5">
         <div className="max-w-7xl mx-auto px-5 md:px-10 text-center">
@@ -1700,6 +1773,13 @@ const App: React.FC = () => {
             <span className="text-xs text-stone-500">{t.footer.contact?.secret}</span>
           </div>
 
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6 mb-6 md:mb-8 text-xs text-stone-600">
+            <button onClick={() => { setCurrentView('privacy'); window.scrollTo(0, 0); }} className="hover:text-amber-500 transition-colors underline underline-offset-2">{t.footer.privacy_link}</button>
+            <span className="text-stone-800">·</span>
+            <button onClick={() => { setCurrentView('terms'); window.scrollTo(0, 0); }} className="hover:text-amber-500 transition-colors underline underline-offset-2">{t.footer.terms_link}</button>
+            <span className="text-stone-800">·</span>
+            <button onClick={() => { setCurrentView('disclaimer'); window.scrollTo(0, 0); }} className="hover:text-amber-500 transition-colors underline underline-offset-2">{t.footer.disclaimer_link}</button>
+          </div>
           <p className="text-[10px] tracking-[0.5em] uppercase font-black opacity-30">{t.footer.copy}</p>
         </div>
       </footer>

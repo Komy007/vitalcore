@@ -231,7 +231,46 @@ export const TRANSLATIONS: Record<string, any> = {
         label: "관리자 연락처",
         telegram: "@cambodiabae",
         secret: "게시판 비밀글 문의 가능"
-      }
+      },
+      privacy_link: "개인정보처리방침",
+      terms_link: "이용약관",
+      disclaimer_link: "의료 면책조항"
+    },
+    legal: {
+      updated: "최종 수정일: 2026년 6월 13일",
+      privacy_title: "개인정보처리방침",
+      privacy_sections: [
+        { title: "1. 수집하는 개인정보", body: "회원가입 시 이름, 이메일 주소, 전화번호, 거주 국가를 수집합니다. 또한 사이트 이용 과정에서 쿠키, IP 주소, 브라우저 유형, 방문 페이지, 접속 시각 등의 정보가 자동으로 수집될 수 있습니다." },
+        { title: "2. 수집 및 이용 목적", body: "수집된 정보는 회원 인증 및 계정 관리, 문의사항 응대, 서비스 개선, 그리고 관계 법령에 따른 의무 이행에만 사용됩니다. 수집 목적 외의 용도로는 사용하지 않습니다." },
+        { title: "3. 보관 기간", body: "개인정보는 회원 탈퇴 시 또는 수집 목적 달성 후 지체 없이 파기합니다. 단, 관계 법령에 따라 일정 기간 보관이 필요한 정보는 해당 기간 동안 안전하게 보관됩니다." },
+        { title: "4. 제3자 광고 서비스 (Google AdSense)", body: "본 사이트는 Google Inc.의 광고 서비스인 Google AdSense를 사용합니다. 구글을 포함한 제3자 광고 공급업체는 쿠키(DART 쿠키 포함)를 이용해 사용자의 이전 방문 기록을 바탕으로 맞춤 광고를 게재합니다.\n\n• 맞춤 광고 비활성화: https://www.google.com/settings/ads\n• 제3자 쿠키 옵트아웃: https://www.aboutads.info" },
+        { title: "5. 쿠키(Cookie) 사용", body: "쿠키는 로그인 세션 유지, 언어 설정 저장, 서비스 품질 개선을 위해 사용됩니다. 브라우저 설정에서 쿠키를 거부하거나 삭제할 수 있으나, 일부 기능이 제한될 수 있습니다." },
+        { title: "6. GDPR(EU) 및 CCPA(캘리포니아) 이용자 권리", body: "EU 거주 이용자는 개인정보 열람, 수정, 삭제, 처리 제한, 이동을 요청할 권리가 있습니다. 캘리포니아 거주 이용자는 CCPA에 따라 개인정보 공개 현황 조회 및 판매 거부 권리를 가집니다. 권리 행사는 아래 연락처를 이용하세요." },
+        { title: "7. 아동 개인정보 보호", body: "본 사이트는 만 13세 미만 아동으로부터 의도적으로 개인정보를 수집하지 않습니다. 해당 사실을 인지하는 경우 즉시 삭제합니다." },
+        { title: "8. 정보 보안", body: "수집된 개인정보는 암호화 및 접근 통제 등 기술적·관리적 보호 조치를 통해 안전하게 관리됩니다. 다만 인터넷 전송 방식의 특성상 100% 보안은 보장되지 않습니다." },
+        { title: "9. 방침 변경", body: "본 방침은 법령 변경 또는 서비스 개선에 따라 수정될 수 있으며, 변경 시 사이트 내 공지를 통해 안내해 드립니다." },
+        { title: "10. 문의처", body: "이메일: cambodia.bae@gmail.com" }
+      ],
+      terms_title: "이용약관",
+      terms_sections: [
+        { title: "1. 서비스 소개", body: "Vital Core Premium(www.linteus.com)은 상황버섯(Phellinus linteus)의 과학적 연구와 효능에 관한 정보를 제공하는 헬스 정보 포털입니다." },
+        { title: "2. 이용 자격 및 계정", body: "만 13세 이상이라면 누구나 회원가입을 할 수 있습니다. 회원은 자신의 계정 정보를 안전하게 관리할 책임이 있으며, 타인과 계정을 공유해서는 안 됩니다. 허위 정보로 가입한 경우 서비스 이용이 제한될 수 있습니다." },
+        { title: "3. 콘텐츠의 목적 및 한계", body: "본 사이트의 모든 콘텐츠는 일반적인 정보 제공을 목적으로 하며, 의학적 진단·치료·처방을 대체하지 않습니다. 건강 관련 사항은 반드시 자격을 갖춘 의료 전문가와 상담하시기 바랍니다." },
+        { title: "4. 지식재산권", body: "사이트의 모든 콘텐츠(텍스트, 이미지, 그래픽, 로고 등)는 저작권법의 보호를 받습니다. 사전 서면 동의 없이 복제, 배포, 수정하는 행위를 금합니다." },
+        { title: "5. 광고 및 외부 링크", body: "본 사이트는 제3자 광고를 게재할 수 있습니다. 광고 내용 및 외부 링크 사이트에 대한 책임은 해당 광고주에게 있으며, 본 사이트는 이에 대해 책임을 지지 않습니다." },
+        { title: "6. 책임 제한", body: "본 사이트는 콘텐츠의 정확성·완전성에 대해 명시적·묵시적 보증을 하지 않으며, 사이트 이용으로 인한 직·간접적 손해에 대한 책임을 법률이 허용하는 최대 범위 내에서 제한합니다." },
+        { title: "7. 서비스 변경 및 중단", body: "운영자는 사전 고지 없이 서비스의 일부 또는 전부를 변경하거나 중단할 수 있습니다." },
+        { title: "8. 준거법", body: "본 약관은 대한민국 법률에 따라 해석 및 적용됩니다." },
+        { title: "9. 약관 변경", body: "약관은 필요 시 변경될 수 있으며, 변경 내용은 사이트를 통해 안내됩니다. 변경 후 서비스를 계속 이용하면 변경된 약관에 동의한 것으로 간주합니다." },
+        { title: "10. 문의처", body: "이메일: cambodia.bae@gmail.com" }
+      ],
+      disclaimer_title: "의료 면책조항",
+      disclaimer_sections: [
+        { title: "정보 제공 목적", body: "본 사이트의 모든 콘텐츠는 상황버섯(Phellinus linteus) 및 관련 건강기능식품에 관한 일반적인 정보 제공만을 목적으로 합니다. 본 사이트의 어떠한 정보도 의학적 진단, 치료, 처방 또는 의료적 조언을 구성하지 않습니다." },
+        { title: "의료 전문가 상담 필수", body: "건강 상태, 질병, 치료 또는 건강기능식품 복용에 관한 결정을 내리기 전에 반드시 자격을 갖춘 의사 또는 의료 전문가와 상담하시기 바랍니다. 본 사이트의 정보를 근거로 한 모든 결정은 전적으로 이용자 본인의 책임입니다." },
+        { title: "제품 정보 한계", body: "본 사이트에서 소개하는 제품은 건강기능식품으로, 질병의 예방·진단·치료를 목적으로 하는 의약품이 아닙니다. 효과는 개인의 건강 상태와 체질에 따라 다를 수 있습니다." },
+        { title: "연구 자료 인용", body: "본 사이트에 인용된 학술 연구 결과는 해당 연구자들의 견해를 반영하는 것으로, 운영자의 공식 의학적 의견이 아닙니다. 연구 결과가 모든 개인에게 동일하게 적용되지 않을 수 있습니다." }
+      ]
     },
     board: {
       ask_btn: "질문하기",
@@ -444,7 +483,46 @@ export const TRANSLATIONS: Record<string, any> = {
         label: "Admin Contact",
         telegram: "@cambodiabae",
         secret: "Private posts available on Q&A"
-      }
+      },
+      privacy_link: "Privacy Policy",
+      terms_link: "Terms of Service",
+      disclaimer_link: "Medical Disclaimer"
+    },
+    legal: {
+      updated: "Last updated: June 13, 2026",
+      privacy_title: "Privacy Policy",
+      privacy_sections: [
+        { title: "1. Information We Collect", body: "When you register, we collect your name, email address, phone number, and country of residence. We may also automatically collect information such as cookies, IP addresses, browser type, pages visited, and access timestamps during your use of the site." },
+        { title: "2. How We Use Your Information", body: "Your information is used solely for member authentication and account management, responding to inquiries, improving our services, and fulfilling legal obligations. We do not use your information for any other purposes." },
+        { title: "3. Data Retention", body: "Personal data is deleted promptly upon account deletion or once the purpose of collection has been fulfilled. Where applicable law requires retention for a specific period, data will be stored securely for that duration." },
+        { title: "4. Third-Party Advertising (Google AdSense)", body: "This site uses Google AdSense, an advertising service provided by Google Inc. Third-party vendors, including Google, use cookies (including the DART cookie) to serve ads based on your prior visits to this site and other websites.\n\n• Opt out of personalized ads: https://www.google.com/settings/ads\n• Opt out of third-party cookies: https://www.aboutads.info" },
+        { title: "5. Cookies", body: "We use cookies to maintain your login session, save language preferences, and improve service quality. You may disable or delete cookies through your browser settings; however, some features may not function correctly as a result." },
+        { title: "6. Your Rights (GDPR & CCPA)", body: "EU residents have the right to access, correct, delete, restrict processing, and port their personal data. California residents have rights under the CCPA, including the right to know what personal information is collected and to opt out of its sale. To exercise these rights, please contact us at the address below." },
+        { title: "7. Children's Privacy", body: "We do not knowingly collect personal information from children under the age of 13. If we become aware that such data has been collected, we will delete it immediately." },
+        { title: "8. Data Security", body: "Collected personal data is protected through encryption and access control measures. Please note that no method of internet transmission is 100% secure." },
+        { title: "9. Changes to This Policy", body: "This policy may be updated in response to legal changes or service improvements. We will notify users of any changes via a notice on this site." },
+        { title: "10. Contact Us", body: "Email: cambodia.bae@gmail.com" }
+      ],
+      terms_title: "Terms of Service",
+      terms_sections: [
+        { title: "1. About the Service", body: "Vital Core Premium (www.linteus.com) is a health information portal providing scientific research and information about Phellinus linteus (Sanghwang Mushroom)." },
+        { title: "2. Eligibility & Accounts", body: "You must be at least 13 years old to register. You are responsible for maintaining the security of your account credentials and must not share your account with others. Providing false information may result in termination of your account." },
+        { title: "3. Content Purpose & Limitations", body: "All content on this site is provided for general informational purposes only and does not constitute medical diagnosis, treatment, prescription, or advice. Always consult a qualified healthcare professional for health-related decisions." },
+        { title: "4. Intellectual Property", body: "All content on this site — including text, images, graphics, and logos — is protected by copyright law. Reproduction, distribution, or modification without prior written consent is prohibited." },
+        { title: "5. Advertising & External Links", body: "This site may display third-party advertisements. We are not responsible for the content of advertisements or the practices of any external websites linked from this site." },
+        { title: "6. Limitation of Liability", body: "We make no warranties regarding the accuracy or completeness of the content on this site. Our liability for any damages arising from your use of this site is limited to the maximum extent permitted by law." },
+        { title: "7. Service Changes & Interruptions", body: "We reserve the right to modify or discontinue any part of the service at any time without prior notice." },
+        { title: "8. Governing Law", body: "These Terms shall be governed by and interpreted in accordance with the laws of the Republic of Korea." },
+        { title: "9. Changes to These Terms", body: "These Terms may be updated from time to time. Continued use of the service after changes are posted constitutes acceptance of the revised Terms." },
+        { title: "10. Contact Us", body: "Email: cambodia.bae@gmail.com" }
+      ],
+      disclaimer_title: "Medical Disclaimer",
+      disclaimer_sections: [
+        { title: "For Informational Purposes Only", body: "All content published on this site (www.linteus.com) is intended solely for general information about Phellinus linteus and related health supplements. Nothing on this site constitutes medical diagnosis, treatment, prescription, or professional medical advice." },
+        { title: "Consult a Healthcare Professional", body: "Before making any decisions regarding your health, medical conditions, treatments, or supplement use, always consult a qualified physician or licensed healthcare provider. Any action you take based on information from this site is entirely at your own risk." },
+        { title: "Supplement — Not Medicine", body: "The products featured on this site are dietary supplements, not medicines. They are not intended to diagnose, treat, cure, or prevent any disease. Individual results may vary based on personal health conditions." },
+        { title: "Citation of Research", body: "Academic research cited on this site reflects the findings and opinions of the respective researchers, not official medical positions of the site operator. Research results may not apply equally to all individuals." }
+      ]
     },
     board: {
       ask_btn: "Ask Question",
@@ -657,7 +735,46 @@ export const TRANSLATIONS: Record<string, any> = {
         label: "管理员联系方式",
         telegram: "@cambodiabae",
         secret: "可在留言板发布秘密咨询"
-      }
+      },
+      privacy_link: "隐私政策",
+      terms_link: "服务条款",
+      disclaimer_link: "医疗免责声明"
+    },
+    legal: {
+      updated: "最后更新日期：2026年6月13日",
+      privacy_title: "隐私政策",
+      privacy_sections: [
+        { title: "1. 我们收集的信息", body: "注册时，我们会收集您的姓名、电子邮件地址、电话号码及居住国家。在您使用本网站的过程中，我们可能自动收集Cookie、IP地址、浏览器类型、访问页面及访问时间等信息。" },
+        { title: "2. 信息使用目的", body: "所收集的信息仅用于会员认证与账户管理、回复咨询、改善服务以及履行法律义务。我们不会将您的信息用于其他任何目的。" },
+        { title: "3. 数据保留期限", body: "账户注销或收集目的达成后，个人数据将立即删除。如适用法律要求在特定期限内保留，数据将在该期限内安全保存。" },
+        { title: "4. 第三方广告服务（Google AdSense）", body: "本网站使用Google Inc.提供的广告服务Google AdSense。包括Google在内的第三方广告商会使用Cookie（包括DART Cookie），根据您过去对本网站及其他网站的访问记录投放个性化广告。\n\n• 关闭个性化广告：https://www.google.com/settings/ads\n• 第三方Cookie退出：https://www.aboutads.info" },
+        { title: "5. Cookie使用", body: "我们使用Cookie来维持登录状态、保存语言偏好设置并改善服务质量。您可以通过浏览器设置拒绝或删除Cookie，但部分功能可能因此受限。" },
+        { title: "6. 您的权利（GDPR与CCPA）", body: "欧盟用户有权访问、更正、删除其个人数据，并有权限制处理或请求数据可携带。加利福尼亚州用户依据CCPA享有知情权及拒绝出售个人数据的权利。如需行使上述权利，请通过以下联系方式与我们联系。" },
+        { title: "7. 儿童隐私保护", body: "我们不会故意收集13岁以下儿童的个人信息。一经发现，将立即予以删除。" },
+        { title: "8. 数据安全", body: "我们通过加密及访问控制等技术与管理措施保护您的个人数据。请注意，互联网传输方式无法保证100%的安全性。" },
+        { title: "9. 政策变更", body: "本政策可能因法律变化或服务改进而更新。如有变更，我们将通过网站公告通知用户。" },
+        { title: "10. 联系我们", body: "电子邮件：cambodia.bae@gmail.com" }
+      ],
+      terms_title: "服务条款",
+      terms_sections: [
+        { title: "1. 服务介绍", body: "Vital Core Premium（www.linteus.com）是一个提供桑黄菌（Phellinus linteus）科学研究与功效信息的健康信息门户。" },
+        { title: "2. 注册资格与账户", body: "13岁及以上用户均可注册。您有责任妥善保管账户信息，不得与他人共享账户。提供虚假信息可能导致账户被限制或注销。" },
+        { title: "3. 内容目的与局限性", body: "本网站所有内容仅供一般参考，不构成医学诊断、治疗、处方或医疗建议。健康相关决策前，请务必咨询具备资质的医疗专业人员。" },
+        { title: "4. 知识产权", body: "本网站所有内容（包括文字、图片、图形、标志等）受版权法保护。未经事先书面许可，禁止复制、分发或修改。" },
+        { title: "5. 广告与外部链接", body: "本网站可能展示第三方广告。广告内容及外部链接网站的责任由相应广告主承担，本网站不对此负责。" },
+        { title: "6. 责任限制", body: "本网站不对内容的准确性或完整性作出任何明示或暗示的保证。因使用本网站而产生的任何损失，本网站的责任以法律允许的最大范围为限。" },
+        { title: "7. 服务变更与中断", body: "运营者有权在不事先通知的情况下变更或中断部分或全部服务。" },
+        { title: "8. 适用法律", body: "本条款依据大韩民国法律解释与适用。" },
+        { title: "9. 条款变更", body: "本条款可能不时更新。更新后继续使用服务，即视为接受修订后的条款。" },
+        { title: "10. 联系我们", body: "电子邮件：cambodia.bae@gmail.com" }
+      ],
+      disclaimer_title: "医疗免责声明",
+      disclaimer_sections: [
+        { title: "仅供参考", body: "本网站（www.linteus.com）发布的所有内容，仅供提供有关桑黄菌（Phellinus linteus）及相关健康食品的一般信息。本网站任何信息均不构成医学诊断、治疗、处方或专业医疗建议。" },
+        { title: "请咨询医疗专业人员", body: "在就健康状况、疾病、治疗方案或健康食品使用作出任何决定之前，请务必咨询具备资质的医生或持证医疗提供者。依据本网站信息所采取的任何行动，风险由您本人承担。" },
+        { title: "保健品，非药品", body: "本网站介绍的产品为保健食品，非药品，不以诊断、治疗、治愈或预防任何疾病为目的。个人效果因健康状况而异。" },
+        { title: "研究资料引用说明", body: "本网站引用的学术研究结果反映相关研究人员的观点，并非本网站运营者的官方医学立场。研究结果不一定适用于所有个体。" }
+      ]
     },
     board: {
       ask_btn: "提问",
@@ -870,7 +987,46 @@ export const TRANSLATIONS: Record<string, any> = {
         label: "管理者連絡先",
         telegram: "@cambodiabae",
         secret: "掲示板での秘密投稿が可能"
-      }
+      },
+      privacy_link: "プライバシーポリシー",
+      terms_link: "利用規約",
+      disclaimer_link: "医療免責事項"
+    },
+    legal: {
+      updated: "最終更新日：2026年6月13日",
+      privacy_title: "プライバシーポリシー",
+      privacy_sections: [
+        { title: "1. 収集する情報", body: "会員登録時にお名前、メールアドレス、電話番号、お住まいの国を収集します。また、サイト利用中にCookie、IPアドレス、ブラウザの種類、閲覧ページ、アクセス時刻などの情報が自動的に収集される場合があります。" },
+        { title: "2. 情報の利用目的", body: "収集した情報は、会員認証とアカウント管理、お問い合わせへの対応、サービスの改善、および法的義務の履行にのみ使用します。収集目的以外には使用いたしません。" },
+        { title: "3. 保管期間", body: "個人情報は、退会時または収集目的の達成後に速やかに削除します。法令により一定期間の保管が義務付けられている場合は、当該期間中安全に保管します。" },
+        { title: "4. 第三者広告サービス（Google AdSense）", body: "当サイトはGoogle Inc.の広告サービスであるGoogle AdSenseを利用します。Googleを含む第三者広告配信事業者は、Cookie（DARTクッキーを含む）を使用して、ユーザーの当サイトおよび他サイトへの過去のアクセス情報を基に広告を配信します。\n\n• パーソナライズ広告の無効化：https://www.google.com/settings/ads\n• 第三者Cookieのオプトアウト：https://www.aboutads.info" },
+        { title: "5. Cookieの使用", body: "ログインセッションの維持、言語設定の保存、サービス品質の向上のためにCookieを使用します。ブラウザの設定からCookieを拒否・削除することができますが、一部の機能が制限される場合があります。" },
+        { title: "6. お客様の権利（GDPRおよびCCPA）", body: "EU在住の方は、個人情報へのアクセス、訂正、削除、処理の制限、データポータビリティを求める権利があります。カリフォルニア州在住の方は、CCPAに基づき、個人情報の収集状況の確認および個人情報の販売拒否の権利を有します。権利の行使は下記連絡先へお問い合わせください。" },
+        { title: "7. 子どものプライバシー保護", body: "当サイトは13歳未満の子どもから意図的に個人情報を収集することはありません。該当する情報の収集が判明した場合は、直ちに削除いたします。" },
+        { title: "8. 情報セキュリティ", body: "収集した個人情報は、暗号化およびアクセス制御などの技術的・管理的措置により安全に管理されます。ただし、インターネットを介した送信は100%の安全性を保証するものではありません。" },
+        { title: "9. ポリシーの変更", body: "本ポリシーは法令の改正やサービスの改善に伴い変更される場合があります。変更の際はサイト上でお知らせします。" },
+        { title: "10. お問い合わせ", body: "メールアドレス：cambodia.bae@gmail.com" }
+      ],
+      terms_title: "利用規約",
+      terms_sections: [
+        { title: "1. サービスのご紹介", body: "Vital Core Premium（www.linteus.com）は、メシマコブ（Phellinus linteus）に関する科学的研究と効能情報を提供するヘルス情報ポータルです。" },
+        { title: "2. 利用資格とアカウント", body: "13歳以上の方であれば会員登録いただけます。アカウント情報の安全な管理はお客様の責任です。アカウントを他者と共有することは禁止されています。虚偽情報でのご登録は利用停止の対象となります。" },
+        { title: "3. コンテンツの目的と限界", body: "当サイトのすべてのコンテンツは一般的な情報提供を目的としており、医学的診断・治療・処方・医療上のアドバイスを代替するものではありません。健康に関わる判断は必ず資格を持つ医療専門家にご相談ください。" },
+        { title: "4. 知的財産権", body: "当サイトのすべてのコンテンツ（テキスト、画像、グラフィック、ロゴ等）は著作権法により保護されています。事前の書面による許可なく、複製・配布・改変することを禁じます。" },
+        { title: "5. 広告および外部リンク", body: "当サイトには第三者広告が掲載される場合があります。広告内容および外部リンク先サイトについての責任は各広告主に帰属し、当サイトは責任を負いません。" },
+        { title: "6. 免責事項", body: "当サイトはコンテンツの正確性・完全性について明示・黙示を問わず保証しません。当サイトの利用に起因するいかなる損害についても、法律の許容する最大限の範囲で責任を制限します。" },
+        { title: "7. サービスの変更・中断", body: "運営者は予告なくサービスの一部または全部を変更・中断する権利を有します。" },
+        { title: "8. 準拠法", body: "本規約は大韓民国の法律に従って解釈・適用されます。" },
+        { title: "9. 規約の変更", body: "本規約は随時更新される場合があります。変更後もサービスを継続してご利用いただくことで、改定後の規約に同意したものとみなします。" },
+        { title: "10. お問い合わせ", body: "メールアドレス：cambodia.bae@gmail.com" }
+      ],
+      disclaimer_title: "医療免責事項",
+      disclaimer_sections: [
+        { title: "情報提供目的", body: "当サイト（www.linteus.com）に掲載されているすべてのコンテンツは、メシマコブ（Phellinus linteus）および関連する健康食品に関する一般的な情報提供のみを目的としています。当サイトのいかなる情報も、医学的診断・治療・処方または医療上のアドバイスを構成するものではありません。" },
+        { title: "医療専門家への相談を推奨", body: "健康状態、疾患、治療法または健康食品の使用に関するいかなる判断においても、必ず資格を有する医師または医療従事者にご相談ください。当サイトの情報を基にした行動はすべてご自身の責任となります。" },
+        { title: "健康食品であり医薬品ではありません", body: "当サイトで紹介する製品は健康食品であり、疾病の診断・治療・治癒・予防を目的とする医薬品ではありません。効果には個人差があります。" },
+        { title: "研究資料の引用について", body: "当サイトに引用されている学術研究の結果は、各研究者の見解を反映したものであり、運営者の公式な医学的見解ではありません。研究結果はすべての個人に同様に適用されるものではありません。" }
+      ]
     },
     board: {
       ask_btn: "質問する",
