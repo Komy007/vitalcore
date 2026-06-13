@@ -248,18 +248,21 @@ const App: React.FC = () => {
     }
   };
 
-  // SEO: Sync URL <-> Lang & Auto-Detect
+  // SEO: Sync URL <-> Lang & View & Auto-Detect
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const urlLang = params.get('lang');
     if (urlLang && ['en', 'zh', 'ja', 'ko'].includes(urlLang)) {
       setLang(urlLang as any);
     } else {
-      // Auto-detect browser language if no URL param
       const browserLang = navigator.language.split('-')[0];
       if (['en', 'zh', 'ja', 'ko'].includes(browserLang)) {
         setLang(browserLang as any);
       }
+    }
+    const urlView = params.get('view');
+    if (urlView && ['health', 'faq', 'privacy', 'terms', 'disclaimer'].includes(urlView)) {
+      setCurrentView(urlView as any);
     }
   }, []);
 
@@ -267,9 +270,11 @@ const App: React.FC = () => {
     const params = new URLSearchParams(window.location.search);
     if (lang !== 'ko') params.set('lang', lang);
     else params.delete('lang');
+    if (currentView !== 'home') params.set('view', currentView);
+    else params.delete('view');
     const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
     window.history.replaceState({}, '', newUrl);
-  }, [lang]);
+  }, [lang, currentView]);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1035,6 +1040,12 @@ const App: React.FC = () => {
                       <h3 className="text-2xl md:text-3xl font-serif font-bold text-white">Global Medical Evidence</h3>
                       <span className="ml-auto text-xs text-stone-500 font-mono tracking-widest uppercase hidden md:block">Source: NIH PubMed Database</span>
                     </div>
+                    <div className="flex items-center gap-3 mb-6 px-4 py-3 bg-amber-900/15 border border-amber-500/20 rounded-2xl">
+                      <Info size={14} className="text-amber-500 shrink-0" />
+                      <p className="text-amber-400/80 text-[11px] leading-relaxed">
+                        {lang === 'ko' ? '이하 내용은 학술 논문을 인용한 연구 정보이며, 의료적 진단·치료·처방을 대체하지 않습니다.' : lang === 'zh' ? '以下内容引用学术研究，仅供参考，不构成医疗诊断、治疗或处方建议。' : lang === 'ja' ? '以下の内容は学術論文の引用情報であり、医療診断・治療・処方の代替となるものではありません。' : 'The following content cites academic research for informational purposes only and does not constitute medical diagnosis, treatment, or prescription.'}
+                      </p>
+                    </div>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
                       {t.about.evidence?.map((paper: any, i: number) => (
                         <div key={i} className="flex flex-col bg-stone-950/40 p-6 rounded-[2rem] border border-white/5 hover:border-amber-500/40 transition-all hover:bg-stone-900/60 group">
@@ -1298,7 +1309,8 @@ const App: React.FC = () => {
                     <div className="lg:col-span-2 space-y-8 flex flex-col justify-center">
                       <div className="p-5 md:p-8 bg-amber-900/20 rounded-[1.5rem] md:rounded-[2.5rem] border border-amber-500/30 shadow-inner relative group">
                         <div className="absolute top-0 right-0 p-6 opacity-20"><FlaskConical size={64} className="text-amber-600" /></div>
-                        <h4 className="text-amber-500 font-black text-xs uppercase tracking-[0.2em] mb-4 flex items-center gap-2"><BookOpen size={16} /> Key Evidence (NCBI/PMC)</h4>
+                        <h4 className="text-amber-500 font-black text-xs uppercase tracking-[0.2em] mb-3 flex items-center gap-2"><BookOpen size={16} /> Key Evidence (NCBI/PMC)</h4>
+                        <p className="text-amber-400/60 text-[10px] mb-4 flex items-center gap-1"><Info size={10} className="shrink-0" />{lang === 'ko' ? '연구 인용 — 의료적 조언 아님' : lang === 'zh' ? '研究引用 — 非医疗建议' : lang === 'ja' ? '研究引用 — 医療上のアドバイスではありません' : 'Research citation — not medical advice'}</p>
                         <p className="text-stone-100 text-sm md:text-base font-medium leading-relaxed mb-8 relative z-10">
                           "{t.benefits.details[benefitActiveTab].evidence}"
                         </p>

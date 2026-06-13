@@ -226,7 +226,7 @@ export const TRANSLATIONS: Record<string, any> = {
       ]
     },
     footer: {
-      copy: "© 2025 Vital Core. All rights reserved.",
+      copy: "© 2026 Vital Core. All rights reserved.",
       contact: {
         label: "관리자 연락처",
         telegram: "@cambodiabae",
@@ -478,7 +478,7 @@ export const TRANSLATIONS: Record<string, any> = {
       ]
     },
     footer: {
-      copy: "© 2025 Vital Core. All rights reserved.",
+      copy: "© 2026 Vital Core. All rights reserved.",
       contact: {
         label: "Admin Contact",
         telegram: "@cambodiabae",
@@ -730,7 +730,7 @@ export const TRANSLATIONS: Record<string, any> = {
       ]
     },
     footer: {
-      copy: "© 2025 Vital Core. All rights reserved.",
+      copy: "© 2026 Vital Core. All rights reserved.",
       contact: {
         label: "管理员联系方式",
         telegram: "@cambodiabae",
@@ -982,7 +982,7 @@ export const TRANSLATIONS: Record<string, any> = {
       ]
     },
     footer: {
-      copy: "© 2025 Vital Core. All rights reserved.",
+      copy: "© 2026 Vital Core. All rights reserved.",
       contact: {
         label: "管理者連絡先",
         telegram: "@cambodiabae",
