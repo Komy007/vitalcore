@@ -33,9 +33,17 @@ const App: React.FC = () => {
   const { user, login, logout, isAuthenticated, isAdmin } = useAuth();
 
   const [lang, setLang] = useState<Language>(() => {
-    if (typeof navigator !== 'undefined' && navigator.language) {
-      return navigator.language.startsWith('ko') ? 'ko' : 'en';
-    }
+    if (typeof window === 'undefined') return 'ko';
+    const LANGS: Language[] = ['ko', 'en', 'zh', 'ja'];
+    // Priority 1: ?lang= URL param (shareable links / direct navigation)
+    const urlLang = new URLSearchParams(window.location.search).get('lang') as Language;
+    if (LANGS.includes(urlLang)) return urlLang;
+    // Priority 2: User's saved preference from a previous visit
+    const saved = localStorage.getItem('preferred_lang') as Language;
+    if (LANGS.includes(saved)) return saved;
+    // Priority 3: Browser / OS language (handles ko, en, zh, ja)
+    const nav = navigator.language.split('-')[0] as Language;
+    if (LANGS.includes(nav)) return nav;
     return 'ko';
   });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -244,25 +252,17 @@ const App: React.FC = () => {
     }
   };
 
-  // SEO: Sync URL <-> Lang & View & Auto-Detect
+  // On mount: apply ?view= from URL (lang is already set in useState initializer)
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const urlLang = params.get('lang');
-    if (urlLang && ['en', 'zh', 'ja', 'ko'].includes(urlLang)) {
-      setLang(urlLang as any);
-    } else {
-      const browserLang = navigator.language.split('-')[0];
-      if (['en', 'zh', 'ja', 'ko'].includes(browserLang)) {
-        setLang(browserLang as any);
-      }
-    }
-    const urlView = params.get('view');
+    const urlView = new URLSearchParams(window.location.search).get('view');
     if (urlView && ['health', 'faq', 'privacy', 'terms', 'disclaimer'].includes(urlView)) {
       setCurrentView(urlView as any);
     }
   }, []);
 
+  // Persist user's language choice and sync URL
   useEffect(() => {
+    localStorage.setItem('preferred_lang', lang);
     const params = new URLSearchParams(window.location.search);
     if (lang !== 'ko') params.set('lang', lang);
     else params.delete('lang');
