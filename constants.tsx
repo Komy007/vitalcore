@@ -5,13 +5,13 @@ import { Translation } from './types';
 // Local Image Imports
 import usage_step_01 from './img/usage_step_01.jpg';
 import usage_step_02 from './img/usage_step_02.jpg';
-import usage_step_03 from './img/usage_step_03.png';
-import usage_step_04 from './img/usage_step_04.png';
-import linteus0 from './img/linteus0.png';
-import linteus1 from './img/linteus1_new.png';
+import usage_step_03 from './img/usage_step_03.webp';
+import usage_step_04 from './img/usage_step_04.webp';
+import linteus0 from './img/linteus0.webp';
+import linteus1 from './img/linteus1_new.webp';
 import linteus2 from './img/linteus2.jpg';
 import linteus3 from './img/linteus3.jpg';
-import linteus4 from './img/linteus4.png';
+import linteus4 from './img/linteus4.webp';
 import linteus5 from './img/linteus5.jpg';
 
 export const IMAGES = {

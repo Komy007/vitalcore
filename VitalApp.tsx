@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { LucideIcon, Menu, X, ChevronRight, Check, Play, Award, Microscope, Leaf, Shield, Heart, Zap, Brain, Activity, ArrowRight, ArrowLeft, Star, Quote, Search, Globe, User, LogOut, ChevronDown, Lock, Mail, Phone, MapPin, Send, LayoutTemplate, Megaphone, Plus, Edit, Trash2, Save, Image as ImageIcon, MessageCircle, Sparkles, AlertTriangle, Droplet, Eye, BookOpen, ExternalLink, Info, FlaskConical, GraduationCap, Coffee, Flame, ShieldCheck, CheckCircle2, FileText, Loader2, Languages, Maximize2, Minimize2 } from 'lucide-react';
-import ReactQuill, { Quill } from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import ImageResize from 'quill-image-resize-module-react';
+const ReactQuill = React.lazy(() => import('./QuillEditor'));
 
 Quill.register('modules/imageResize', ImageResize);
 
@@ -23,9 +21,7 @@ const addLinkTargets = (html: string): string => {
   if (!html) return '';
   return html.replace(/<a\s/gi, '<a target="_blank" rel="noopener noreferrer" ');
 };
-import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
-} from 'recharts';
+const ResearchChart = React.lazy(() => import('./ResearchChart'));
 import { IMAGES, TRANSLATIONS, VitalCoreLogo } from './constants';
 import { Language, UserInfo, ResearchData } from './types';
 import { useAuth } from './contexts/AuthContext';
@@ -1205,16 +1201,9 @@ const App: React.FC = () => {
                   </MobileModal>
 
                   <div className="bg-stone-900/60 backdrop-blur-3xl p-4 md:p-10 rounded-[1.5rem] md:rounded-[2.5rem] border border-white/10 shadow-2xl h-[280px] md:h-[400px]">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={researchData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#444" vertical={false} />
-                        <XAxis dataKey="category" stroke="#bbb" tick={{ fontSize: 11, fontWeight: 'bold' }} />
-                        <YAxis stroke="#bbb" tick={{ fontSize: 11 }} />
-                        <Tooltip contentStyle={{ background: '#111', border: '1px solid #333', borderRadius: '14px', color: '#fff' }} />
-                        <Bar dataKey="control" name="Control" fill="#333" radius={[6, 6, 0, 0]} barSize={45} />
-                        <Bar dataKey="phellinus" name="Vital Core" fill="#d97706" radius={[6, 6, 0, 0]} barSize={45} />
-                      </BarChart>
-                    </ResponsiveContainer>
+                    <React.Suspense fallback={<div className="w-full h-full flex items-center justify-center text-stone-600 text-sm">Loading chart…</div>}>
+                      <ResearchChart data={researchData} />
+                    </React.Suspense>
                   </div>
                 </div>
 
@@ -2425,29 +2414,27 @@ const App: React.FC = () => {
                         </button>
                       </div>
                     )}
-                    <ReactQuill
-                      key={editingReportId ? `edit-${editingReportId}-${reportLang}` : `new-${reportLang}`}
-                      theme="snow"
-                      value={newReport[reportLang === 'ko' ? 'content' : `content_${reportLang}`] || ''}
-                      onChange={(value) => setNewReport({ ...newReport, [reportLang === 'ko' ? 'content' : `content_${reportLang}`]: value })}
-                      style={{ color: '#ffffff' }} // Force white text inline
-                      modules={{
-                        toolbar: [
-                          [{ 'header': [1, 2, 3, false] }],
-                          ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                          [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                          ['link', 'image'],
-                          ['clean'],
-                          [{ 'color': [] }, { 'background': [] }],
-                          [{ 'align': [] }],
-                        ],
-                        // imageResize: {
-                        //   parchment: Quill.import('parchment'),
-                        //   modules: ['Resize', 'DisplaySize']
-                        // }
-                      }}
-                      className="bg-stone-800 rounded-xl text-white border border-white/5 h-full quill-editor"
-                    />
+                    <React.Suspense fallback={<div className="w-full h-64 flex items-center justify-center text-stone-500 text-sm">Loading editor…</div>}>
+                      <ReactQuill
+                        key={editingReportId ? `edit-${editingReportId}-${reportLang}` : `new-${reportLang}`}
+                        theme="snow"
+                        value={newReport[reportLang === 'ko' ? 'content' : `content_${reportLang}`] || ''}
+                        onChange={(value) => setNewReport({ ...newReport, [reportLang === 'ko' ? 'content' : `content_${reportLang}`]: value })}
+                        style={{ color: '#ffffff' }}
+                        modules={{
+                          toolbar: [
+                            [{ 'header': [1, 2, 3, false] }],
+                            ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                            ['link', 'image'],
+                            ['clean'],
+                            [{ 'color': [] }, { 'background': [] }],
+                            [{ 'align': [] }],
+                          ],
+                        }}
+                        className="bg-stone-800 rounded-xl text-white border border-white/5 h-full quill-editor"
+                      />
+                    </React.Suspense>
                   </div>
 
                 </div>
@@ -2493,27 +2480,25 @@ const App: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-stone-500 text-xs font-bold uppercase mb-2">Content ({noticeLang})</label>
-                  <ReactQuill
-                    theme="snow"
-                    value={newNotice[noticeLang === 'ko' ? 'content' : `content_${noticeLang}`] || ''}
-                    onChange={(value) => setNewNotice({ ...newNotice, [noticeLang === 'ko' ? 'content' : `content_${noticeLang}`]: value })}
-                    modules={{
-                      toolbar: [
-                        [{ 'header': [1, 2, 3, false] }],
-                        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                        ['link', 'image'],
-                        ['clean'],
-                        [{ 'color': [] }, { 'background': [] }],
-                        [{ 'align': [] }],
-                      ],
-                      imageResize: {
-                        parchment: Quill.import('parchment'),
-                        modules: ['Resize', 'DisplaySize']
-                      }
-                    }}
-                    className="bg-stone-800 rounded-xl text-white border border-white/5"
-                  />
+                  <React.Suspense fallback={<div className="w-full h-48 flex items-center justify-center text-stone-500 text-sm">Loading editor…</div>}>
+                    <ReactQuill
+                      theme="snow"
+                      value={newNotice[noticeLang === 'ko' ? 'content' : `content_${noticeLang}`] || ''}
+                      onChange={(value) => setNewNotice({ ...newNotice, [noticeLang === 'ko' ? 'content' : `content_${noticeLang}`]: value })}
+                      modules={{
+                        toolbar: [
+                          [{ 'header': [1, 2, 3, false] }],
+                          ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                          [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                          ['link', 'image'],
+                          ['clean'],
+                          [{ 'color': [] }, { 'background': [] }],
+                          [{ 'align': [] }],
+                        ],
+                      }}
+                      className="bg-stone-800 rounded-xl text-white border border-white/5"
+                    />
+                  </React.Suspense>
 
 
                   {/* Notice Type Selector */}
