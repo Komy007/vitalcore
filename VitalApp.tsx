@@ -2,20 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { LucideIcon, Menu, X, ChevronRight, Check, Play, Award, Microscope, Leaf, Shield, Heart, Zap, Brain, Activity, ArrowRight, ArrowLeft, Star, Quote, Search, Globe, User, LogOut, ChevronDown, Lock, Mail, Phone, MapPin, Send, LayoutTemplate, Megaphone, Plus, Edit, Trash2, Save, Image as ImageIcon, MessageCircle, Sparkles, AlertTriangle, Droplet, Eye, BookOpen, ExternalLink, Info, FlaskConical, GraduationCap, Coffee, Flame, ShieldCheck, CheckCircle2, FileText, Loader2, Languages, Maximize2, Minimize2 } from 'lucide-react';
 const ReactQuill = React.lazy(() => import('./QuillEditor'));
 
-Quill.register('modules/imageResize', ImageResize);
-
-// Force all Quill links to open in new tab
-const QuillLink = Quill.import('formats/link') as any;
-class NewTabLink extends QuillLink {
-  static create(value: string) {
-    const node = super.create(value);
-    node.setAttribute('target', '_blank');
-    node.setAttribute('rel', 'noopener noreferrer');
-    return node;
-  }
-}
-Quill.register(NewTabLink, true);
-
 // Helper: add target="_blank" to all <a> tags in stored HTML
 const addLinkTargets = (html: string): string => {
   if (!html) return '';
