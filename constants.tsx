@@ -83,7 +83,7 @@ export const TRANSLATIONS: Record<string, any> = {
       badge: "Vital Core Premium",
       title_top: "대자연이 선사한",
       title_highlight: "가장 고귀한 생명력",
-      desc: "전문가 검증을 거친 국제 과학 저널 게재 논문에 근거한 상황버섯(Phellinus linteus)을 기반으로,\n새로운 패러다임의 건강 연구들이 학계의 논문으로 발표되고 인정되고 있다. 건강에 관한 새로운 연구와 우리 몸의 자연스러운 면역을 활성화 하는 정보들을 공유하는 플랫폼입니다. 「웰니스 저널」에서 새롭게 만나요.",
+      desc: "전문가 검증을 거친 국제 과학 저널 게재 논문에 근거한 상황버섯(Phellinus linteus)을 기반으로,\n새로운 패러다임의 건강 연구들이 학계의 논문으로 발표되고 인정되고 있다. 건강에 관한 새로운 연구와 우리 몸의 자연스러운 면역을 활성화 하는 정보들을 공유하는 플랫폼입니다. 상단 메뉴 「웰니스 저널」에서 새로운 정보를 확인하세요.",
       btn_research: "연구 결과 자세히 보기",
       scroll_text: "우리는 태어날 때부터 자연치유력을 지니고 있습니다. 이는 곰팡이, 바이러스, 각종 환경 요인 등 복잡하고 위험한 세상 속에서 우리의 생명을 스스로 보호하기 위해 몸 안에 내재된 본래의 방어 시스템입니다. 이 자연치유력을 우리는 흔히 면역력, 또는 면역 시스템(Immune System)이라 부릅니다. 우리 몸의 이 면역 시스템은 단순한 방어 기능을 넘어, 손상된 세포와 균형이 무너진 상태를 스스로 회복하고 다시 재생하려는 능력을 갖추고 있습니다. 우리는 이 근본적인 생명 시스템을 바이탈 코어(Vital Core)라고 부릅니다. 바이탈 코어의 원리를 정확히 이해하고 핵심을 잘 다룬다면, 인체는 언제든지 스스로 균형을 되찾고 회복하려는 방향으로 작동한다는 사실을 알 수 있습니다. 이 사이트는 이러한 자연치유력과 바이탈 코어의 본질을 현대인의 삶에 실질적으로 접목하기 위해 만들어졌습니다."
     },
@@ -335,7 +335,7 @@ export const TRANSLATIONS: Record<string, any> = {
       badge: "Vital Core Premium",
       title_top: "Nature's",
       title_highlight: "Most Powerful Gift",
-      desc: "Rooted in expert-validated Phellinus linteus research published in leading international scientific journals,\nnew-paradigm health studies are being presented and recognized in academic literature. A platform sharing the latest research on naturally activating the body's innate immunity. Explore the 'Wellness Journal'.",
+      desc: "Rooted in expert-validated Phellinus linteus research published in leading international scientific journals,\nnew-paradigm health studies are being presented and recognized in academic literature. A platform sharing new research on naturally activating the body's innate immunity. Check the top menu 「Wellness Journal」 for the latest information.",
       btn_research: "View Research",
       scroll_text: "We possess innate natural healing power from birth. This is an inherent defense system designed to protect our lives from complex environmental dangers such as fungi and viruses. We often call this 'Immunity' or the 'Immune System'. Beyond simple defense, this system has the ability to recover and regenerate damaged cells and restore balance. We call this fundamental life system 'Vital Core'. If we correctly understand the principles of Vital Core, we see that the human body always operates to regain balance and recover. This site is created to bridge the essence of this natural healing power and Vital Core into modern life."
     },
@@ -587,7 +587,7 @@ export const TRANSLATIONS: Record<string, any> = {
       badge: "Vital Core Premium",
       title_top: "大自然赐予的",
       title_highlight: "尊贵生命力",
-      desc: "以国际科学期刊专家审证的桑黄(Phellinus linteus)论文为基础，\n新健康范式研究正不断在学术期刊发表并获得认可。分享促进人体自然免疫力的前沿研究与信息的平台。欢迎前往「健康日志」。",
+      desc: "以国际科学期刊专家审证的桑黄(Phellinus linteus)论文为基础，\n新健康范式研究正不断在学术期刊发表并获得认可。分享激活人体自然免疫力的最新研究与信息的平台。请从上方菜单「健康日志」确认最新资讯。",
       btn_research: "查看研究",
       scroll_text: "We possess innate natural healing power from birth. This is an inherent defense system designed to protect our lives from complex environmental dangers such as fungi and viruses. We often call this 'Immunity' or the 'Immune System'. Beyond simple defense, this system has the ability to recover and regenerate damaged cells and restore balance. We call this fundamental life system 'Vital Core'. If we correctly understand the principles of Vital Core, we see that the human body always operates to regain balance and recover. This site is created to bridge the essence of this natural healing power and Vital Core into modern life."
     },
@@ -839,7 +839,7 @@ export const TRANSLATIONS: Record<string, any> = {
       badge: "Vital Core Premium",
       title_top: "大自然が贈る",
       title_highlight: "気高い生命力",
-      desc: "国際科学誌の専門家検証済みメシマコブ(Phellinus linteus)論文を基盤に、\n新たな健康パラダイムの研究が学術論文として発表・認定されています。体の自然な免疫を活性化する最新研究と情報を共有するプラットフォームです。「ウェルネスジャーナル」でお会いしましょう。",
+      desc: "国際科学誌の専門家検証済みメシマコブ(Phellinus linteus)論文を基盤に、\n新たな健康パラダイムの研究が学術論文として発表・認定されています。体の自然な免疫を活性化する新しい研究と情報を共有するプラットフォームです。上部メニュー「ウェルネスジャーナル」から最新情報をご確認ください。",
       btn_research: "研究を見る",
       scroll_text: "We possess innate natural healing power from birth. This is an inherent defense system designed to protect our lives from complex environmental dangers such as fungi and viruses. We often call this 'Immunity' or the 'Immune System'. Beyond simple defense, this system has the ability to recover and regenerate damaged cells and restore balance. We call this fundamental life system 'Vital Core'. If we correctly understand the principles of Vital Core, we see that the human body always operates to regain balance and recover. This site is created to bridge the essence of this natural healing power and Vital Core into modern life."
     },
