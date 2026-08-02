@@ -89,8 +89,10 @@ app.use('/api/auth/register', authLimiter);
 // Middleware
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
+// 해시된 빌드 산출물은 장기 캐시, index.html은 기본(max-age=0) 유지
+app.use('/assets', express.static('dist/assets', { maxAge: '30d', immutable: true }));
 app.use(express.static('dist'));
-app.use('/img', express.static('img')); // Serve images
+app.use('/img', express.static('img', { maxAge: '7d' })); // Serve images
 
 // --- Health Check (Critical) ---
 app.get('/api/health', (req, res) => {
@@ -421,10 +423,30 @@ if (db) {
                     title_en, summary_en, key_point_en,
                     title_zh, summary_zh, key_point_zh,
                     title_ja, summary_ja, key_point_ja
-                FROM health_reports 
+                FROM health_reports
                 ORDER BY created_at DESC
             `);
-            res.json(stmt.all());
+            // base64 데이터URI는 목록에서 제외하고 이미지 전용 URL로 대체 (egress 절감)
+            const rows = stmt.all().map(r => {
+                if (r.image_url && r.image_url.startsWith('data:')) {
+                    r.image_url = `/api/health-reports/${r.id}/image`;
+                }
+                return r;
+            });
+            res.json(rows);
+        } catch (e) { res.status(500).json({ error: e.message }); }
+    });
+
+    // 목록용 커버 이미지 제공 (DB의 base64 데이터URI를 디코드해 캐시 가능한 바이너리로 응답)
+    app.get('/api/health-reports/:id/image', (req, res) => {
+        try {
+            const row = db.prepare('SELECT image_url FROM health_reports WHERE id = ?').get(req.params.id);
+            if (!row || !row.image_url) return res.status(404).end();
+            const m = row.image_url.match(/^data:(image\/[\w.+-]+);base64,(.*)$/s);
+            if (!m) return res.redirect(row.image_url);
+            res.set('Content-Type', m[1]);
+            res.set('Cache-Control', 'public, max-age=86400');
+            res.send(Buffer.from(m[2], 'base64'));
         } catch (e) { res.status(500).json({ error: e.message }); }
     });
 
